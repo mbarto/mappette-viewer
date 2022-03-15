@@ -17,7 +17,7 @@ export function getPlugins(plugins: MapStorePluginDef[]): Promise<Plugin[]> {
     return Promise.all(
         plugins.map((plugin) => {
             const pluginDef = normalizePlugin(plugin)
-            return import(`../plugins/${pluginDef.name.toLowerCase()}`)
+            return import(`../plugins/${pluginDef.name.toLowerCase()}.tsx`)
                 .then((impl) => ({
                     plugin: impl.default as PluginImpl,
                     cfg: pluginDef.cfg,
