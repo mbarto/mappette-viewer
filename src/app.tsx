@@ -15,7 +15,7 @@ export function App() {
     return contextName ? (
         <>
             {error ? (
-                <div className="error">{error}</div>
+                <div className="error">{JSON.stringify(error)}</div>
             ) : context ? (
                 <ContextViewer context={context} />
             ) : (

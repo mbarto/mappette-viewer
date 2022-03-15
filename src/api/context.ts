@@ -31,7 +31,7 @@ export type MapStoreResource = {
     }
 }
 
-export type BaseLayer = {
+export type MapLayer = {
     id: string
     name: string
     type: string
@@ -39,19 +39,6 @@ export type BaseLayer = {
     group?: string
     visibility: boolean
 }
-
-export type OSMLayer = BaseLayer & {
-    type: "osm"
-}
-
-export type WMSLayer = BaseLayer & {
-    type: "wms"
-    format?: string
-    url: string
-    singleTile?: boolean
-}
-
-export type MapLayer = OSMLayer | WMSLayer
 
 export type MapConfig = {
     version: number

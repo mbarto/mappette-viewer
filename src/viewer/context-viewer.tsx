@@ -5,6 +5,7 @@ import View from "ol/View"
 import "ol/ol.css"
 import { reproject } from "../core/projection"
 import { createLayers } from "../core/layers"
+import "../core/layers/all"
 
 type ContextViewerProps = {
     id?: string
@@ -30,7 +31,7 @@ export default function ContextViewer({
                 projection,
                 zoom: mapConfig.zoom,
             }),
-            layers: createLayers(mapConfig.layers),
+            layers: createLayers(mapConfig.layers, projection),
         })
     }, [context])
     return <div id={id}></div>
