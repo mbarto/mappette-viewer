@@ -21,3 +21,10 @@ body {
     width: 100%;
     height: 100%;
 }
+
+@font-face {
+    font-family: mapstore2;
+    font-style: normal;
+    font-weight: 400;
+    src: url("icons.woff") format("woff");
+}

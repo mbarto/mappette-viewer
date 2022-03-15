@@ -1,0 +1,42 @@
+#toolbar {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+    box-shadow: -1px 1px 5px 1px #5e5e5e;
+}
+
+.toolbar-button {
+    background-color: rgb(7, 138, 163);
+    border-style: solid;
+    border-color: rgb(6, 121, 143);
+    border-width: 1px;
+    color: white;
+    width: 52px;
+    height: 52px;
+    position: relative;
+    display: block;
+    cursor: pointer;
+}
+
+.glyphicon {
+    font-size: 26px;
+    margin: auto;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    position: relative;
+    font-family: mapstore2;
+}
+
+.glyphicon-plus:before {
+    content: "\f1e7";
+}
+
+.glyphicon-minus:before {
+    content: "\f1c8";
+}
+
+.glyphicon-resize-full:before {
+    content: "\f20a";
+}

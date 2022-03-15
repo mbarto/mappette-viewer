@@ -1,6 +1,7 @@
-import { useEffect, useState } from "preact/hooks"
+import { useEffect, useRef, useState } from "preact/hooks"
 import type { Context } from "../api/context"
-import { getPlugins, Plugin } from "../core/plugins"
+import { getPlugins, getPluginsFor, Plugin } from "../core/plugins"
+import OLMap from "ol/Map"
 
 type ContextViewerProps = {
     context: Context
@@ -11,10 +12,18 @@ export default function ContextViewer({
     context,
     env = "desktop",
 }: ContextViewerProps) {
+    const map = useRef<OLMap | null>(null)
     function renderPlugins(contextPlugins: Plugin[]) {
-        return contextPlugins.map((p) => (
-            <p.plugin context={context} cfg={p.cfg} />
-        ))
+        return contextPlugins
+            .filter((p) => !p.container)
+            .map((p) => (
+                <p.plugin
+                    context={context}
+                    cfg={p.cfg}
+                    map={map}
+                    plugins={getPluginsFor(p.name, contextPlugins)}
+                />
+            ))
     }
 
     const [contextPlugins, setContextPlugins] = useState<Plugin[]>([])
