@@ -58,16 +58,22 @@ export type MapConfig = {
     }
 }
 
-export type MapStorePlugin = {}
+export type MapStorePlugin = {
+    name: string
+    cfg?: unknown
+    override?: unknown
+}
+
+export type MapStorePluginDef = string | MapStorePlugin
 
 export type Context = {
     windowTitle?: string
     mapConfig: MapConfig
     customVariablesEnabled: boolean
     plugins: {
-        [key: string]: MapStorePlugin[]
+        [key: string]: MapStorePluginDef[]
     }
-    userPlugins: MapStorePlugin[]
+    userPlugins: MapStorePluginDef[]
 }
 
 export function loadContext(contextName: string): Promise<Context> {

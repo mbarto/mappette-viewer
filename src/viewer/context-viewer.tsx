@@ -1,38 +1,28 @@
-import { useEffect, useRef } from "preact/hooks"
+import { useEffect, useState } from "preact/hooks"
 import type { Context } from "../api/context"
-import Map from "ol/Map"
-import View from "ol/View"
-import "ol/ol.css"
-import { reproject } from "../core/projection"
-import { createLayers } from "../core/layers"
-import "../core/layers/all"
+import { getPlugins, Plugin } from "../core/plugins"
 
 type ContextViewerProps = {
-    id?: string
     context: Context
+    env?: string
 }
 
 export default function ContextViewer({
-    id = "map",
     context,
+    env = "desktop",
 }: ContextViewerProps) {
-    const map = useRef<Map | null>(null)
+    function renderPlugins(contextPlugins: Plugin[]) {
+        return contextPlugins.map((p) => (
+            <p.plugin context={context} cfg={p.cfg} />
+        ))
+    }
+
+    const [contextPlugins, setContextPlugins] = useState<Plugin[]>([])
     useEffect(() => {
         if (context.windowTitle) {
             document.title = context.windowTitle
         }
-        const mapConfig = context.mapConfig.map
-        const projection = mapConfig.projection ?? "EPSG:3857"
-        const center = reproject(mapConfig.center, projection)
-        map.current = new Map({
-            target: id,
-            view: new View({
-                center: [center.x, center.y],
-                projection,
-                zoom: mapConfig.zoom,
-            }),
-            layers: createLayers(mapConfig.layers, projection),
-        })
+        getPlugins(context.plugins[env]).then(setContextPlugins)
     }, [context])
-    return <div id={id}></div>
+    return <div id="viewer">{renderPlugins(contextPlugins)}</div>
 }
