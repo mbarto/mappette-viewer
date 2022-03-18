@@ -1,4 +1,5 @@
 import { PluginProps } from "../core/plugins"
+import ToolbarButton from "./toolbar/toolbar-button"
 
 type ZoomOutPluginProps = PluginProps
 
@@ -11,13 +12,12 @@ export default function ZoomOut({ map }: ZoomOutPluginProps) {
         }
     }
     return (
-        <button
+        <ToolbarButton
             id="zoomout"
-            className="toolbar-button zoomout-button"
+            tooltip="zoombuttons.zoomOutTooltip"
             onClick={zoomOut}
-        >
-            <span className="glyphicon glyphicon-minus"></span>
-        </button>
+            icon="minus"
+        />
     )
 }
 

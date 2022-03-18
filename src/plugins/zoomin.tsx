@@ -1,4 +1,5 @@
 import { PluginProps } from "../core/plugins"
+import ToolbarButton from "./toolbar/toolbar-button"
 
 type ZoomInPluginProps = PluginProps
 
@@ -11,13 +12,12 @@ export default function ZoomIn({ map }: ZoomInPluginProps) {
         }
     }
     return (
-        <button
+        <ToolbarButton
             id="zoomin"
-            className="toolbar-button zoomin-button"
+            tooltip="zoombuttons.zoomInTooltip"
             onClick={zoomIn}
-        >
-            <span className="glyphicon glyphicon-plus"></span>
-        </button>
+            icon="plus"
+        />
     )
 }
 

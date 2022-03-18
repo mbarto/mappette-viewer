@@ -1,21 +1,21 @@
 import { PluginProps } from "../core/plugins"
+import ToolbarButton from "./toolbar/toolbar-button"
 
 type ZoomAllPluginProps = PluginProps
 
-export default function ZoomOut({ map }: ZoomAllPluginProps) {
+export default function ZoomAll({ map }: ZoomAllPluginProps) {
     function zoomAll() {
         if (map.current) {
             map.current.getView().setZoom(0)
         }
     }
     return (
-        <button
-            onClick={zoomAll}
+        <ToolbarButton
             id="zoomall"
-            className="toolbar-button zoomall-button"
-        >
-            <span className="glyphicon glyphicon-resize-full"></span>
-        </button>
+            tooltip="zoombuttons.zoomAllTooltip"
+            onClick={zoomAll}
+            icon="resize-full"
+        />
     )
 }
 

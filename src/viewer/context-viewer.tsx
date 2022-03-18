@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { getPlugins, getPluginsFor, Plugin } from "../core/plugins"
 import OLMap from "ol/Map"
+import { loadLocale, Locale } from "../api/locale"
+import PluginsContainer from "./plugins-container"
 
 type ContextViewerProps = {
     context: Context
@@ -13,25 +15,26 @@ export default function ContextViewer({
     env = "desktop",
 }: ContextViewerProps) {
     const map = useRef<OLMap | null>(null)
-    function renderPlugins(contextPlugins: Plugin[]) {
-        return contextPlugins
-            .filter((p) => !p.container)
-            .map((p) => (
-                <p.plugin
-                    context={context}
-                    cfg={p.cfg}
-                    map={map}
-                    plugins={getPluginsFor(p.name, contextPlugins)}
-                />
-            ))
-    }
 
     const [contextPlugins, setContextPlugins] = useState<Plugin[]>([])
+    const [locale, setLocale] = useState<Locale | undefined>()
     useEffect(() => {
         if (context.windowTitle) {
             document.title = context.windowTitle
         }
         getPlugins(context.plugins[env]).then(setContextPlugins)
+        loadLocale().then(setLocale)
     }, [context])
-    return <div id="viewer">{renderPlugins(contextPlugins)}</div>
+    return (
+        <div id="viewer">
+            <Locale.Provider value={locale}>
+                <PluginsContainer
+                    allPlugins={contextPlugins}
+                    plugins={contextPlugins.filter((p) => !p.container)}
+                    context={context}
+                    map={map}
+                />
+            </Locale.Provider>
+        </div>
+    )
 }

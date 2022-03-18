@@ -1,13 +1,9 @@
-import { Map } from "ol"
 import { JSX } from "preact"
-import { MutableRef } from "preact/hooks"
-import { Context, MapStorePlugin, MapStorePluginDef } from "../api/context"
+import { MapStorePlugin, MapStorePluginDef } from "../api/context"
+import { PluginsContainerProps } from "../viewer/plugins-container"
 
-export type PluginProps = {
+export type PluginProps = PluginsContainerProps & {
     cfg: unknown
-    context: Context
-    map: MutableRef<Map | null>
-    plugins: Plugin[]
 }
 
 export type PluginImpl = (props: PluginProps) => JSX.Element | null
