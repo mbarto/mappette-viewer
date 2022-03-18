@@ -1,0 +1,12 @@
+.mapstore-scalebar .ol-scale-line {
+    background-color: #fff;
+    bottom: 0;
+    right: 0;
+    left: initial;
+}
+
+.mapstore-scalebar .ol-scale-line-inner {
+    color: #333;
+    border-color: #333;
+    background-color: #fff;
+}

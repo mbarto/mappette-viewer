@@ -15,26 +15,45 @@ export type Plugin = {
     container?: string
 }
 
+function addDependencies(
+    plugins: MapStorePlugin[],
+    plugin: MapStorePlugin
+): MapStorePlugin[] {
+    if (plugin.name.toLowerCase() === "map") {
+        return [
+            ...plugins,
+            plugin,
+            { name: "Scalebar" },
+            { name: "Attribution" },
+        ]
+    }
+    return [...plugins, plugin]
+}
+
 export function getPlugins(plugins: MapStorePluginDef[]): Promise<Plugin[]> {
     return Promise.all(
-        plugins.map((plugin) => {
-            const pluginDef = normalizePlugin(plugin)
-            return import(`../plugins/${pluginDef.name.toLowerCase()}.tsx`)
-                .then((impl) => ({
-                    name: pluginDef.name.toLowerCase(),
-                    plugin: impl.default as PluginImpl,
-                    cfg: pluginDef.cfg,
-                    container: impl.container,
-                }))
-                .catch(() => {
-                    console.error(`plugin ${pluginDef.name} not implemented`)
-                    return {
+        plugins
+            .map(normalizePlugin)
+            .reduce(addDependencies, [])
+            .map((pluginDef) => {
+                return import(`../plugins/${pluginDef.name.toLowerCase()}.tsx`)
+                    .then((impl) => ({
                         name: pluginDef.name.toLowerCase(),
-                        plugin: (() => null) as PluginImpl,
+                        plugin: impl.default as PluginImpl,
                         cfg: pluginDef.cfg,
-                    }
-                })
-        })
+                        container: impl.container,
+                    }))
+                    .catch(() => {
+                        console.error(
+                            `plugin ${pluginDef.name} not implemented`
+                        )
+                        return {
+                            name: pluginDef.name.toLowerCase(),
+                            plugin: (() => null) as PluginImpl,
+                            cfg: pluginDef.cfg,
+                        }
+                    })
+            })
     ).then((pluginImpls) => pluginImpls.filter((p) => p))
 }
 

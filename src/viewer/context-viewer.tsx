@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "preact/hooks"
 import type { Context } from "../api/context"
-import { getPlugins, getPluginsFor, Plugin } from "../core/plugins"
+import { getPlugins, Plugin } from "../core/plugins"
 import OLMap from "ol/Map"
+import { Map } from "../core/map"
 import { loadLocale, Locale } from "../api/locale"
 import PluginsContainer from "./plugins-container"
 
@@ -28,12 +29,13 @@ export default function ContextViewer({
     return (
         <div id="viewer">
             <Locale.Provider value={locale}>
-                <PluginsContainer
-                    allPlugins={contextPlugins}
-                    plugins={contextPlugins.filter((p) => !p.container)}
-                    context={context}
-                    map={map}
-                />
+                <Map.Provider value={map}>
+                    <PluginsContainer
+                        allPlugins={contextPlugins}
+                        plugins={contextPlugins.filter((p) => !p.container)}
+                        context={context}
+                    />
+                </Map.Provider>
             </Locale.Provider>
         </div>
     )

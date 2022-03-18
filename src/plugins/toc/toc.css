@@ -1,0 +1,60 @@
+:root {
+    --toc-width: 300px;
+}
+
+.mapstore-table-of-contents {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--toc-width) * -1);
+    width: var(--toc-width);
+    background-color: #fff;
+}
+
+.mapstore-table-of-contents.open {
+    animation-duration: 0.5s;
+    animation-name: slidein;
+    left: 0;
+}
+
+.mapstore-table-of-contents.closed {
+    animation-duration: 0.5s;
+    animation-name: slideout;
+    left: calc(var(--toc-width) * -1);
+}
+
+@keyframes slidein {
+    from {
+        left: calc(var(--toc-width) * -1);
+    }
+
+    to {
+        left: 0;
+    }
+}
+
+@keyframes slideout {
+    from {
+        left: 0;
+    }
+
+    to {
+        left: calc(var(--toc-width) * -1);
+    }
+}
+
+.glyphicon-1-layer:before {
+    content: "\f111";
+}
+
+.glyphicon-1-close:before {
+    content: "\f107";
+}
+
+.toc-close {
+    cursor: pointer;
+}
+
+.toc-icon {
+    float: right;
+}

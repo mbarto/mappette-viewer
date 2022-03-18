@@ -1,0 +1,6 @@
+.mapstore-map {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 30px;
+}

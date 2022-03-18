@@ -1,11 +1,13 @@
+import { useMap } from "../core/map"
 import { PluginProps } from "../core/plugins"
 import ToolbarButton from "./toolbar/toolbar-button"
 
 type ZoomInPluginProps = PluginProps
 
-export default function ZoomIn({ map }: ZoomInPluginProps) {
+export default function ZoomIn({}: ZoomInPluginProps) {
+    const map = useMap()
     function zoomIn() {
-        if (map.current) {
+        if (map?.current) {
             map.current
                 .getView()
                 .setZoom((map.current.getView().getZoom() ?? 0) + 1)

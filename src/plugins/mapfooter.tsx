@@ -1,12 +1,12 @@
 import { PluginProps } from "../core/plugins"
 import PluginsContainer from "../viewer/plugins-container"
-import "./toolbar/toolbar.css"
+import "./mapfooter/mapfooter.css"
 
-type ToolbarPluginProps = PluginProps
+type FooterPluginProps = PluginProps
 
-export default function Toolbar(props: ToolbarPluginProps) {
+export default function Footer(props: FooterPluginProps) {
     return (
-        <div className="mapstore-toolbar">
+        <div className="mapstore-map-footer">
             <PluginsContainer {...props} />
         </div>
     )

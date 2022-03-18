@@ -1,0 +1,21 @@
+.mapstore-map-footer {
+    bottom: 0;
+    box-shadow: 3px 0 6px #0000001f, 4px 0 8px #0000003d;
+    height: 30px;
+    position: absolute;
+    width: 100%;
+    z-index: 1030;
+    background-color: #fff;
+    color: #333;
+}
+
+.mapstore-map-footer .ol-attribution.ol-uncollapsible {
+    font-size: 11px;
+    height: 30px;
+    left: 0;
+    max-height: 2.6em;
+    overflow: hidden;
+    position: absolute;
+    text-align: left;
+    width: 50%;
+}
