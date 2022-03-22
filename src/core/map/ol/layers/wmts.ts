@@ -64,6 +64,7 @@ export function createLayer(
                 style: wmtsLayer.style || "default",
                 wrapX: true,
             }),
+            opacity: layer.opacity ?? 1,
         })
     }
     return null

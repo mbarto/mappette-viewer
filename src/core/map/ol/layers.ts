@@ -26,7 +26,10 @@ export function createLayers(
         .filter((l) => l.visibility)
         .reduce((acc: Layer[], layer) => {
             const olLayer = createLayer(layer, projection, sources)
-            if (olLayer) return [...acc, olLayer]
+            if (olLayer) {
+                olLayer.set("mapstore_id", layer.id)
+                return [...acc, olLayer]
+            }
             return acc
         }, [])
 }

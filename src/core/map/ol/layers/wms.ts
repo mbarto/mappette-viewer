@@ -26,6 +26,7 @@ export function createLayer(layer: MapLayer): Layer {
                 ratio: 1,
                 serverType: "geoserver",
             }),
+            opacity: layer.opacity ?? 1,
         })
     } else {
         return new TileLayer({
@@ -38,6 +39,7 @@ export function createLayer(layer: MapLayer): Layer {
                 },
                 transition: 0,
             }),
+            opacity: layer.opacity ?? 1,
         })
     }
 }

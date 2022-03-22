@@ -12,6 +12,7 @@ export type MapInstance = {
     getZoom: () => number | undefined
     addControl: (control: unknown) => void
     removeControl: (control: unknown) => void
+    setLayerVisibility: (id: string, visibility: boolean) => void
 }
 
 export const Map = createContext<MapInstance | null>(null)

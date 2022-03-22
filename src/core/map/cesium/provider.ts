@@ -78,6 +78,8 @@ const CesiumMapProvider: MapProvider = {
             },
             addControl: (control: unknown) => {},
             removeControl: (control: unknown) => {},
+            setLayerVisibility: (id: string, visibility: boolean) => {},
+            setLayerOpacity: (id: string, opacity: number) => {},
         }
     },
 }

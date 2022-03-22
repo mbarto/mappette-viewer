@@ -33,6 +33,20 @@ const OLMapProvider: MapProvider = {
                 map.addControl(control as Control),
             removeControl: (control: unknown) =>
                 map.removeControl(control as Control),
+            setLayerVisibility: (id: string, visibility: boolean) => {
+                map.getLayers().forEach((l) => {
+                    if (l.get("mapstore_id") === id) {
+                        l.setVisible(visibility)
+                    }
+                })
+            },
+            setLayerOpacity: (id: string, opacity: number) => {
+                map.getLayers().forEach((l) => {
+                    if (l.get("mapstore_id") === id) {
+                        l.setOpacity(opacity)
+                    }
+                })
+            },
         }
     },
 }

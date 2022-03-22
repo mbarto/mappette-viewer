@@ -34,10 +34,12 @@ export type MapStoreResource = {
 export type MapLayer = {
     id: string
     name: string
+    title?: string
     type: string
     source?: string
     group?: string
     visibility: boolean
+    opacity?: number
 }
 
 export type MapSources = {
