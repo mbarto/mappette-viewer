@@ -13,6 +13,7 @@ export type MapInstance = {
     addControl: (control: unknown) => void
     removeControl: (control: unknown) => void
     setLayerVisibility: (id: string, visibility: boolean) => void
+    setLayerOpacity: (id: string, opacity: number) => void
 }
 
 export const Map = createContext<MapInstance | null>(null)

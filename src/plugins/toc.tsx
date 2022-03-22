@@ -65,8 +65,11 @@ export default function TableOfContents({ context }: TableOfContentsProps) {
                                         onChange={(evt) =>
                                             setOpacity(
                                                 l.id,
-                                                (evt.target as HTMLInputElement)
-                                                    .value
+                                                Number(
+                                                    (
+                                                        evt.target as HTMLInputElement
+                                                    ).value
+                                                )
                                             )
                                         }
                                     />
