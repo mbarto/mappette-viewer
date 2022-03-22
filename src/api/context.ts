@@ -31,6 +31,12 @@ export type MapStoreResource = {
     }
 }
 
+export type MapLayerGroup = {
+    id: string
+    title: string
+    expanded: boolean
+}
+
 export type MapLayer = {
     id: string
     name: string
@@ -65,6 +71,7 @@ export type MapConfig = {
             [key: string]: string | number
         }
         layers: MapLayer[]
+        groups: MapLayerGroup[]
         sources: MapSources | undefined
     }
 }

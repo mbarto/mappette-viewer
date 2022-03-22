@@ -52,10 +52,25 @@
 }
 
 .glyphicon-1-map {
-    font-size: 16px;
+    font-size: 20px !important;
 }
 .glyphicon-1-map:before {
     content: "\f115";
+}
+
+.glyphicon-folder-open,
+.glyphicon-folder-close {
+    font-size: 18px !important;
+    float: right;
+    cursor: pointer;
+}
+
+.glyphicon-folder-open:before {
+    content: "\f196";
+}
+
+.glyphicon-folder-close:before {
+    content: "\f195";
 }
 
 .toc-close {
@@ -77,9 +92,11 @@
     text-align: center;
 }
 
+.toc-group-header {
+    margin-bottom: 10px;
+}
 .toc-layers-container {
     margin-top: 20px;
-    padding: 8px;
 }
 
 .toc-layer {
@@ -90,4 +107,18 @@
     box-shadow: rgba(0, 0, 0, 0.06) 0px 3px 6px 0px,
         rgba(0, 0, 0, 0.12) 0px 4px 8px 0px,
         rgba(0, 0, 0, 0.06) 2px -2px 6px 0px;
+    margin-bottom: 8px;
+}
+
+.toc-group {
+    border-bottom: solid 1px #aaa;
+    border-top: solid 1px #aaa;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.toc-group-title {
+    padding-bottom: 10px;
 }
