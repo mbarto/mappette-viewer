@@ -13,7 +13,8 @@ import "./layers/all"
 window.CESIUM_BASE_URL = "node_modules/cesium/Build/Cesium"
 
 import "cesium/Build/Cesium/Widgets/widgets.css"
-import { createLayers } from "./layers"
+import { createLayers, ImageryProviderWithId } from "./layers"
+import ImageryLayer from "cesium/Source/Scene/ImageryLayer"
 
 export const zoomToHeight = 80000000
 
@@ -79,38 +80,29 @@ const CesiumMapProvider: MapProvider = {
             addControl: (control: unknown) => {},
             removeControl: (control: unknown) => {},
             setLayerVisibility: (id: string, visibility: boolean) => {
-                for (let i = 0; i < map.imageryLayers.length; i++) {
-                    const layer = map.imageryLayers.get(i)
-                    // @ts-ignore
-                    if (layer._imageryProvider?.mapstoreId === id) {
-                        if (visibility) {
-                            // @ts-ignore
-                            layer.alpha = layer._oldAlpha || 1.0
-                            // @ts-ignore
-                            layer._oldAlpha = undefined
-                        } else {
-                            // @ts-ignore
-                            layer._oldAlpha = layer.alpha
-                            layer.alpha = 0.0
-                        }
-                    }
-                }
+                findLayer(map, id).and((l) => (l.show = visibility))
             },
             setLayerOpacity: (id: string, opacity: number) => {
-                for (let i = 0; i < map.imageryLayers.length; i++) {
-                    const layer = map.imageryLayers.get(i)
-                    if (
-                        // @ts-ignore
-                        layer._imageryProvider?.mapstoreId === id &&
-                        // @ts-ignore
-                        layer._oldAlpha === undefined
-                    ) {
-                        layer.alpha = opacity
-                    }
-                }
+                findLayer(map, id).and((l) => (l.alpha = opacity))
             },
         }
     },
+}
+
+function findLayer(map: Viewer, id: string) {
+    let layer: ImageryLayer | undefined
+    for (let i = 0; i < map.imageryLayers.length; i++) {
+        const candidate = map.imageryLayers.get(i)
+        const provider = candidate.imageryProvider as ImageryProviderWithId
+        if (provider?.mapstoreId === id) {
+            layer = candidate
+        }
+    }
+    return {
+        and: (callback: (layer: ImageryLayer) => void) => {
+            if (layer) callback(layer)
+        },
+    }
 }
 
 export default CesiumMapProvider

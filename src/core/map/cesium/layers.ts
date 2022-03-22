@@ -1,6 +1,10 @@
 import { MapLayer } from "../../../api/context"
 import { ImageryProvider } from "cesium"
 
+export type ImageryProviderWithId = ImageryProvider & {
+    mapstoreId: string
+}
+
 const layerTypes: {
     [key: string]: LayerImpl
 } = {}
@@ -26,8 +30,7 @@ export function createLayers(layers: MapLayer[]): ImageryProvider[] {
 export function createLayer(layer: MapLayer): ImageryProvider | null {
     const impl = layerTypes[layer.type]
     if (impl) {
-        const provider = impl.create(layer)
-        // @ts-ignore
+        const provider = impl.create(layer) as ImageryProviderWithId
         provider.mapstoreId = layer.id
         return provider
     }
