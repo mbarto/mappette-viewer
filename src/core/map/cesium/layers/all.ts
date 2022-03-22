@@ -1,1 +1,2 @@
 import "./osm"
+import "./wms"

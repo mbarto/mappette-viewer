@@ -12,6 +12,8 @@ export type WMSLayer = MapLayer & {
     url: string
     singleTile?: boolean
     style?: string
+    transparent?: boolean
+    tiled?: boolean
 }
 
 export function createLayer(layer: MapLayer): Layer {

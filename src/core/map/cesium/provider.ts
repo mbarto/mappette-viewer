@@ -78,8 +78,37 @@ const CesiumMapProvider: MapProvider = {
             },
             addControl: (control: unknown) => {},
             removeControl: (control: unknown) => {},
-            setLayerVisibility: (id: string, visibility: boolean) => {},
-            setLayerOpacity: (id: string, opacity: number) => {},
+            setLayerVisibility: (id: string, visibility: boolean) => {
+                for (let i = 0; i < map.imageryLayers.length; i++) {
+                    const layer = map.imageryLayers.get(i)
+                    // @ts-ignore
+                    if (layer._imageryProvider?.mapstoreId === id) {
+                        if (visibility) {
+                            // @ts-ignore
+                            layer.alpha = layer._oldAlpha || 1.0
+                            // @ts-ignore
+                            layer._oldAlpha = undefined
+                        } else {
+                            // @ts-ignore
+                            layer._oldAlpha = layer.alpha
+                            layer.alpha = 0.0
+                        }
+                    }
+                }
+            },
+            setLayerOpacity: (id: string, opacity: number) => {
+                for (let i = 0; i < map.imageryLayers.length; i++) {
+                    const layer = map.imageryLayers.get(i)
+                    if (
+                        // @ts-ignore
+                        layer._imageryProvider?.mapstoreId === id &&
+                        // @ts-ignore
+                        layer._oldAlpha === undefined
+                    ) {
+                        layer.alpha = opacity
+                    }
+                }
+            },
         }
     },
 }

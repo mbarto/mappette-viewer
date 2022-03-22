@@ -26,7 +26,10 @@ export function createLayers(layers: MapLayer[]): ImageryProvider[] {
 export function createLayer(layer: MapLayer): ImageryProvider | null {
     const impl = layerTypes[layer.type]
     if (impl) {
-        return impl.create(layer)
+        const provider = impl.create(layer)
+        // @ts-ignore
+        provider.mapstoreId = layer.id
+        return provider
     }
     console.error(`Layer type ${layer.type} not implemented`)
     return null
