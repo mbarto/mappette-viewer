@@ -7,8 +7,8 @@ type ZoomAllPluginProps = PluginProps
 export default function ZoomAll({}: ZoomAllPluginProps) {
     const map = useMap()
     function zoomAll() {
-        if (map?.current) {
-            map.current.getView().setZoom(0)
+        if (map) {
+            map.setZoom(0)
         }
     }
     return (

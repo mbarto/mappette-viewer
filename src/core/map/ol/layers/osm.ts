@@ -1,7 +1,7 @@
 import Layer from "ol/layer/Layer"
 import TileLayer from "ol/layer/Tile"
 import OSM from "ol/source/OSM"
-import { MapLayer } from "../../api/context"
+import { MapLayer } from "../../../../api/context"
 import { addLayerType } from "../layers"
 
 export type OSMLayer = MapLayer & {

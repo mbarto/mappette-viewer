@@ -5,6 +5,7 @@ import ContextViewer from "./viewer/context-viewer"
 export function App() {
     const url = new URL(window.location.href)
     const contextName = url.searchParams.get("context")
+    const mapType = url.searchParams.get("mapType") ?? "ol"
     const [context, setContext] = useState<Context | null>(null)
     const [error, setError] = useState(null)
     useEffect(() => {
@@ -17,7 +18,7 @@ export function App() {
             {error ? (
                 <div className="error">{JSON.stringify(error)}</div>
             ) : context ? (
-                <ContextViewer context={context} />
+                <ContextViewer context={context} mapType={mapType} />
             ) : (
                 <div className="loading">Loading...</div>
             )}

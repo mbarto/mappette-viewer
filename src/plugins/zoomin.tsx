@@ -7,10 +7,8 @@ type ZoomInPluginProps = PluginProps
 export default function ZoomIn({}: ZoomInPluginProps) {
     const map = useMap()
     function zoomIn() {
-        if (map?.current) {
-            map.current
-                .getView()
-                .setZoom((map.current.getView().getZoom() ?? 0) + 1)
+        if (map) {
+            map.setZoom((map.getZoom() ?? 0) + 1)
         }
     }
     return (

@@ -4,7 +4,7 @@ import WMTS from "ol/source/WMTS"
 import WMTSTileGrid from "ol/tilegrid/WMTS"
 import { getTopLeft, getWidth } from "ol/extent"
 import { get as getProjection } from "ol/proj"
-import { MapLayer } from "../../api/context"
+import { MapLayer } from "../../../../api/context"
 import { addLayerType } from "../layers"
 
 export type WMTSLayer = MapLayer & {

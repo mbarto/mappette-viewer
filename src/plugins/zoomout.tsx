@@ -7,10 +7,8 @@ type ZoomOutPluginProps = PluginProps
 export default function ZoomOut({}: ZoomOutPluginProps) {
     const map = useMap()
     function zoomOut() {
-        if (map?.current) {
-            map.current
-                .getView()
-                .setZoom((map.current.getView().getZoom() ?? 0) - 1)
+        if (map) {
+            map.setZoom((map.getZoom() ?? 0) - 1)
         }
     }
     return (

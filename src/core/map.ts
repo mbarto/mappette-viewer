@@ -1,9 +1,25 @@
 import { createContext } from "preact"
-import OLMap from "ol/Map"
-import { MutableRef, useContext } from "preact/hooks"
+import { useContext } from "preact/hooks"
+import { MapConfig } from "../api/context"
 
-export const Map = createContext<MutableRef<OLMap | null> | null>(null)
+export type MapProvider = {
+    create: (id: string, mapConfig: MapConfig["map"]) => MapInstance
+}
+
+export type MapInstance = {
+    map?: unknown
+    setZoom: (zoom: number) => void
+    getZoom: () => number | undefined
+    addControl: (control: unknown) => void
+    removeControl: (control: unknown) => void
+}
+
+export const Map = createContext<MapInstance | null>(null)
 
 export function useMap() {
     return useContext(Map)
+}
+
+export function loadProvider(mapType: string): Promise<MapProvider> {
+    return import(`./map/${mapType}/provider.ts`).then((p) => p.default)
 }

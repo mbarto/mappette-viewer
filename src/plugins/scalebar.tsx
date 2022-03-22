@@ -10,20 +10,19 @@ export default function Scalebar({}: ScalebarPluginProps) {
     const map = useMap()
     const scalebar = useRef<ScaleLine>()
     useEffect(() => {
-        if (map?.current) {
+        if (map) {
             scalebar.current = new ScaleLine({
                 target: document.querySelector(
                     ".mapstore-scalebar"
                 ) as HTMLElement,
             })
 
-            map.current.addControl(scalebar.current)
+            map.addControl(scalebar.current)
         }
         return () => {
-            if (scalebar.current && map?.current)
-                map.current?.removeControl(scalebar.current)
+            if (scalebar.current && map) map.removeControl(scalebar.current)
         }
-    }, [map?.current])
+    }, [map])
     return <div className="mapstore-scalebar"></div>
 }
 

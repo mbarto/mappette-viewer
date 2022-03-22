@@ -6,24 +6,24 @@ import "./attribution/attribution.css"
 
 type AttributionPluginProps = PluginProps
 
-export default function Attribution({}: AttributionPluginProps) {
+export default function Attribution({ mapType }: AttributionPluginProps) {
     const map = useMap()
     const attribution = useRef<OLAttribution>()
     useEffect(() => {
-        if (map?.current) {
+        if (map && mapType === "ol") {
             attribution.current = new OLAttribution({
                 target: document.querySelector(
                     ".mapstore-attribution"
                 ) as HTMLElement,
             })
 
-            map.current.addControl(attribution.current)
+            map.addControl(attribution.current)
         }
         return () => {
-            if (attribution.current && map?.current)
-                map.current?.removeControl(attribution.current)
+            if (attribution.current && map)
+                map.removeControl(attribution.current)
         }
-    }, [map?.current])
+    }, [map])
     return <div className="mapstore-attribution"></div>
 }
 

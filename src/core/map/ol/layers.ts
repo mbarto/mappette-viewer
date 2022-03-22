@@ -1,5 +1,5 @@
 import Layer from "ol/layer/Layer"
-import { MapLayer } from "../api/context"
+import { MapLayer } from "../../../api/context"
 
 const layerTypes: {
     [key: string]: LayerImpl
