@@ -1,23 +1,31 @@
 import Layer from "ol/layer/Layer"
-import { MapLayer } from "../../../api/context"
+import { MapLayer, MapSources } from "../../../api/context"
 
 const layerTypes: {
     [key: string]: LayerImpl
 } = {}
 
 export type LayerImpl = {
-    create: (layer: MapLayer, projection: string) => Layer | null
+    create: (
+        layer: MapLayer,
+        projection: string,
+        sources: MapSources
+    ) => Layer | null
 }
 
 export function addLayerType(type: string, impl: LayerImpl) {
     layerTypes[type] = impl
 }
 
-export function createLayers(layers: MapLayer[], projection: string): Layer[] {
+export function createLayers(
+    layers: MapLayer[],
+    projection: string,
+    sources?: MapSources
+): Layer[] {
     return layers
         .filter((l) => l.visibility)
         .reduce((acc: Layer[], layer) => {
-            const olLayer = createLayer(layer, projection)
+            const olLayer = createLayer(layer, projection, sources)
             if (olLayer) return [...acc, olLayer]
             return acc
         }, [])
@@ -25,11 +33,12 @@ export function createLayers(layers: MapLayer[], projection: string): Layer[] {
 
 export function createLayer(
     layer: MapLayer,
-    mapProjection = "EPSG:3857"
+    mapProjection = "EPSG:3857",
+    sources = {}
 ): Layer | null {
     const impl = layerTypes[layer.type]
     if (impl) {
-        return impl.create(layer, mapProjection)
+        return impl.create(layer, mapProjection, sources)
     }
     console.error(`Layer type ${layer.type} not implemented`)
     return null

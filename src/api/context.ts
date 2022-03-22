@@ -40,6 +40,10 @@ export type MapLayer = {
     visibility: boolean
 }
 
+export type MapSources = {
+    [key: string]: unknown
+}
+
 export type MapConfig = {
     version: number
     map: {
@@ -55,6 +59,7 @@ export type MapConfig = {
             [key: string]: string | number
         }
         layers: MapLayer[]
+        sources: MapSources | undefined
     }
 }
 

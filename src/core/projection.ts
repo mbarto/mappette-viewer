@@ -13,3 +13,18 @@ export function reproject(p: Point, to: string): Point {
         crs: to,
     }
 }
+
+export function matchesProjection(
+    projection: string,
+    mapProjection: string
+): boolean {
+    return (
+        normalizeProjection(projection) === normalizeProjection(mapProjection)
+    )
+}
+export function normalizeProjection(projection: string) {
+    let epsg = projection.startsWith("urn:ogc:def:crs:")
+        ? projection.substring("urn:ogc:def:crs:".length).replace("::", ":")
+        : projection
+    return epsg === "EPSG:900913" ? "EPSG:3857" : epsg
+}

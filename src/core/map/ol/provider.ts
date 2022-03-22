@@ -19,7 +19,11 @@ const OLMapProvider: MapProvider = {
                 projection,
                 zoom: mapConfig.zoom,
             }),
-            layers: createLayers(mapConfig.layers, projection),
+            layers: createLayers(
+                mapConfig.layers,
+                projection,
+                mapConfig.sources
+            ),
         })
         return {
             map,
