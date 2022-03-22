@@ -5,7 +5,7 @@ import ContextViewer from "./viewer/context-viewer"
 export function App() {
     const url = new URL(window.location.href)
     const contextName = url.searchParams.get("context")
-    const mapType = url.searchParams.get("mapType") ?? "ol"
+    const mode = url.searchParams.get("mode") ?? "2d"
     const [context, setContext] = useState<Context | null>(null)
     const [error, setError] = useState(null)
     useEffect(() => {
@@ -18,7 +18,7 @@ export function App() {
             {error ? (
                 <div className="error">{JSON.stringify(error)}</div>
             ) : context ? (
-                <ContextViewer context={context} mapType={mapType} />
+                <ContextViewer context={context} mapType={getMapType(mode)} />
             ) : (
                 <div className="loading">Loading...</div>
             )}
@@ -32,4 +32,7 @@ export function App() {
             </div>
         </>
     )
+}
+function getMapType(mode: string): string {
+    return mode === "3d" ? "cesium" : "ol"
 }
