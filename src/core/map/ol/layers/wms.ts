@@ -11,6 +11,7 @@ export type WMSLayer = MapLayer & {
     format?: string
     url: string
     singleTile?: boolean
+    style?: string
 }
 
 export function createLayer(layer: MapLayer): Layer {
@@ -22,6 +23,7 @@ export function createLayer(layer: MapLayer): Layer {
                 params: {
                     LAYERS: wmsLayer.name,
                     FORMAT: wmsLayer.format || "image/png",
+                    STYLES: wmsLayer.style,
                 },
                 ratio: 1,
                 serverType: "geoserver",
@@ -36,6 +38,7 @@ export function createLayer(layer: MapLayer): Layer {
                     LAYERS: wmsLayer.name,
                     TILED: true,
                     FORMAT: wmsLayer.format || "image/png",
+                    STYLES: wmsLayer.style,
                 },
                 transition: 0,
             }),

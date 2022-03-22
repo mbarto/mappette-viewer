@@ -34,7 +34,11 @@ export type MapStoreResource = {
 export type MapLayer = {
     id: string
     name: string
-    title?: string
+    title?:
+        | {
+              [key: string]: string
+          }
+        | string
     type: string
     source?: string
     group?: string

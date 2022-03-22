@@ -3,12 +3,16 @@ import { PluginProps } from "../core/plugins"
 import ToolbarButton from "./toolbar/toolbar-button"
 import "./toc/toc.css"
 import { useMap } from "../core/map"
+import { Context, MapLayer } from "../api/context"
+import Layer from "ol/layer/Layer"
+import { useLocale } from "../api/locale"
 
 type TableOfContentsProps = PluginProps
 
 export default function TableOfContents({ context }: TableOfContentsProps) {
     const [status, setStatus] = useState("")
     const map = useMap()
+    const locale = useLocale()
     function toggle() {
         setStatus((s) => (s !== "open" ? "open" : "closed"))
     }
@@ -37,47 +41,63 @@ export default function TableOfContents({ context }: TableOfContentsProps) {
                         onClick={toggle}
                     ></span>
                     <span className="toc-icon glyphicon glyphicon-1-layer"></span>
-                    <div className="mapstore-layers-container">
-                        {context.mapConfig.map.layers
-                            .filter((l) => l.group !== "background")
-                            .map((l) => (
+                </div>
+                <div className="toc-body">
+                    <div className="toc-title">
+                        <span className="glyphicon glyphicon-1-map"></span>{" "}
+                        {context.windowTitle}
+                    </div>
+                    <div className="toc-layers-container">
+                        {getLayers(context).map((l) => (
+                            <div className="toc-layer">
                                 <div>
-                                    <div>
-                                        <input
-                                            type="checkbox"
-                                            checked={l.visibility}
-                                            onChange={(evt) =>
-                                                setVisibility(
-                                                    l.id,
-                                                    (
-                                                        evt.target as HTMLInputElement
-                                                    ).checked
-                                                )
-                                            }
-                                        />{" "}
-                                        <span>{l.title ?? l.name}</span>
-                                    </div>
                                     <input
-                                        type="range"
-                                        min="0"
-                                        max="100"
-                                        value={(l.opacity ?? 1) * 100}
+                                        type="checkbox"
+                                        checked={l.visibility}
                                         onChange={(evt) =>
-                                            setOpacity(
+                                            setVisibility(
                                                 l.id,
-                                                Number(
-                                                    (
-                                                        evt.target as HTMLInputElement
-                                                    ).value
-                                                )
+                                                (evt.target as HTMLInputElement)
+                                                    .checked
                                             )
                                         }
-                                    />
+                                    />{" "}
+                                    <span>{getTitle(l, locale)}</span>
                                 </div>
-                            ))}
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={(l.opacity ?? 1) * 100}
+                                    onChange={(evt) =>
+                                        setOpacity(
+                                            l.id,
+                                            Number(
+                                                (evt.target as HTMLInputElement)
+                                                    .value
+                                            )
+                                        )
+                                    }
+                                />
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
         </>
     )
+}
+function getTitle(layer: MapLayer, locale: string): string {
+    if (typeof layer.title === "string") {
+        return layer.title
+    }
+    if (layer.title) {
+        layer.title[locale] ?? layer.title["default"]
+    }
+    return layer.name
+}
+function getLayers(context: Context): MapLayer[] {
+    return [
+        ...context.mapConfig.map.layers.filter((l) => l.group !== "background"),
+    ].reverse()
 }

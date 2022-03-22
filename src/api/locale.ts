@@ -15,6 +15,10 @@ export type Locale = {
     messages: LocaleMessages
 }
 
+export function useLocale() {
+    return navigator.language
+}
+
 export function loadLocale(
     locale: string = navigator.language
 ): Promise<Locale> {
