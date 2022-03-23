@@ -6,7 +6,7 @@ export type OSMLayer = MapLayer & {
     type: "osm"
 }
 
-export function createLayer(layer: MapLayer): ImageryProvider {
+export function createLayer(): ImageryProvider {
     return new OpenStreetMapImageryProvider({})
 }
 

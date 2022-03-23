@@ -3,7 +3,6 @@ import {
     WebMapServiceImageryProvider,
     ImageryProvider,
     Resource,
-    NeverTileDiscardPolicy,
 } from "cesium"
 import { MapLayer } from "../../../../api/context"
 import { addLayerType } from "../layers"
@@ -58,7 +57,11 @@ export function createLayer(layer: MapLayer): ImageryProvider {
         })
     } else {
         return new WebMapServiceImageryProvider({
-            url: wmsLayer.url,
+            url: Array.isArray(wmsLayer.url)
+                ? wmsLayer.url[
+                      Math.round(Math.random() * (wmsLayer.url.length - 1))
+                  ]
+                : wmsLayer.url,
             layers: wmsLayer.name,
             enablePickFeatures: false,
             parameters: {

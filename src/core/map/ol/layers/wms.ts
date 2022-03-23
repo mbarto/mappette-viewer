@@ -20,6 +20,7 @@ export function createLayer(layer: MapLayer): Layer {
     const wmsLayer = layer as WMSLayer
     if (wmsLayer.singleTile) {
         return new ImageLayer({
+            visible: layer.visibility,
             source: new ImageWMS({
                 url: wmsLayer.url,
                 params: {
@@ -34,6 +35,7 @@ export function createLayer(layer: MapLayer): Layer {
         })
     } else {
         return new TileLayer({
+            visible: layer.visibility,
             source: new TileWMS({
                 url: wmsLayer.url,
                 params: {

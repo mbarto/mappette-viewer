@@ -50,6 +50,7 @@ export function createLayer(
     if (tileMatrix) {
         const [resolutions, matrixSet, matrixIds, origin] = tileMatrix
         return new TileLayer({
+            visible: layer.visibility,
             source: new WMTS({
                 url: wmtsLayer.url,
                 layer: wmtsLayer.name,

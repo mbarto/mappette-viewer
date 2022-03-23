@@ -44,8 +44,15 @@ const CesiumMapProvider: MapProvider = {
             creditContainer:
                 document.querySelector(".mapstore-attribution") ?? undefined,
         })
-        const layers = createLayers(mapConfig.layers)
-        layers.forEach((l) => map.imageryLayers.addImageryProvider(l))
+        createLayers(mapConfig.layers, mapConfig.sources).forEach((l) =>
+            map.imageryLayers.addImageryProvider(l)
+        )
+        // turn off all layers with visibility false
+        mapConfig.layers
+            .filter((l) => !l.visibility)
+            .forEach((l) =>
+                findLayer(map, l.id).and((layer) => (layer.show = false))
+            )
         map.camera.setView({
             destination: Cartesian3.fromDegrees(
                 center.x,

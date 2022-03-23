@@ -22,16 +22,14 @@ export function createLayers(
     projection: string,
     sources?: MapSources
 ): Layer[] {
-    return layers
-        .filter((l) => l.visibility)
-        .reduce((acc: Layer[], layer) => {
-            const olLayer = createLayer(layer, projection, sources)
-            if (olLayer) {
-                olLayer.set("mapstore_id", layer.id)
-                return [...acc, olLayer]
-            }
-            return acc
-        }, [])
+    return layers.reduce((acc: Layer[], layer) => {
+        const olLayer = createLayer(layer, projection, sources)
+        if (olLayer) {
+            olLayer.set("mapstore_id", layer.id)
+            return [...acc, olLayer]
+        }
+        return acc
+    }, [])
 }
 
 export function createLayer(

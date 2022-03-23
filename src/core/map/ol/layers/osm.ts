@@ -10,6 +10,7 @@ export type OSMLayer = MapLayer & {
 
 export function createLayer(layer: MapLayer): Layer {
     return new TileLayer({
+        visible: layer.visibility,
         source: new OSM(),
     })
 }
