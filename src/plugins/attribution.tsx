@@ -1,29 +1,41 @@
-import OLAttribution from "ol/control/Attribution"
-import { useEffect, useRef } from "preact/hooks"
-import { useMap } from "../core/map"
+import { useEffect, useRef, useState } from "preact/hooks"
+import { MapInstance, useMap } from "../core/map"
 import { PluginProps } from "../core/plugins"
 import "./attribution/attribution.css"
 
 type AttributionPluginProps = PluginProps
 
+export type AttributionInstance = {
+    control: unknown
+    remove: () => void
+}
+
+export type AttributionProvider = {
+    create: (map: MapInstance) => AttributionInstance
+}
+
 export default function Attribution({ mapType }: AttributionPluginProps) {
     const map = useMap()
-    const attribution = useRef<OLAttribution>()
+    const [provider, setProvider] = useState<AttributionProvider | null>(null)
+    const attribution = useRef<AttributionInstance>()
     useEffect(() => {
-        if (map && mapType === "ol") {
-            attribution.current = new OLAttribution({
-                target: document.querySelector(
-                    ".mapstore-attribution"
-                ) as HTMLElement,
-            })
-
-            map.addControl(attribution.current)
+        if (map) {
+            if (provider) {
+                attribution.current = provider.create(map)
+            } else {
+                import(`./attribution/${mapType}/provider.ts`)
+                    .then((p) => setProvider(p.default))
+                    .catch(() =>
+                        console.warn(
+                            `No attribution implementation for ${mapType} provider`
+                        )
+                    )
+            }
         }
         return () => {
-            if (attribution.current && map)
-                map.removeControl(attribution.current)
+            if (attribution.current && map) attribution.current.remove()
         }
-    }, [map])
+    }, [map, provider])
     return <div className="mapstore-attribution"></div>
 }
 
