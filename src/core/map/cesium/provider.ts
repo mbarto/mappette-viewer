@@ -1,12 +1,6 @@
 import { MapProvider } from "../../map"
 import { reproject } from "../../projection"
-import {
-    Viewer,
-    OpenStreetMapImageryProvider,
-    Cartesian3,
-    Ellipsoid,
-    Cartographic,
-} from "cesium"
+import { CesiumWidget, Cartesian3, Ellipsoid, Cartographic } from "cesium"
 import "./layers/all"
 
 // @ts-ignore
@@ -29,18 +23,7 @@ function getZoomFromHeight(height: number) {
 const CesiumMapProvider: MapProvider = {
     create: (id, mapConfig) => {
         const center = reproject(mapConfig.center, "EPSG:4326")
-        const map = new Viewer(id, {
-            baseLayerPicker: false,
-            animation: false,
-            fullscreenButton: false,
-            geocoder: false,
-            homeButton: false,
-            infoBox: false,
-            sceneModePicker: false,
-            selectionIndicator: false,
-            timeline: false,
-            navigationHelpButton: false,
-            navigationInstructionsInitiallyVisible: false,
+        const map = new CesiumWidget(id, {
             creditContainer:
                 document.querySelector(".mapstore-attribution") ?? undefined,
         })
@@ -96,7 +79,7 @@ const CesiumMapProvider: MapProvider = {
     },
 }
 
-function findLayer(map: Viewer, id: string) {
+function findLayer(map: CesiumWidget, id: string) {
     let layer: ImageryLayer | undefined
     for (let i = 0; i < map.imageryLayers.length; i++) {
         const candidate = map.imageryLayers.get(i)
