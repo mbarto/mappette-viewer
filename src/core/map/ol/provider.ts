@@ -47,6 +47,15 @@ const OLMapProvider: MapProvider = {
                     }
                 })
             },
+            setBackground: (id: string) => {
+                map.getLayers().forEach((l) => {
+                    if (l.get("mapstore_id") === id) {
+                        l.setVisible(true)
+                    } else if (l.get("mapstore_group_id") === "background") {
+                        l.setVisible(false)
+                    }
+                })
+            },
         }
     },
 }

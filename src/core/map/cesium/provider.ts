@@ -79,6 +79,7 @@ const CesiumMapProvider: MapProvider = {
             setLayerOpacity: (id: string, opacity: number) => {
                 findLayer(map, id).and((l) => (l.alpha = opacity))
             },
+            setBackground: (id: string) => {},
         }
     },
 }

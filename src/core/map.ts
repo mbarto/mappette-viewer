@@ -1,6 +1,6 @@
 import { createContext } from "preact"
 import { useContext } from "preact/hooks"
-import { MapConfig } from "../api/context"
+import { MapConfig, MapLayer } from "../api/context"
 
 export type MapProvider = {
     create: (id: string, mapConfig: MapConfig["map"]) => MapInstance
@@ -14,6 +14,7 @@ export type MapInstance = {
     removeControl: (control: unknown) => void
     setLayerVisibility: (id: string, visibility: boolean) => void
     setLayerOpacity: (id: string, opacity: number) => void
+    setBackground: (id: string) => void
 }
 
 export const Map = createContext<MapInstance | null>(null)

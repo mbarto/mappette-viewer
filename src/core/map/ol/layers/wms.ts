@@ -22,7 +22,9 @@ export function createLayer(layer: MapLayer): Layer {
         return new ImageLayer({
             visible: layer.visibility,
             source: new ImageWMS({
-                url: wmsLayer.url,
+                url: Array.isArray(wmsLayer.url)
+                    ? wmsLayer.url[0]
+                    : wmsLayer.url,
                 params: {
                     LAYERS: wmsLayer.name,
                     FORMAT: wmsLayer.format || "image/png",
@@ -37,7 +39,9 @@ export function createLayer(layer: MapLayer): Layer {
         return new TileLayer({
             visible: layer.visibility,
             source: new TileWMS({
-                url: wmsLayer.url,
+                url: Array.isArray(wmsLayer.url)
+                    ? wmsLayer.url[0]
+                    : wmsLayer.url,
                 params: {
                     LAYERS: wmsLayer.name,
                     TILED: true,

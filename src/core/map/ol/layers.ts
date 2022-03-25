@@ -26,6 +26,7 @@ export function createLayers(
         const olLayer = createLayer(layer, projection, sources)
         if (olLayer) {
             olLayer.set("mapstore_id", layer.id)
+            olLayer.set("mapstore_group_id", layer.group)
             return [...acc, olLayer]
         }
         return acc
