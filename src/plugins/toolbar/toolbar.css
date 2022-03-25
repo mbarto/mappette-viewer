@@ -1,15 +1,15 @@
 .mapstore-toolbar {
     position: absolute;
-    bottom: 40px;
+    bottom: calc(var(--footer-present) * var(--footer-height) + 10px);
     right: 10px;
     z-index: 1000;
     box-shadow: -1px 1px 5px 1px #5e5e5e;
 }
 
 .toolbar-button {
-    background-color: rgb(7, 138, 163);
+    background-color: var(--main-color);
     border-style: solid;
-    border-color: rgb(6, 121, 143);
+    border-color: var(--main-color-darker);
     border-width: 1px;
     color: white;
     width: 52px;

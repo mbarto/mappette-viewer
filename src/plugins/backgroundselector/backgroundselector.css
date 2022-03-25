@@ -1,7 +1,7 @@
 .mapstore-background-selector {
     position: absolute;
     bottom: 40px;
-    left: 10px;
+    left: calc(var(--left-panel-open) * var(--left-panel-width) + 10px);
     z-index: 1000;
 }
 

@@ -27,3 +27,12 @@ body {
     font-weight: 400;
     src: url("icons.woff") format("woff");
 }
+
+:root {
+    --main-color: rgb(7, 138, 163);
+    --main-color-darker: rgb(6, 121, 143);
+    --left-panel-width: 300px;
+    --left-panel-open: 0;
+    --footer-height: 30px;
+    --footer-present: 0;
+}

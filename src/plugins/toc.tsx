@@ -5,6 +5,7 @@ import "./toc/toc.css"
 import { useMap } from "../core/map"
 import { Context, MapLayer, MapLayerGroup } from "../api/context"
 import { useLocale } from "../api/locale"
+import { useCssVariable } from "../core/css"
 
 type TableOfContentsProps = PluginProps
 
@@ -43,6 +44,9 @@ export default function TableOfContents({ context }: TableOfContentsProps) {
             [id]: !groupStatus[id],
         })
     }
+    useCssVariable("--left-panel-open", () => (status === "open" ? "1" : "0"), [
+        status,
+    ])
     return (
         <>
             <ToolbarButton

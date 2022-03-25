@@ -1,31 +1,25 @@
-:root {
-    --toc-width: 300px;
-}
-
 .mapstore-table-of-contents {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: calc(var(--toc-width) * -1);
-    width: var(--toc-width);
+    left: calc(var(--left-panel-width) * -1);
+    width: var(--left-panel-width);
     background-color: #fff;
-}
-
-.mapstore-table-of-contents.open {
-    animation-duration: 0.5s;
-    animation-name: slidein;
-    left: 0;
-}
-
-.mapstore-table-of-contents.closed {
-    animation-duration: 0.5s;
-    animation-name: slideout;
-    left: calc(var(--toc-width) * -1);
+    &.open {
+        animation-duration: 0.5s;
+        animation-name: slidein;
+        left: 0;
+    }
+    &.closed {
+        animation-duration: 0.5s;
+        animation-name: slideout;
+        left: calc(var(--left-panel-width) * -1);
+    }
 }
 
 @keyframes slidein {
     from {
-        left: calc(var(--toc-width) * -1);
+        left: calc(var(--left-panel-width) * -1);
     }
 
     to {
@@ -39,7 +33,7 @@
     }
 
     to {
-        left: calc(var(--toc-width) * -1);
+        left: calc(var(--left-panel-width) * -1);
     }
 }
 
@@ -53,9 +47,9 @@
 
 .glyphicon-1-map {
     font-size: 20px !important;
-}
-.glyphicon-1-map:before {
-    content: "\f115";
+    &:before {
+        content: "\f115";
+    }
 }
 
 .glyphicon-folder-open,
@@ -75,7 +69,7 @@
 
 .toc-close {
     cursor: pointer;
-    color: rgb(7, 138, 163);
+    color: var(--main-color);
 }
 
 .toc-header {
@@ -84,7 +78,7 @@
 
 .toc-icon {
     float: right;
-    color: rgb(7, 138, 163);
+    color: var(--main-color);
 }
 
 .toc-title {

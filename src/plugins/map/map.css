@@ -1,6 +1,7 @@
 .mapstore-map {
-    width: 100%;
+    right: 0;
     position: absolute;
+    left: calc(var(--left-panel-open) * var(--left-panel-width));
     top: 0;
-    bottom: 30px;
+    bottom: calc(var(--footer-present) * var(--footer-height));
 }
