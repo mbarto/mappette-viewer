@@ -1,12 +1,10 @@
 import { MapLayer, MapSources } from "../../../../api/context"
 import { addLayerType } from "../layers"
 import { matchesProjection } from "../../../projection"
-import {
-    ImageryProvider,
-    WebMapTileServiceImageryProvider,
-    Resource,
-    GeographicTilingScheme,
-} from "cesium"
+import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
+import WebMapTileServiceImageryProvider from "cesium/Source/Scene/WebMapTileServiceImageryProvider"
+import Resource from "cesium/Source/Core/Resource"
+import GeographicTilingScheme from "cesium/Source/Core/GeographicTilingScheme"
 
 export type WMTSLayer = MapLayer & {
     type: "wmts"

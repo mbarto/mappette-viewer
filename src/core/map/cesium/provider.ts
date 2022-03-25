@@ -1,6 +1,6 @@
 import { MapProvider } from "../../map"
 import { reproject } from "../../projection"
-import { CesiumWidget, Cartesian3, Ellipsoid, Cartographic } from "cesium"
+
 import "./layers/all"
 
 // @ts-ignore
@@ -8,7 +8,11 @@ window.CESIUM_BASE_URL = "node_modules/cesium/Build/Cesium"
 
 import "cesium/Build/Cesium/Widgets/widgets.css"
 import { createLayers, ImageryProviderWithId } from "./layers"
+import CesiumWidget from "cesium/Source/Widgets/CesiumWidget/CesiumWidget"
+import Cartesian3 from "cesium/Source/Core/Cartesian3"
+import Ellipsoid from "cesium/Source/Core/Ellipsoid"
 import ImageryLayer from "cesium/Source/Scene/ImageryLayer"
+import Cartographic from "cesium/Source/Core/Cartographic"
 
 export const zoomToHeight = 80000000
 

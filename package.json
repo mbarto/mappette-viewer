@@ -5,7 +5,8 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "postinstall": "cd node_modules/cesium; npe --delete exports"
     },
     "dependencies": {
         "cesium": "^1.91.0",
@@ -16,6 +17,7 @@
     "devDependencies": {
         "@preact/preset-vite": "^2.1.5",
         "@types/proj4": "^2.5.2",
+        "npe": "^1.2.0",
         "prettier": "^2.5.1",
         "rollup-plugin-copy": "^3.4.0",
         "typescript": "^4.5.4",
