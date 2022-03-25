@@ -1,4 +1,4 @@
-import { Coordinate } from "../../cesium/layers/wmts"
+import { Coordinate } from "../cesium/layers/wmts"
 
 export type TileProviders = {
     [key: string]: TileProvider
@@ -44,6 +44,46 @@ export type TileProviderVariant =
           url?: string | Function
           options?: TileProviderOptions
       }
+
+export type Config = {
+    url?: string
+    options?: TileProviderOptions
+}
+
+export function getConfig(providerPath: string): Config | undefined {
+    const [provider, variant, ...rest] = providerPath.split(".")
+    const providerConfig = providers[provider]
+    if (providerConfig) {
+        if (variant) {
+            const variantConfig = providerConfig.variants?.[variant]
+            const url =
+                typeof variantConfig !== "string"
+                    ? variantConfig?.url ?? providerConfig.url
+                    : providerConfig.url
+            return {
+                url:
+                    typeof url === "function"
+                        ? url(rest.splice(1, rest.length + 1).join("."))
+                        : url,
+                options: {
+                    ...providerConfig.options,
+                    ...(typeof variantConfig !== "string"
+                        ? variantConfig?.options
+                        : {}),
+                },
+            }
+        }
+        return {
+            url:
+                typeof providerConfig.url === "function"
+                    ? providerConfig.url(
+                          rest.splice(1, rest.length + 1).join(".")
+                      )
+                    : providerConfig.url,
+            options: providerConfig.options ?? {},
+        }
+    }
+}
 
 const providers: TileProviders = {
     OpenStreetMap: {
@@ -945,6 +985,70 @@ const providers: TileProviders = {
             },
         },
     },
+}
+
+export function replaceAttribution(config?: Config) {
+    if (config?.options?.attribution) {
+        return {
+            ...config,
+            options: {
+                ...config.options,
+                attribution: replaceAttributionValue(
+                    config.options.attribution
+                ),
+            },
+        }
+    }
+    return config
+}
+
+export function replaceAttributionValue(attribution: string): string {
+    if (attribution.indexOf("{attribution.") !== -1) {
+        return attribution.replace(
+            /\{attribution.(\w*)\}/,
+            (_, attributionName) => {
+                const provider = providers[attributionName]
+                return replaceAttributionValue(
+                    provider?.options?.attribution ?? ""
+                )
+            }
+        )
+    }
+    return attribution
+}
+
+export function template(str = "", data: { [key: string]: unknown } = {}) {
+    return str.replace(
+        /(\{(.*?)\})/g,
+        function (st: string, arg1: string, arg2: string | undefined): string {
+            let key = arg2 ?? arg1
+            if (["x", "y", "z"].includes(key)) {
+                return st
+            }
+            let value = data[key]
+
+            if (value === undefined) {
+                throw new Error("No value provided for variable " + st)
+            } else if (typeof value === "function") {
+                return value(data)
+            }
+            return value as string
+        }
+    )
+}
+
+export function getUrls(opt: Config) {
+    let url = opt.url || ""
+    const subdomains =
+        typeof opt.options?.subdomains === "string"
+            ? String(opt.options?.subdomains).split("")
+            : ["a", "b", "c"]
+
+    return subdomains.map((c) =>
+        template(url.replace("{s}", c), {
+            ...opt.options,
+        })
+    )
 }
 
 export default providers

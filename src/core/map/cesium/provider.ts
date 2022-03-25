@@ -13,6 +13,8 @@ import Cartesian3 from "cesium/Source/Core/Cartesian3"
 import Ellipsoid from "cesium/Source/Core/Ellipsoid"
 import ImageryLayer from "cesium/Source/Scene/ImageryLayer"
 import Cartographic from "cesium/Source/Core/Cartographic"
+import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
+import Color from "cesium/Source/Core/Color"
 
 export const zoomToHeight = 80000000
 
@@ -31,6 +33,8 @@ const CesiumMapProvider: MapProvider = {
             creditContainer:
                 document.querySelector(".mapstore-attribution") ?? undefined,
         })
+        map.scene.globe.baseColor = Color.WHITE
+        map.imageryLayers.removeAll()
         createLayers(mapConfig.layers, mapConfig.sources).forEach((l) =>
             map.imageryLayers.addImageryProvider(l)
         )
@@ -79,7 +83,15 @@ const CesiumMapProvider: MapProvider = {
             setLayerOpacity: (id: string, opacity: number) => {
                 findLayer(map, id).and((l) => (l.alpha = opacity))
             },
-            setBackground: (id: string) => {},
+            setBackground: (id: string) => {
+                findLayer(map, id).and((l) => (l.show = true))
+                findLayers(
+                    map,
+                    (l) =>
+                        l.mapstoreGroupId === "background" &&
+                        l.mapstoreId !== id
+                ).and((layers) => layers.forEach((l) => (l.show = false)))
+            },
         }
     },
 }
@@ -96,6 +108,25 @@ function findLayer(map: CesiumWidget, id: string) {
     return {
         and: (callback: (layer: ImageryLayer) => void) => {
             if (layer) callback(layer)
+        },
+    }
+}
+
+function findLayers(
+    map: CesiumWidget,
+    predicate: (provider: ImageryProviderWithId) => boolean
+) {
+    let layers: ImageryLayer[] = []
+    for (let i = 0; i < map.imageryLayers.length; i++) {
+        const candidate = map.imageryLayers.get(i)
+        const provider = candidate.imageryProvider as ImageryProviderWithId
+        if (predicate(provider)) {
+            layers.push(candidate)
+        }
+    }
+    return {
+        and: (callback: (layers: ImageryLayer[]) => void) => {
+            callback(layers)
         },
     }
 }

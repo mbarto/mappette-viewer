@@ -3,6 +3,7 @@ import { MapLayer, MapSources } from "../../../api/context"
 
 export type ImageryProviderWithId = ImageryProvider & {
     mapstoreId: string
+    mapstoreGroupId: string
 }
 
 const layerTypes: {
@@ -36,6 +37,7 @@ export function createLayer(
     if (impl) {
         const provider = impl.create(layer, sources) as ImageryProviderWithId
         provider.mapstoreId = layer.id
+        provider.mapstoreGroupId = layer.group ?? "Default"
         return provider
     }
     console.error(`Layer type ${layer.type} not implemented`)
