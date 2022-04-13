@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "preact/hooks"
+import { useEffect, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { getPlugins, Plugin } from "../core/plugins"
-import { Map, MapInstance, MapProvider } from "../core/map"
+import { Map, MapInstance } from "../core/map"
 import { loadLocale, Locale } from "../api/locale"
 import PluginsContainer from "./plugins-container"
 

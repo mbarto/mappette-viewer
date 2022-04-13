@@ -1,20 +1,20 @@
-import { MapProvider } from "../../map"
-import { reproject } from "../../projection"
+import { MapProvider } from "../map"
+import { reproject } from "../projection"
 
-import "./layers/all"
+import "./cesium/layers/all"
 
 // @ts-ignore
 window.CESIUM_BASE_URL = "node_modules/cesium/Build/Cesium"
 
 import "cesium/Build/Cesium/Widgets/widgets.css"
-import { createLayers, ImageryProviderWithId } from "./layers"
+import { createLayers, ImageryProviderWithId } from "./cesium/layers"
 import CesiumWidget from "cesium/Source/Widgets/CesiumWidget/CesiumWidget"
 import Cartesian3 from "cesium/Source/Core/Cartesian3"
 import Ellipsoid from "cesium/Source/Core/Ellipsoid"
 import ImageryLayer from "cesium/Source/Scene/ImageryLayer"
 import Cartographic from "cesium/Source/Core/Cartographic"
-import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
 import Color from "cesium/Source/Core/Color"
+import ScreenSpaceEventHandler from "cesium/Source/Core/ScreenSpaceEventHandler"
 
 export const zoomToHeight = 80000000
 
@@ -24,6 +24,42 @@ function getHeightFromZoom(zoom: number) {
 
 function getZoomFromHeight(height: number) {
     return Math.log2(zoomToHeight / height) + 1
+}
+
+function getCartesian(viewer: CesiumWidget, event: any) {
+    if (event.position !== null) {
+        const scene = viewer.scene
+        const ellipsoid = scene.globe.ellipsoid
+        const cartesian = scene.camera.pickEllipsoid(
+            event.position || event.endPosition,
+            ellipsoid
+        )
+        return cartesian
+    }
+    return null
+}
+
+function getMouseXYZ(viewer: CesiumWidget, event: any) {
+    var scene = viewer.scene
+    const mousePosition = event.position || event.endPosition
+    if (!mousePosition) {
+        return null
+    }
+    const ray = viewer.camera.getPickRay(mousePosition)
+    if (ray) {
+        const position = viewer.scene.globe.pick(ray, viewer.scene)
+        const ellipsoid = scene.globe.ellipsoid
+        if (position) {
+            const cartographic = ellipsoid.cartesianToCartographic(position)
+            const cartesian = getCartesian(viewer, event)
+            if (cartesian) {
+                cartographic.height = scene.globe.getHeight(cartographic) ?? 0
+            }
+            return cartographic
+        }
+    }
+
+    return null
 }
 
 const CesiumMapProvider: MapProvider = {
@@ -91,6 +127,29 @@ const CesiumMapProvider: MapProvider = {
                         l.mapstoreGroupId === "background" &&
                         l.mapstoreId !== id
                 ).and((layers) => layers.forEach((l) => (l.show = false)))
+            },
+            addListener: (event, listener) => {
+                if (event === "mousemove") {
+                    const hand = new ScreenSpaceEventHandler(map.scene.canvas)
+                    hand.setInputAction((movement) => {
+                        const cartesian = map.camera.pickEllipsoid(
+                            movement.endPosition,
+                            map.scene.globe.ellipsoid
+                        )
+                        let cartographic =
+                            getMouseXYZ(map, movement) ||
+                            (cartesian && Cartographic.fromCartesian(cartesian))
+                        if (cartographic) {
+                            const elevation = Math.round(cartographic.height)
+                            listener({
+                                y: (cartographic.latitude * 180.0) / Math.PI,
+                                x: (cartographic.longitude * 180.0) / Math.PI,
+                                z: elevation,
+                                crs: "EPSG:4326",
+                            })
+                        }
+                    }, 15) // ScreenSpaceEventType.MOUSE_MOVE
+                }
             },
         }
     },

@@ -1,10 +1,10 @@
-import { MapProvider } from "../../map"
-import { reproject } from "../../projection"
+import { MapProvider } from "../map"
+import { reproject } from "../projection"
 import OLMap from "ol/Map"
 import View from "ol/View"
-import { createLayers } from "./layers"
+import { createLayers } from "./ol/layers"
 import "ol/ol.css"
-import "./layers/all"
+import "./ol/layers/all"
 import Control from "ol/control/Control"
 
 const OLMapProvider: MapProvider = {
@@ -55,6 +55,17 @@ const OLMapProvider: MapProvider = {
                         l.setVisible(false)
                     }
                 })
+            },
+            addListener: (event, listener) => {
+                if (event === "mousemove") {
+                    map.on("pointermove", (e) =>
+                        listener({
+                            x: e.coordinate[0],
+                            y: e.coordinate[1],
+                            crs: projection,
+                        })
+                    )
+                }
             },
         }
     },
