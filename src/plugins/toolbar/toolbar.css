@@ -1,6 +1,6 @@
 .mapstore-toolbar {
     position: absolute;
-    bottom: calc(var(--footer-present) * var(--footer-height) + 10px);
+    bottom: calc(var(--main-area-bottom) + 10px);
     right: 10px;
     z-index: 1000;
     box-shadow: -1px 1px 5px 1px #5e5e5e;
@@ -17,6 +17,10 @@
     position: relative;
     display: block;
     cursor: pointer;
+}
+
+.toolbar-button.selected {
+    background-color: var(--selected-color);
 }
 
 .glyphicon {
@@ -39,4 +43,8 @@
 
 .glyphicon-resize-full:before {
     content: "\f20a";
+}
+
+.glyphicon-3d:before {
+    content: "\f137";
 }
