@@ -1,4 +1,4 @@
-import { AttributionProvider } from "../../attribution"
+import { AttributionProvider } from "../attribution"
 import Attribution from "ol/control/Attribution"
 
 const OLAttributionProvider: AttributionProvider = {

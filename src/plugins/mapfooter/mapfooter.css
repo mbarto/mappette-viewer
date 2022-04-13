@@ -7,15 +7,10 @@
     z-index: 1030;
     background-color: #fff;
     color: #333;
-
-    & .ol-attribution.ol-uncollapsible {
-        font-size: 11px;
-        height: var(--footer-height);
-        left: 0;
-        max-height: 2.6em;
-        overflow: hidden;
-        position: absolute;
-        text-align: left;
-        width: 50%;
+    display: flex;
+    justify-content: right;
+    & > div {
+        flex-basis: content;
+        flex-grow: 0;
     }
 }

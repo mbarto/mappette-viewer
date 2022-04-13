@@ -1,3 +1,18 @@
-.mapstore-attribution .ol-attribution {
-    flex-flow: row;
+.mapstore-attribution {
+    order: 1;
+    flex-grow: 1;
+    & .ol-attribution {
+        flex-flow: row;
+    }
+}
+
+.ol-attribution.ol-uncollapsible {
+    font-size: 11px;
+    height: var(--footer-height);
+    left: 0;
+    max-height: 2.6em;
+    overflow: hidden;
+    position: absolute;
+    text-align: left;
+    width: 50%;
 }

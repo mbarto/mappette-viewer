@@ -24,7 +24,7 @@ export default function Scalebar({ mapType }: ScalebarPluginProps) {
             if (provider) {
                 scalebar.current = provider.create(map)
             } else {
-                import(`./scalebar/${mapType}/provider.ts`)
+                import(`./scalebar/${mapType}-scalebar.ts`)
                     .then((p) => setProvider(p.default))
                     .catch(() =>
                         console.warn(

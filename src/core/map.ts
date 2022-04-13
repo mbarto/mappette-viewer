@@ -1,10 +1,19 @@
 import { createContext } from "preact"
 import { useContext } from "preact/hooks"
-import { MapConfig, MapLayer } from "../api/context"
+import { MapConfig } from "../api/context"
 
 export type MapProvider = {
     create: (id: string, mapConfig: MapConfig["map"]) => MapInstance
 }
+
+export type OnMouseMovePayload = {
+    x: number
+    y: number
+    z?: number
+    crs: string
+}
+
+export type EventPayload = OnMouseMovePayload
 
 export type MapInstance = {
     map?: unknown
@@ -15,6 +24,10 @@ export type MapInstance = {
     setLayerVisibility: (id: string, visibility: boolean) => void
     setLayerOpacity: (id: string, opacity: number) => void
     setBackground: (id: string) => void
+    addListener: (
+        event: string,
+        listener: (eventPayload: EventPayload) => void
+    ) => void
 }
 
 export const Map = createContext<MapInstance | null>(null)
@@ -24,5 +37,5 @@ export function useMap() {
 }
 
 export function loadProvider(mapType: string): Promise<MapProvider> {
-    return import(`./map/${mapType}/provider.ts`).then((p) => p.default)
+    return import(`./map/${mapType}-map.ts`).then((p) => p.default)
 }

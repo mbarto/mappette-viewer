@@ -1,4 +1,4 @@
-import { ScalebarProvider } from "../../scalebar"
+import { ScalebarProvider } from "../scalebar"
 import ScaleLine from "ol/control/ScaleLine"
 
 const OLScalebarProvider: ScalebarProvider = {

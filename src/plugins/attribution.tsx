@@ -23,7 +23,7 @@ export default function Attribution({ mapType }: AttributionPluginProps) {
             if (provider) {
                 attribution.current = provider.create(map)
             } else {
-                import(`./attribution/${mapType}/provider.ts`)
+                import(`./attribution/${mapType}-attribution.ts`)
                     .then((p) => setProvider(p.default))
                     .catch(() =>
                         console.warn(
