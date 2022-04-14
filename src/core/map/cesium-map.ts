@@ -1,4 +1,4 @@
-import { MapProvider } from "../map"
+import { EventPayload, MapProvider } from "../map"
 import { reproject } from "../projection"
 
 import "./cesium/layers/all"
@@ -62,6 +62,63 @@ function getMouseXYZ(viewer: CesiumWidget, event: any) {
     return null
 }
 
+type CesiumMapListener = {
+    event: 2 | 15 // ScreenSpaceEventType
+    handler: (e: unknown) => unknown
+}
+
+type CesiumMapListeners = {
+    [key: number]: CesiumMapListener
+}
+
+let listeners: CesiumMapListeners = {}
+
+const managedEvents: {
+    [key: string]: CesiumMapListener["event"]
+} = {
+    mousemove: 15,
+    click: 2,
+}
+
+function createWrapper(
+    listener: (eventPayload: EventPayload) => void,
+    map: CesiumWidget
+) {
+    return (movement: any) => {
+        const cartesian = map.camera.pickEllipsoid(
+            movement.endPosition ?? movement.position,
+            map.scene.globe.ellipsoid
+        )
+        let cartographic =
+            getMouseXYZ(map, movement) ||
+            (cartesian && Cartographic.fromCartesian(cartesian))
+        if (cartographic) {
+            const elevation = Math.round(cartographic.height)
+            listener({
+                y: (cartographic.latitude * 180.0) / Math.PI,
+                x: (cartographic.longitude * 180.0) / Math.PI,
+                z: elevation,
+                crs: "EPSG:4326",
+            })
+        }
+    }
+}
+
+function addListener(
+    event: CesiumMapListener["event"],
+    listener: (e: unknown) => void
+) {
+    const key = Object.keys(listeners).length + 1
+    listeners = {
+        ...listeners,
+        [key]: {
+            event,
+            handler: listener,
+        },
+    }
+    return key
+}
+
 const CesiumMapProvider: MapProvider = {
     create: (id, mapConfig) => {
         const center = reproject(mapConfig.center, "EPSG:4326")
@@ -74,6 +131,7 @@ const CesiumMapProvider: MapProvider = {
         createLayers(mapConfig.layers, mapConfig.sources).forEach((l) =>
             map.imageryLayers.addImageryProvider(l)
         )
+        const hand = new ScreenSpaceEventHandler(map.scene.canvas)
         // turn off all layers with visibility false
         mapConfig.layers
             .filter((l) => !l.visibility)
@@ -129,26 +187,17 @@ const CesiumMapProvider: MapProvider = {
                 ).and((layers) => layers.forEach((l) => (l.show = false)))
             },
             addListener: (event, listener) => {
-                if (event === "mousemove") {
-                    const hand = new ScreenSpaceEventHandler(map.scene.canvas)
-                    hand.setInputAction((movement) => {
-                        const cartesian = map.camera.pickEllipsoid(
-                            movement.endPosition,
-                            map.scene.globe.ellipsoid
-                        )
-                        let cartographic =
-                            getMouseXYZ(map, movement) ||
-                            (cartesian && Cartographic.fromCartesian(cartesian))
-                        if (cartographic) {
-                            const elevation = Math.round(cartographic.height)
-                            listener({
-                                y: (cartographic.latitude * 180.0) / Math.PI,
-                                x: (cartographic.longitude * 180.0) / Math.PI,
-                                z: elevation,
-                                crs: "EPSG:4326",
-                            })
-                        }
-                    }, 15) // ScreenSpaceEventType.MOUSE_MOVE
+                const cesiumEvent = managedEvents[event]
+                if (cesiumEvent) {
+                    const listenerWrapper = createWrapper(listener, map)
+                    hand.setInputAction(listenerWrapper, cesiumEvent)
+                    return addListener(cesiumEvent, listenerWrapper)
+                }
+                return 0
+            },
+            removeListener(listener) {
+                if (listeners[listener]) {
+                    hand.removeInputAction(listeners[listener].event)
                 }
             },
         }

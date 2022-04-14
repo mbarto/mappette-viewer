@@ -13,7 +13,16 @@ export type OnMouseMovePayload = {
     crs: string
 }
 
-export type EventPayload = OnMouseMovePayload
+export type OnClickPayload = {
+    x: number
+    y: number
+    z?: number
+    crs: string
+}
+
+export type EventPayload = OnMouseMovePayload | OnClickPayload
+
+export type MapListener = number
 
 export type MapInstance = {
     map?: unknown
@@ -27,7 +36,8 @@ export type MapInstance = {
     addListener: (
         event: string,
         listener: (eventPayload: EventPayload) => void
-    ) => void
+    ) => MapListener
+    removeListener: (listener: MapListener) => void
 }
 
 export const Map = createContext<MapInstance | null>(null)

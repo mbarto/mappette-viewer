@@ -48,3 +48,7 @@
 .glyphicon-3d:before {
     content: "\f137";
 }
+
+.glyphicon-map-marker:before {
+    content: "\f1c3";
+}

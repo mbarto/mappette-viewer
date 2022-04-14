@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks"
+import { useEffect, useRef, useState } from "preact/hooks"
 import { useMessage } from "../api/locale"
 import { OnMouseMovePayload, useMap } from "../core/map"
 import { PluginProps } from "../core/plugins"
@@ -35,11 +35,20 @@ export default function MousePosition({ context }: MousePositionPluginProps) {
     function toggleActive() {
         setActive((a) => !a)
     }
+    const listener = useRef<number | undefined>()
     useEffect(() => {
-        if (active) {
-            map?.addListener("mousemove", (p) => setPoint(p))
+        if (map) {
+            if (active) {
+                listener.current = map.addListener("mousemove", (p) =>
+                    setPoint(p)
+                )
+            } else {
+                if (listener.current) {
+                    map.removeListener(listener.current)
+                }
+            }
         }
-    }, [active])
+    }, [active, map])
     return (
         <div className="mapstore-mouse-position">
             {active && point ? (

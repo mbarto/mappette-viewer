@@ -1,4 +1,3 @@
-import { useMap } from "../core/map"
 import { PluginProps } from "../core/plugins"
 import ToolbarButton from "./toolbar/toolbar-button"
 
