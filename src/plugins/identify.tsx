@@ -67,7 +67,7 @@ export default function Identify({ context }: IdentifyPluginProps) {
 
     useEffect(() => {
         Promise.all(
-            layers.map((l) => import(`../core/layers/${l}/identify`))
+            layers.map((l) => import(`../core/layers/${l}/identify.ts`))
         ).then((handlers) => {
             setProviders(
                 layers.reduce((acc, l, idx) => {
