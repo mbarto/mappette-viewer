@@ -136,6 +136,17 @@ function getMapZoom(map: CesiumWidget): number {
     return getZoomFromHeight(cartographic.height)
 }
 
+function getResolutions() {
+    const size = 360 / 256
+    const resolutions = new Array(19)
+    for (let z = 0; z < 19; ++z) {
+        resolutions[z] = size / Math.pow(2, z)
+    }
+    return resolutions
+}
+
+const resolutions = getResolutions()
+
 const CesiumMapProvider: MapProvider = {
     create: (id, mapConfig) => {
         const center = reproject(mapConfig.center, "EPSG:4326")
@@ -181,7 +192,7 @@ const CesiumMapProvider: MapProvider = {
             getZoom: () => {
                 return getMapZoom(map)
             },
-            getResolution: () => 1, // TODO
+            getResolution: () => resolutions[Math.round(getMapZoom(map))],
             addControl: (control: unknown) => {},
             removeControl: (control: unknown) => {},
             setLayerVisibility: (id: string, visibility: boolean) => {

@@ -17,7 +17,7 @@ export default function identify(
         pixelSize
     )
     url.searchParams.append("SERVICE", "WMS")
-    url.searchParams.append("VERSION", "1.3.0")
+    url.searchParams.append("VERSION", "1.1.1")
     url.searchParams.append("REQUEST", "GETFEATUREINFO")
     url.searchParams.append("LAYERS", wmsLayer.name)
     url.searchParams.append("QUERY_LAYERS", wmsLayer.name)
