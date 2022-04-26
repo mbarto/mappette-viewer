@@ -10,12 +10,12 @@ type IdentifyPluginProps = PluginProps
 
 type Results = {
     layer: MapLayer
-    features: unknown[]
+    features: Feature[]
 }
 
 type FeatureCollection = {
     type: "FeatureCollection"
-    features: unknown[]
+    features: Feature[]
 }
 
 type Feature = {
