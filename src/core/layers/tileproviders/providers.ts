@@ -1,4 +1,4 @@
-import { Coordinate } from "../cesium/layers/wmts"
+import { Coordinate } from "../../map/cesium/layers/wmts"
 
 export type TileProviders = {
     [key: string]: TileProvider

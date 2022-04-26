@@ -6,7 +6,7 @@ import {
     Config,
     getConfig,
     replaceAttribution,
-} from "../../tileproviders/providers"
+} from "../../../layers/tileproviders/providers"
 import { addLayerType } from "../layers"
 
 export type TileProviderLayer = MapLayer &

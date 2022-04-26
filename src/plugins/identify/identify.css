@@ -1,0 +1,10 @@
+.mapstore-identify-results {
+    position: fixed;
+    top: calc((100% - 500px) / 2);
+    width: 500px;
+    height: 500px;
+    left: calc((100% - 500px) / 2);
+    overflow: auto;
+    background-color: white;
+    padding: 10px;
+}

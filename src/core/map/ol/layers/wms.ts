@@ -4,17 +4,8 @@ import TileLayer from "ol/layer/Tile"
 import ImageWMS from "ol/source/ImageWMS"
 import TileWMS from "ol/source/TileWMS"
 import { MapLayer } from "../../../../api/context"
+import { WMSLayer } from "../../../layers/wms/types"
 import { addLayerType } from "../layers"
-
-export type WMSLayer = MapLayer & {
-    type: "wms"
-    format?: string
-    url: string
-    singleTile?: boolean
-    style?: string
-    transparent?: boolean
-    tiled?: boolean
-}
 
 export function createLayer(layer: MapLayer): Layer {
     const wmsLayer = layer as WMSLayer

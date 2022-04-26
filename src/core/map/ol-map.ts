@@ -1,4 +1,4 @@
-import { EventPayload, MapProvider } from "../map"
+import { MapEvent, MapEventType, MapProvider } from "../map"
 import { reproject } from "../projection"
 import OLMap from "ol/Map"
 import View from "ol/View"
@@ -7,6 +7,7 @@ import "ol/ol.css"
 import "./ol/layers/all"
 import Control from "ol/control/Control"
 import { MapBrowserEvent } from "ol"
+import BaseLayer from "ol/layer/Base"
 
 type OLMapListener = {
     event: "click" | "pointermove"
@@ -17,7 +18,7 @@ type OLMapListeners = {
     [key: number]: OLMapListener
 }
 
-let listeners: OLMapListeners = {}
+const listeners: OLMapListeners = {}
 
 const managedEvents: {
     [key: string]: OLMapListener["event"]
@@ -27,14 +28,22 @@ const managedEvents: {
 }
 
 function createWrapper(
-    listener: (eventPayload: EventPayload) => void,
+    event: MapEventType,
+    listener: (eventPayload: MapEvent) => void,
     projection: string
 ) {
     return (e: MapBrowserEvent<MouseEvent>) =>
         listener({
-            x: e.coordinate[0],
-            y: e.coordinate[1],
-            crs: projection,
+            type: event,
+            pixel: {
+                x: e.pixel[0],
+                y: e.pixel[1],
+            },
+            coordinate: {
+                x: e.coordinate[0],
+                y: e.coordinate[1],
+                crs: projection,
+            },
         })
 }
 
@@ -43,14 +52,21 @@ function addListener(
     listener: (e: MapBrowserEvent<MouseEvent>) => void
 ) {
     const key = Object.keys(listeners).length + 1
-    listeners = {
-        ...listeners,
-        [key]: {
-            event,
-            handler: listener,
-        },
+    listeners[key] = {
+        event,
+        handler: listener,
     }
     return key
+}
+
+function getLayer(map: OLMap, id: string): BaseLayer | null {
+    let result = null
+    map.getLayers().forEach((l) => {
+        if (l.get("mapstore_id") === id) {
+            result = l
+        }
+    })
+    return result
 }
 
 const OLMapProvider: MapProvider = {
@@ -75,23 +91,18 @@ const OLMapProvider: MapProvider = {
             map,
             setZoom: (zoom) => map.getView().setZoom(zoom),
             getZoom: () => map.getView().getZoom(),
+            getResolution: () => map.getView().getResolution(),
             addControl: (control: unknown) =>
                 map.addControl(control as Control),
             removeControl: (control: unknown) =>
                 map.removeControl(control as Control),
             setLayerVisibility: (id: string, visibility: boolean) => {
-                map.getLayers().forEach((l) => {
-                    if (l.get("mapstore_id") === id) {
-                        l.setVisible(visibility)
-                    }
-                })
+                getLayer(map, id)?.setVisible(visibility)
             },
+            getLayerVisibility: (id: string) =>
+                getLayer(map, id)?.getVisible() ?? false,
             setLayerOpacity: (id: string, opacity: number) => {
-                map.getLayers().forEach((l) => {
-                    if (l.get("mapstore_id") === id) {
-                        l.setOpacity(opacity)
-                    }
-                })
+                getLayer(map, id)?.setOpacity(opacity)
             },
             setBackground: (id: string) => {
                 map.getLayers().forEach((l) => {
@@ -105,7 +116,11 @@ const OLMapProvider: MapProvider = {
             addListener: (event, listener) => {
                 const olEvent = managedEvents[event]
                 if (olEvent) {
-                    const listenerWrapper = createWrapper(listener, projection)
+                    const listenerWrapper = createWrapper(
+                        event,
+                        listener,
+                        projection
+                    )
                     map.on(olEvent, listenerWrapper)
                     return addListener(olEvent, listenerWrapper)
                 }
@@ -117,8 +132,10 @@ const OLMapProvider: MapProvider = {
                         listeners[listener].event,
                         listeners[listener].handler
                     )
+                    delete listeners[listener]
                 }
             },
+            getProjection: () => projection,
         }
     },
 }

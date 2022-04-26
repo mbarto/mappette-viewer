@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks"
 import { useMessage } from "../api/locale"
-import { OnMouseMovePayload, useMap } from "../core/map"
+import { OnMouseMoveEvent, useMap } from "../core/map"
 import { PluginProps } from "../core/plugins"
 import { reproject } from "../core/projection"
 import "./mouseposition/mouseposition.css"
@@ -22,14 +22,14 @@ function toDegrees(val: number, degDigits: number): string {
     return `${pad(deg, degDigits)}° ${pad(minutes, 2)}' ${pad(seconds, 2)}''`
 }
 
-function format(point: OnMouseMovePayload, projection: string): string {
-    const latlon = reproject(point, "EPSG:4326")
+function format(event: OnMouseMoveEvent, projection: string): string {
+    const latlon = reproject(event.coordinate, "EPSG:4326")
     return `Lat: ${toDegrees(latlon.y, 2)} Lng: ${toDegrees(latlon.x, 3)}`
 }
 
 export default function MousePosition({ context }: MousePositionPluginProps) {
     const [active, setActive] = useState(false)
-    const [point, setPoint] = useState<OnMouseMovePayload | null>(null)
+    const [point, setPoint] = useState<OnMouseMoveEvent | null>(null)
     const map = useMap()
     const label = useMessage("mouseCoordinates")
     function toggleActive() {
@@ -39,9 +39,11 @@ export default function MousePosition({ context }: MousePositionPluginProps) {
     useEffect(() => {
         if (map) {
             if (active) {
-                listener.current = map.addListener("mousemove", (p) =>
-                    setPoint(p)
-                )
+                listener.current = map.addListener("mousemove", (p) => {
+                    if (p.type === "mousemove") {
+                        setPoint(p)
+                    }
+                })
             } else {
                 if (listener.current) {
                     map.removeListener(listener.current)

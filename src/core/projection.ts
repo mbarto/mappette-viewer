@@ -3,6 +3,7 @@ import proj4 from "proj4"
 export type Point = {
     x: number
     y: number
+    z?: number
     crs: string
 }
 

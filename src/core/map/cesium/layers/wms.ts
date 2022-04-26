@@ -3,20 +3,8 @@ import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
 import SingleTileImageryProvider from "cesium/Source/Scene/SingleTileImageryProvider"
 import WebMapServiceImageryProvider from "cesium/Source/Scene/WebMapServiceImageryProvider"
 import { MapLayer } from "../../../../api/context"
+import { WMSLayer } from "../../../layers/wms/types"
 import { addLayerType } from "../layers"
-
-export type WMSLayer = MapLayer & {
-    type: "wms"
-    format?: string
-    url: string
-    singleTile?: boolean
-    style?: string
-    transparent?: boolean
-    tiled?: boolean
-    tileSize?: number
-    size?: number
-    tileDiscardPolicy?: string
-}
 
 export function createLayer(layer: MapLayer): ImageryProvider {
     const wmsLayer = layer as WMSLayer

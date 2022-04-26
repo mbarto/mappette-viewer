@@ -1,4 +1,4 @@
-import { EventPayload, MapProvider } from "../map"
+import { MapEvent, MapEventType, MapProvider } from "../map"
 import { reproject } from "../projection"
 
 import "./cesium/layers/all"
@@ -15,6 +15,7 @@ import ImageryLayer from "cesium/Source/Scene/ImageryLayer"
 import Cartographic from "cesium/Source/Core/Cartographic"
 import Color from "cesium/Source/Core/Color"
 import ScreenSpaceEventHandler from "cesium/Source/Core/ScreenSpaceEventHandler"
+import { ScreenSpaceEventType } from "../../types/cesium"
 
 export const zoomToHeight = 80000000
 
@@ -63,7 +64,7 @@ function getMouseXYZ(viewer: CesiumWidget, event: any) {
 }
 
 type CesiumMapListener = {
-    event: 2 | 15 // ScreenSpaceEventType
+    event: ScreenSpaceEventType.LEFT_CLICK | ScreenSpaceEventType.MOUSE_MOVE
     handler: (e: unknown) => unknown
 }
 
@@ -71,17 +72,18 @@ type CesiumMapListeners = {
     [key: number]: CesiumMapListener
 }
 
-let listeners: CesiumMapListeners = {}
+const listeners: CesiumMapListeners = {}
 
 const managedEvents: {
     [key: string]: CesiumMapListener["event"]
 } = {
-    mousemove: 15,
-    click: 2,
+    mousemove: ScreenSpaceEventType.MOUSE_MOVE,
+    click: ScreenSpaceEventType.LEFT_CLICK,
 }
 
 function createWrapper(
-    listener: (eventPayload: EventPayload) => void,
+    event: MapEventType,
+    listener: (eventPayload: MapEvent) => void,
     map: CesiumWidget
 ) {
     return (movement: any) => {
@@ -94,11 +96,23 @@ function createWrapper(
             (cartesian && Cartographic.fromCartesian(cartesian))
         if (cartographic) {
             const elevation = Math.round(cartographic.height)
+            const latitude = (cartographic.latitude * 180.0) / Math.PI
+            const longitude = (cartographic.longitude * 180.0) / Math.PI
+            const zoom = getMapZoom(map)
+            const y = ((90.0 - latitude) / 180.0) * 512 * (zoom + 1)
+            const x = ((180.0 + longitude) / 360.0) * 512 * (zoom + 1)
             listener({
-                y: (cartographic.latitude * 180.0) / Math.PI,
-                x: (cartographic.longitude * 180.0) / Math.PI,
-                z: elevation,
-                crs: "EPSG:4326",
+                type: event,
+                pixel: {
+                    x,
+                    y,
+                },
+                coordinate: {
+                    y: latitude,
+                    x: longitude,
+                    z: elevation,
+                    crs: "EPSG:4326",
+                },
             })
         }
     }
@@ -109,14 +123,17 @@ function addListener(
     listener: (e: unknown) => void
 ) {
     const key = Object.keys(listeners).length + 1
-    listeners = {
-        ...listeners,
-        [key]: {
-            event,
-            handler: listener,
-        },
+    listeners[key] = {
+        event,
+        handler: listener,
     }
     return key
+}
+
+function getMapZoom(map: CesiumWidget): number {
+    const cartographic = new Cartographic()
+    Ellipsoid.WGS84.cartesianToCartographic(map.camera.position, cartographic)
+    return getZoomFromHeight(cartographic.height)
 }
 
 const CesiumMapProvider: MapProvider = {
@@ -162,18 +179,16 @@ const CesiumMapProvider: MapProvider = {
                 })
             },
             getZoom: () => {
-                const cartographic = new Cartographic()
-                Ellipsoid.WGS84.cartesianToCartographic(
-                    map.camera.position,
-                    cartographic
-                )
-                return getZoomFromHeight(cartographic.height)
+                return getMapZoom(map)
             },
+            getResolution: () => 1, // TODO
             addControl: (control: unknown) => {},
             removeControl: (control: unknown) => {},
             setLayerVisibility: (id: string, visibility: boolean) => {
                 findLayer(map, id).and((l) => (l.show = visibility))
             },
+            getLayerVisibility: (id) =>
+                findLayer(map, id).and((l) => l.show) as boolean,
             setLayerOpacity: (id: string, opacity: number) => {
                 findLayer(map, id).and((l) => (l.alpha = opacity))
             },
@@ -189,7 +204,7 @@ const CesiumMapProvider: MapProvider = {
             addListener: (event, listener) => {
                 const cesiumEvent = managedEvents[event]
                 if (cesiumEvent) {
-                    const listenerWrapper = createWrapper(listener, map)
+                    const listenerWrapper = createWrapper(event, listener, map)
                     hand.setInputAction(listenerWrapper, cesiumEvent)
                     return addListener(cesiumEvent, listenerWrapper)
                 }
@@ -198,8 +213,10 @@ const CesiumMapProvider: MapProvider = {
             removeListener(listener) {
                 if (listeners[listener]) {
                     hand.removeInputAction(listeners[listener].event)
+                    delete listeners[listener]
                 }
             },
+            getProjection: () => "EPSG:4326",
         }
     },
 }
@@ -214,8 +231,8 @@ function findLayer(map: CesiumWidget, id: string) {
         }
     }
     return {
-        and: (callback: (layer: ImageryLayer) => void) => {
-            if (layer) callback(layer)
+        and: (callback: (layer: ImageryLayer) => unknown) => {
+            if (layer) return callback(layer)
         },
     }
 }

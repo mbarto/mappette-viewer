@@ -9,7 +9,7 @@ import {
     replaceAttribution,
     getUrls,
     template,
-} from "../../tileproviders/providers"
+} from "../../../layers/tileproviders/providers"
 
 export type TileProviderLayer = MapLayer &
     Config & {

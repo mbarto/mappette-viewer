@@ -1,26 +1,37 @@
 import { createContext } from "preact"
 import { useContext } from "preact/hooks"
 import { MapConfig } from "../api/context"
+import { Point } from "./projection"
 
 export type MapProvider = {
     create: (id: string, mapConfig: MapConfig["map"]) => MapInstance
 }
 
-export type OnMouseMovePayload = {
-    x: number
-    y: number
-    z?: number
-    crs: string
+export type MapEventType = "mousemove" | "click"
+
+export type BaseMapEvent = {
+    type: MapEventType
 }
 
-export type OnClickPayload = {
-    x: number
-    y: number
-    z?: number
-    crs: string
+export type EventPoint = {
+    pixel: {
+        x: number
+        y: number
+    }
+    coordinate: Point
 }
 
-export type EventPayload = OnMouseMovePayload | OnClickPayload
+export type OnMouseMoveEvent = BaseMapEvent &
+    EventPoint & {
+        type: "mousemove"
+    }
+
+export type OnClickEvent = BaseMapEvent &
+    EventPoint & {
+        type: "click"
+    }
+
+export type MapEvent = OnMouseMoveEvent | OnClickEvent
 
 export type MapListener = number
 
@@ -28,16 +39,19 @@ export type MapInstance = {
     map?: unknown
     setZoom: (zoom: number) => void
     getZoom: () => number | undefined
+    getResolution: () => number | undefined
     addControl: (control: unknown) => void
     removeControl: (control: unknown) => void
     setLayerVisibility: (id: string, visibility: boolean) => void
+    getLayerVisibility: (id: string) => boolean
     setLayerOpacity: (id: string, opacity: number) => void
     setBackground: (id: string) => void
     addListener: (
-        event: string,
-        listener: (eventPayload: EventPayload) => void
+        event: MapEventType,
+        listener: (mapEvent: MapEvent) => void
     ) => MapListener
     removeListener: (listener: MapListener) => void
+    getProjection: () => string
 }
 
 export const Map = createContext<MapInstance | null>(null)
