@@ -5,48 +5,12 @@ import { PluginProps } from "../core/plugins"
 import ToolbarButton from "./toolbar/toolbar-button"
 import layers from "../core/layers/all"
 import "./identify/identify.css"
+import IdentifyResults, {
+    FeatureCollection,
+    Results,
+} from "./identify/identify-results"
 
 type IdentifyPluginProps = PluginProps
-
-type Results = {
-    layer: MapLayer
-    features: Feature[]
-}
-
-type FeatureCollection = {
-    type: "FeatureCollection"
-    features: Feature[]
-}
-
-type Feature = {
-    type: "Feature"
-    properties: {
-        [key: string]: unknown
-    }
-}
-
-type IdentifyResultsProps = {
-    data: Results[]
-    onClose: () => void
-}
-
-function IdentifyResults({ data, onClose }: IdentifyResultsProps) {
-    return (
-        <div className="mapstore-identify-results">
-            <div className="mapstore-identify-results-header">
-                <span onClick={onClose}>X</span>
-            </div>
-            <div>
-                {data.map((i) => (
-                    <>
-                        <h1>{getTitle(i.layer)}</h1>
-                        {i.features.map((f) => showFeature(f))}
-                    </>
-                ))}
-            </div>
-        </div>
-    )
-}
 
 export default function Identify({ context }: IdentifyPluginProps) {
     const map = useMap()
@@ -141,15 +105,3 @@ export default function Identify({ context }: IdentifyPluginProps) {
 }
 
 export const container = "toolbar"
-
-function getTitle(layer: MapLayer): string {
-    if (typeof layer.title === "string") return layer.title
-    return layer.title?.["default"] ?? ""
-}
-function showFeature(f: Feature) {
-    return Object.keys(f.properties).map((prop) => (
-        <div>
-            {prop}: {f.properties[prop]}
-        </div>
-    ))
-}

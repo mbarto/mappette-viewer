@@ -27,6 +27,7 @@ export default function identify(
     url.searchParams.append("HEIGHT", `${pixelSize}`)
     url.searchParams.append("X", "51")
     url.searchParams.append("Y", "51")
+    url.searchParams.append("FEATURE_COUNT", "10")
     url.searchParams.append("INFO_FORMAT", "application/json")
     url.searchParams.append("BBOX", `${minX},${minY},${maxX},${maxY}`)
 

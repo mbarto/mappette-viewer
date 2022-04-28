@@ -1,10 +1,45 @@
 .mapstore-identify-results {
-    position: fixed;
+    position: absolute;
     top: calc((100% - 500px) / 2);
     width: 500px;
     height: 500px;
     left: calc((100% - 500px) / 2);
-    overflow: auto;
     background-color: white;
-    padding: 10px;
+    & .header {
+        display: flex;
+        item-align: start;
+        padding: 10px;
+        background-color: var(--main-color);
+        color: white;
+        height: 40px;
+        & span {
+            display: inline-block;
+            cursor: pointer;
+        }
+        & h1 {
+            font-size: 15px;
+            margin: 0;
+            margin-left: 20px;
+        }
+    }
+    & .body {
+        padding: 10px;
+        overflow: auto;
+        position: absolute;
+        top: 40px;
+        height: calc(100% - 50px);
+        width: 100%;
+
+        & h1 {
+            font-size: 18px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        & > div {
+            padding-left: 20px;
+            padding-top: 5px;
+            border-top: solid 1px #444;
+        }
+    }
 }
