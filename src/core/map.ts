@@ -52,6 +52,7 @@ export type MapInstance = {
     ) => MapListener
     removeListener: (listener: MapListener) => void
     getProjection: () => string
+    resize: () => void
 }
 
 export const Map = createContext<MapInstance | null>(null)

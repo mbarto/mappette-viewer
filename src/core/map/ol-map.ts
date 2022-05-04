@@ -136,6 +136,7 @@ const OLMapProvider: MapProvider = {
                 }
             },
             getProjection: () => projection,
+            resize: () => map.updateSize(),
         }
     },
 }
