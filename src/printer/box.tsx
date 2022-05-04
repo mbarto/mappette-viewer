@@ -3,7 +3,7 @@ import { ComponentChildren } from "preact"
 import "./box/box.css"
 type BoxProps = {
     id: string
-    onResize: () => void
+    onResize?: () => void
     children: ComponentChildren
 }
 
@@ -22,7 +22,7 @@ function Box({ id, onResize, children }: BoxProps) {
     const box = useRef<HTMLDivElement | null>(null)
     const dragState = useRef<DragState>({})
     useEffect(() => {
-        if (box.current) {
+        if (box.current && onResize) {
             const observer = new ResizeObserver(onResize)
             observer.observe(box.current)
             return () => observer.disconnect()
@@ -81,7 +81,7 @@ function Box({ id, onResize, children }: BoxProps) {
         }
     }, [box.current])
     return (
-        <div id={id} className="resizable draggable" ref={box}>
+        <div id={id} className="resizable draggable box" ref={box}>
             {children}
         </div>
     )
