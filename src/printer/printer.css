@@ -1,0 +1,87 @@
+body {
+    margin: 0;
+}
+.sheet {
+    padding: 1cm;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    page-break-after: always;
+}
+
+/** Paper sizes **/
+body.A3 .sheet {
+    width: 297mm;
+    height: 419mm;
+}
+body.A3.landscape .sheet {
+    width: 420mm;
+    height: 296mm;
+}
+body.A4 .sheet {
+    width: 210mm;
+    height: 296mm;
+}
+body.A4.landscape .sheet {
+    width: 297mm;
+    height: 209mm;
+}
+body.A5 .sheet {
+    width: 148mm;
+    height: 209mm;
+}
+body.A5.landscape .sheet {
+    width: 210mm;
+    height: 147mm;
+}
+
+/** For screen preview **/
+@media screen {
+    body {
+        background: #e0e0e0;
+    }
+    .sheet {
+        background: white;
+        box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+        margin: 5mm;
+    }
+}
+
+/** Fix for Chrome issue #273306 **/
+@media print {
+    body.A3.landscape {
+        width: 420mm;
+    }
+    body.A3,
+    body.A4.landscape {
+        width: 297mm;
+    }
+    body.A4,
+    body.A5.landscape {
+        width: 210mm;
+    }
+    body.A5 {
+        width: 148mm;
+    }
+    .resizable {
+        resize: none !important;
+    }
+}
+
+#map-container {
+    width: 100%;
+    height: 50%;
+}
+
+:root {
+    --main-color: rgb(7, 138, 163);
+    --selected-color: #2a602a;
+    --main-color-darker: rgb(6, 121, 143);
+    --left-panel-width: 300px;
+    --left-panel-open: 0;
+    --footer-height: 30px;
+    --footer-present: 0;
+    --main-area-left: calc(var(--left-panel-open) * var(--left-panel-width));
+    --main-area-bottom: calc(var(--footer-present) * var(--footer-height));
+}
