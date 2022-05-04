@@ -8,6 +8,10 @@
     overflow: hidden;
 }
 
+.box {
+    border: dashed 1px #666;
+}
+
 .no-select {
     user-select: none;
 }

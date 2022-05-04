@@ -67,11 +67,19 @@ body.A5.landscape .sheet {
     .resizable {
         resize: none !important;
     }
+    .box {
+        border: none !important;
+    }
 }
 
 #map-container {
+    top: 100px;
     width: 100%;
     height: 50%;
+}
+
+#title-container {
+    width: 100%;
 }
 
 :root {

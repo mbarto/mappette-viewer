@@ -21,15 +21,16 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
         loadLocale().then(setLocale)
     }, [context])
 
-    // draggable: https://codepen.io/2bt/pen/pwELaR
-    function resize() {
-        if (map) map.resize()
-    }
     return (
         <Locale.Provider value={locale}>
             <Map.Provider value={map}>
                 <div className="sheet">
-                    <Box id="map-container" onResize={resize}>
+                    <Box id="title-container">
+                        <div contentEditable>
+                            {context.windowTitle || "Title"}
+                        </div>
+                    </Box>
+                    <Box id="map-container">
                         <MapViewer
                             setMap={setMap}
                             context={context}
