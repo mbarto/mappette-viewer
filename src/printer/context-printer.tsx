@@ -5,6 +5,7 @@ import { loadLocale, Locale } from "../api/locale"
 import MapViewer from "../plugins/map"
 import "./printer.css"
 import Box from "./box"
+import Toolbar from "./toolbar"
 
 type ContextPrinterProps = {
     context: Context
@@ -24,6 +25,8 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
     return (
         <Locale.Provider value={locale}>
             <Map.Provider value={map}>
+                <Toolbar />
+
                 <div className="sheet">
                     <Box id="title-container">
                         <div contentEditable>

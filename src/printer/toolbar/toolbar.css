@@ -1,0 +1,25 @@
+.toolbar {
+    position: fixed;
+    left: 220mm;
+    top: 0;
+    bottom: 0;
+    background: white;
+    box-shadow: 0 0.5mm 2mm rgb(0 0 0 / 30%);
+    margin: 5mm;
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+
+    & button {
+        border: none;
+        box-shadow: 0 0.5mm 2mm rgb(0 0 0 / 60%);
+        margin-top: 10px;
+        padding: 5px;
+        border-radius: 10px;
+        width: 30px;
+        height: 30px;
+        background-color: #ccc;
+        cursor: pointer;
+    }
+}
