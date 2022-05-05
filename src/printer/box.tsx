@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from "preact/hooks"
 import { ComponentChildren } from "preact"
 import "./box/box.css"
+
+export type Rectangle = {
+    top: string
+    left: string
+    width: string
+    height: string
+}
+
 type BoxProps = {
     id: string
+    rect: Rectangle
     onResize?: () => void
     children: ComponentChildren
 }
@@ -18,7 +27,7 @@ type DragState = {
     }
 }
 
-function Box({ id, onResize, children }: BoxProps) {
+function Box({ id, onResize, children, rect }: BoxProps) {
     const box = useRef<HTMLDivElement | null>(null)
     const dragState = useRef<DragState>({})
     useEffect(() => {
@@ -80,8 +89,16 @@ function Box({ id, onResize, children }: BoxProps) {
             )
         }
     }, [box.current])
+    const style = {
+        ...rect,
+    }
     return (
-        <div id={id} className="resizable draggable box" ref={box}>
+        <div
+            id={id}
+            className="resizable draggable box"
+            ref={box}
+            style={style}
+        >
             {children}
         </div>
     )

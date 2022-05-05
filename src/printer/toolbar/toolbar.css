@@ -3,6 +3,7 @@
     left: 220mm;
     top: 0;
     bottom: 0;
+    width: 30px;
     background: white;
     box-shadow: 0 0.5mm 2mm rgb(0 0 0 / 30%);
     margin: 5mm;
@@ -21,5 +22,24 @@
         height: 30px;
         background-color: #ccc;
         cursor: pointer;
+    }
+    & hr {
+        width: 100%;
+    }
+}
+
+.A4.landscape .toolbar,
+.A3.portrait .toolbar {
+    left: 310mm;
+}
+
+.A3.landscape .toolbar {
+    right: 10px;
+    left: inherit !important;
+}
+
+@media print {
+    .toolbar {
+        display: none;
     }
 }
