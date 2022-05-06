@@ -6,6 +6,7 @@ import MapViewer from "../plugins/map"
 import "./printer.css"
 import Box, { Rectangle } from "./box"
 import Toolbar from "./toolbar"
+import ScaleBox from "../plugins/scalebox"
 
 type ContextPrinterProps = {
     context: Context
@@ -26,6 +27,9 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
     const [selectedPage, setSelectedPage] = useState(0)
     const [orientation, setOrientation] = useState("portrait")
     const [sheet, setSheet] = useState("A4")
+    // TODO: how to handle this?
+    const [editingText, setEditingText] = useState(true)
+
     const [pages, setPages] = useState<Page[]>([
         {
             components: [
@@ -47,6 +51,16 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                         left: "0",
                         width: "100%",
                         height: "50%",
+                    },
+                },
+                {
+                    type: "scale",
+                    id: "scale",
+                    box: {
+                        top: "90%",
+                        left: "0",
+                        width: "30%",
+                        height: "30px",
                     },
                 },
             ],
@@ -76,24 +90,23 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
         }
     }
     function renderComponent(component: PageComponent) {
-        if (component.type === "map")
-            return (
-                <MapViewer
-                    setMap={setMap}
-                    context={context}
-                    mapType="ol"
-                    plugins={[]}
-                    allPlugins={[]}
-                    cfg={{}}
-                />
-            )
+        const pluginsProps = {
+            setMap,
+            context,
+            mapType: "ol",
+            plugins: [],
+            allPlugins: [],
+            cfg: {},
+        }
+        if (component.type === "map") return <MapViewer {...pluginsProps} />
         if (component.type === "text")
             return <div contentEditable>{context.windowTitle || "Title"}</div>
+        if (component.type === "scale") return <ScaleBox {...pluginsProps} />
         return null
     }
     function addComponent(type: string) {
         const newComponent: PageComponent = {
-            id: "aaa",
+            id: type,
             type,
             box: {
                 left: "0",
@@ -152,6 +165,8 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                     sheet={sheet}
                     toggleOrientation={toggleOrientation}
                     toggleSheet={toggleSheet}
+                    selectedPage={selectedPage}
+                    editingText={editingText}
                 />
                 {pages.map((page, idx) => (
                     <div

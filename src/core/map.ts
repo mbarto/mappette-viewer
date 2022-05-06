@@ -7,7 +7,7 @@ export type MapProvider = {
     create: (id: string, mapConfig: MapConfig["map"]) => MapInstance
 }
 
-export type MapEventType = "mousemove" | "click"
+export type MapEventType = "mousemove" | "click" | "zoom"
 
 export type BaseMapEvent = {
     type: MapEventType
@@ -31,7 +31,12 @@ export type OnClickEvent = BaseMapEvent &
         type: "click"
     }
 
-export type MapEvent = OnMouseMoveEvent | OnClickEvent
+export type OnZoomEvent = BaseMapEvent & {
+    type: "zoom"
+    zoom: number
+}
+
+export type MapEvent = OnMouseMoveEvent | OnClickEvent | OnZoomEvent
 
 export type MapListener = number
 

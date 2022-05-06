@@ -1,5 +1,5 @@
 import { MapEvent, MapEventType, MapProvider } from "../map"
-import { reproject } from "../projection"
+import { getProjectionScale, reproject } from "../projection"
 
 import "./cesium/layers/all"
 
@@ -87,33 +87,36 @@ function createWrapper(
     map: CesiumWidget
 ) {
     return (movement: any) => {
-        const cartesian = map.camera.pickEllipsoid(
-            movement.endPosition ?? movement.position,
-            map.scene.globe.ellipsoid
-        )
-        let cartographic =
-            getMouseXYZ(map, movement) ||
-            (cartesian && Cartographic.fromCartesian(cartesian))
-        if (cartographic) {
-            const elevation = Math.round(cartographic.height)
-            const latitude = (cartographic.latitude * 180.0) / Math.PI
-            const longitude = (cartographic.longitude * 180.0) / Math.PI
-            const zoom = getMapZoom(map)
-            const y = ((90.0 - latitude) / 180.0) * 512 * (zoom + 1)
-            const x = ((180.0 + longitude) / 360.0) * 512 * (zoom + 1)
-            listener({
-                type: event,
-                pixel: {
-                    x,
-                    y,
-                },
-                coordinate: {
-                    y: latitude,
-                    x: longitude,
-                    z: elevation,
-                    crs: "EPSG:4326",
-                },
-            })
+        if (event === "click" || event === "mousemove") {
+            const cartesian = map.camera.pickEllipsoid(
+                movement.endPosition ?? movement.position,
+                map.scene.globe.ellipsoid
+            )
+            let cartographic =
+                getMouseXYZ(map, movement) ||
+                (cartesian && Cartographic.fromCartesian(cartesian))
+            if (cartographic) {
+                const elevation = Math.round(cartographic.height)
+                const latitude = (cartographic.latitude * 180.0) / Math.PI
+                const longitude = (cartographic.longitude * 180.0) / Math.PI
+                const zoom = getMapZoom(map)
+                const y = ((90.0 - latitude) / 180.0) * 512 * (zoom + 1)
+                const x = ((180.0 + longitude) / 360.0) * 512 * (zoom + 1)
+
+                listener({
+                    type: event,
+                    pixel: {
+                        x,
+                        y,
+                    },
+                    coordinate: {
+                        y: latitude,
+                        x: longitude,
+                        z: elevation,
+                        crs: "EPSG:4326",
+                    },
+                })
+            }
         }
     }
 }

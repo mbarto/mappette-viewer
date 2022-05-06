@@ -1,18 +1,27 @@
-import { MapEvent, MapEventType, MapProvider } from "../map"
-import { reproject } from "../projection"
+import { MapEvent, MapEventType, MapInstance, MapProvider } from "../map"
+import { getProjectionScale, reproject } from "../projection"
 import OLMap from "ol/Map"
 import View from "ol/View"
 import { createLayers } from "./ol/layers"
 import "ol/ol.css"
 import "./ol/layers/all"
 import Control from "ol/control/Control"
-import { MapBrowserEvent } from "ol"
+import { MapBrowserEvent, MapEvent as OLMapEvent } from "ol"
 import BaseLayer from "ol/layer/Base"
 
-type OLMapListener = {
-    event: "click" | "pointermove"
-    handler: (e: MapBrowserEvent<MouseEvent>) => unknown
-}
+type OLMapListener =
+    | {
+          event: "click"
+          handler: (e: MapBrowserEvent<MouseEvent>) => unknown
+      }
+    | {
+          event: "pointermove"
+          handler: (e: MapBrowserEvent<MouseEvent>) => unknown
+      }
+    | {
+          event: "moveend"
+          handler: (e: OLMapEvent) => unknown
+      }
 
 type OLMapListeners = {
     [key: number]: OLMapListener
@@ -20,42 +29,60 @@ type OLMapListeners = {
 
 const listeners: OLMapListeners = {}
 
-const managedEvents: {
-    [key: string]: OLMapListener["event"]
-} = {
-    mousemove: "pointermove",
-    click: "click",
-}
-
-function createWrapper(
+function addListenerToMap(
     event: MapEventType,
     listener: (eventPayload: MapEvent) => void,
+    map: OLMap,
     projection: string
-) {
-    return (e: MapBrowserEvent<MouseEvent>) =>
+): OLMapListener {
+    if (event === "click") {
+        const handler = (e: MapBrowserEvent<MouseEvent>) =>
+            listener({
+                type: event,
+                pixel: {
+                    x: e.pixel[0],
+                    y: e.pixel[1],
+                },
+                coordinate: {
+                    x: e.coordinate[0],
+                    y: e.coordinate[1],
+                    crs: projection,
+                },
+            })
+
+        map.on("click", handler)
+        return { event: "click", handler }
+    }
+    if (event === "mousemove") {
+        const handler = (e: MapBrowserEvent<MouseEvent>) =>
+            listener({
+                type: event,
+                pixel: {
+                    x: e.pixel[0],
+                    y: e.pixel[1],
+                },
+                coordinate: {
+                    x: e.coordinate[0],
+                    y: e.coordinate[1],
+                    crs: projection,
+                },
+            })
+        map.on("pointermove", handler)
+        return { event: "pointermove", handler }
+    }
+    // moveend
+    const handler = (e: OLMapEvent) =>
         listener({
-            type: event,
-            pixel: {
-                x: e.pixel[0],
-                y: e.pixel[1],
-            },
-            coordinate: {
-                x: e.coordinate[0],
-                y: e.coordinate[1],
-                crs: projection,
-            },
+            type: "zoom",
+            zoom: e.map.getView().getZoom() ?? 0,
         })
+    map.on("moveend", handler)
+    return { event: "moveend", handler }
 }
 
-function addListener(
-    event: OLMapListener["event"],
-    listener: (e: MapBrowserEvent<MouseEvent>) => void
-) {
+function addListener(listener: OLMapListener) {
     const key = Object.keys(listeners).length + 1
-    listeners[key] = {
-        event,
-        handler: listener,
-    }
+    listeners[key] = listener
     return key
 }
 
@@ -114,24 +141,23 @@ const OLMapProvider: MapProvider = {
                 })
             },
             addListener: (event, listener) => {
-                const olEvent = managedEvents[event]
-                if (olEvent) {
-                    const listenerWrapper = createWrapper(
-                        event,
-                        listener,
-                        projection
-                    )
-                    map.on(olEvent, listenerWrapper)
-                    return addListener(olEvent, listenerWrapper)
-                }
-                return 0
+                const olListener = addListenerToMap(
+                    event,
+                    listener,
+                    map,
+                    projection
+                )
+                return addListener(olListener)
             },
             removeListener(listener) {
                 if (listeners[listener]) {
-                    map.un(
-                        listeners[listener].event,
-                        listeners[listener].handler
-                    )
+                    const { event, handler } = listeners[listener]
+                    if (event === "click" || event === "pointermove") {
+                        map.un(event, handler)
+                    }
+                    if (event === "moveend") {
+                        map.un("moveend", handler)
+                    }
                     delete listeners[listener]
                 }
             },
