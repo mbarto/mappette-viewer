@@ -14,10 +14,11 @@ export default function Map({ cfg, context, mapType, setMap }: MapPluginProps) {
     const { id = "map" } = cfg
     const map = useMap()
     const container = useRef<HTMLDivElement | null>(null)
-    function onResize() {
-        if (map) map.resize()
-    }
+
     useEffect(() => {
+        function onResize() {
+            if (map) map.resize()
+        }
         if (container.current) {
             const observer = new ResizeObserver(onResize)
             observer.observe(container.current)
