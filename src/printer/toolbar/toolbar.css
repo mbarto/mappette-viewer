@@ -41,7 +41,7 @@
     content: "\efb2";
 }
 
-.icon-page.portrait span:before {
+.icon-page.landscape span:before {
     display: inline-block;
     transform: rotate(90deg);
 }
