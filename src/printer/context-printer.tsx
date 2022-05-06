@@ -42,9 +42,9 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                     type: "text",
                     id: "title",
                     box: {
-                        top: "0",
-                        left: "0",
-                        width: "100%",
+                        top: "5%",
+                        left: "5%",
+                        width: "90%",
                         height: "20px",
                     },
                 },
@@ -53,8 +53,8 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                     id: "map",
                     box: {
                         top: "100px",
-                        left: "0",
-                        width: "100%",
+                        left: "5%",
+                        width: "90%",
                         height: "50%",
                     },
                 },
@@ -63,7 +63,7 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                     id: "scale",
                     box: {
                         top: "90%",
-                        left: "0",
+                        left: "5%",
                         width: "30%",
                         height: "30px",
                     },

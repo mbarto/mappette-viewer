@@ -48,18 +48,23 @@ export default function Toolbar({
         }
     return (
         <div className="toolbar">
-            <button onClick={addPage} title="Add a page">
-                P+
+            <button onClick={addPage} title="Add a page" className="icon-page">
+                <span>+</span>
             </button>
             <button
                 disabled={selectedPage === 0}
                 onClick={removePage}
                 title="Remove selected page"
+                className="icon-page"
             >
-                P-
+                <span>-</span>
             </button>
-            <button onClick={toggleOrientation} title="Toggle page orientation">
-                {orientation === "portrait" ? "-" : "|"}
+            <button
+                onClick={toggleOrientation}
+                title="Toggle page orientation"
+                className={`icon-page ${orientation}`}
+            >
+                <span></span>
             </button>
             <button onClick={toggleSheet} title="Toggle sheet format">
                 {sheet}
@@ -76,33 +81,35 @@ export default function Toolbar({
                 onClick={formatBlock("div")}
                 title="Remove titles"
             >
-                S
+                N
             </button>
+            <hr />
             <button
                 disabled={!editingText}
                 onClick={align("left")}
                 title="Justify left"
-            >
-                L
-            </button>
+                className="icon-align-left"
+            ></button>
             <button
                 disabled={!editingText}
                 onClick={align("center")}
                 title="Center"
-            >
-                C
-            </button>
+                className="icon-align-center"
+            ></button>
             <button
                 disabled={!editingText}
                 onClick={align("right")}
                 title="Justify right"
-            >
-                R
-            </button>
+                className="icon-align-right"
+            ></button>
+            <hr />
             <button
                 disabled={!editingText}
                 onClick={textStyle("bold")}
                 title="Apply bold"
+                style={{
+                    fontWeight: "bold",
+                }}
             >
                 B
             </button>
@@ -110,6 +117,9 @@ export default function Toolbar({
                 disabled={!editingText}
                 onClick={textStyle("italic")}
                 title="Apply italic"
+                style={{
+                    fontStyle: "italic",
+                }}
             >
                 I
             </button>
@@ -124,14 +134,20 @@ export default function Toolbar({
             <button
                 onClick={() => addComponent("text")}
                 title="Add a text box to the page"
+                style={{
+                    fontSize: 12,
+                }}
             >
-                T
+                Text
             </button>
             <button
                 onClick={() => addComponent("scale")}
                 title="Add a scale box to the page"
+                style={{
+                    fontSize: 8,
+                }}
             >
-                S
+                1:100
             </button>
         </div>
     )

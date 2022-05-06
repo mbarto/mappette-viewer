@@ -1,3 +1,10 @@
+@font-face {
+    font-family: icofont;
+    font-style: normal;
+    font-weight: 400;
+    src: url("icofont.woff") format("woff");
+}
+
 .toolbar {
     position: fixed;
     left: 220mm;
@@ -22,10 +29,33 @@
         height: 30px;
         background-color: #ccc;
         cursor: pointer;
+        font-family: icofont;
     }
     & hr {
         width: 100%;
     }
+}
+
+.icon-page span:before {
+    display: inline;
+    content: "\efb2";
+}
+
+.icon-page.portrait span:before {
+    display: inline-block;
+    transform: rotate(90deg);
+}
+
+.icon-align-left:before {
+    content: "\ede0";
+}
+
+.icon-align-center:before {
+    content: "\eddf";
+}
+
+.icon-align-right:before {
+    content: "\ede1";
 }
 
 .A4.landscape .toolbar,
