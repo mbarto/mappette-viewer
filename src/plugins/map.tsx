@@ -16,15 +16,12 @@ export default function Map({ cfg, context, mapType, setMap }: MapPluginProps) {
     const container = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        function onResize() {
-            if (map) map.resize()
-        }
-        if (container.current) {
-            const observer = new ResizeObserver(onResize)
+        if (container.current && map) {
+            const observer = new ResizeObserver(() => map?.resize())
             observer.observe(container.current)
             return () => observer.disconnect()
         }
-    }, [container.current])
+    }, [container.current, map])
     useEffect(() => {
         loadProvider(mapType).then((provider) => {
             const mapConfig = context.mapConfig.map
