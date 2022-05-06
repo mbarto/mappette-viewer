@@ -1,21 +1,12 @@
 import "./toolbar/toolbar.css"
 
-const formatBlock = (format?: string) => () => {
-    document.execCommand("formatBlock", false, format)
-}
-
-const align =
-    (position: string = "left") =>
-    () => {
-        document.execCommand("justify" + position, false)
-    }
-
 type ToolbarProps = {
     addPage: () => void
     removePage: () => void
     addComponent: (type: string) => void
     toggleOrientation: () => void
     toggleSheet: () => void
+    applyStyle: (style: object) => void
     selectedPage: number
     orientation: string
     sheet: string
@@ -32,7 +23,29 @@ export default function Toolbar({
     sheet = "A4",
     orientation = "portrait",
     editingText = false,
+    applyStyle = () => {},
 }: ToolbarProps) {
+    const formatBlock = (format?: string) => () => {
+        document.execCommand("formatBlock", false, format)
+    }
+
+    const align =
+        (position: string = "left") =>
+        () => {
+            document.execCommand("justify" + position, false)
+            applyStyle({
+                textAlign: position,
+            })
+        }
+
+    const textStyle =
+        (style: string = "none") =>
+        () => {
+            applyStyle({
+                fontWeight: style === "bold" ? "bold" : "",
+                fontStyle: style === "italic" ? "italic" : "",
+            })
+        }
     return (
         <div className="toolbar">
             <button onClick={addPage} title="Add a page">
@@ -85,6 +98,27 @@ export default function Toolbar({
                 title="Justify right"
             >
                 R
+            </button>
+            <button
+                disabled={!editingText}
+                onClick={textStyle("bold")}
+                title="Apply bold"
+            >
+                B
+            </button>
+            <button
+                disabled={!editingText}
+                onClick={textStyle("italic")}
+                title="Apply italic"
+            >
+                I
+            </button>
+            <button
+                disabled={!editingText}
+                onClick={textStyle("none")}
+                title="Remove text style"
+            >
+                N
             </button>
             <hr />
             <button

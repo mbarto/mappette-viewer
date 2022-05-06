@@ -10,6 +10,9 @@
 
 .box {
     border: dashed 1px #666;
+    &.selected {
+        border-color: orange;
+    }
 }
 
 .no-select {

@@ -11,8 +11,12 @@ export type Rectangle = {
 
 type BoxProps = {
     id: string
+    selected: boolean
     rect: Rectangle
+    stylable?: boolean
+    boxStyle?: object
     onResize?: () => void
+    onSelect: (id: string) => void
     children: ComponentChildren
 }
 
@@ -27,7 +31,16 @@ type DragState = {
     }
 }
 
-function Box({ id, onResize, children, rect }: BoxProps) {
+function Box({
+    id,
+    onResize,
+    onSelect,
+    children,
+    rect,
+    stylable = false,
+    boxStyle = {},
+    selected = false,
+}: BoxProps) {
     const box = useRef<HTMLDivElement | null>(null)
     const dragState = useRef<DragState>({})
     useEffect(() => {
@@ -92,12 +105,14 @@ function Box({ id, onResize, children, rect }: BoxProps) {
     const style = {
         ...rect,
     }
+    const additionalStyle = stylable ? boxStyle : {}
     return (
         <div
-            id={id}
-            className="resizable draggable box"
+            id={`${id}-container`}
+            className={`resizable draggable box ${selected ? "selected" : ""}`}
             ref={box}
-            style={style}
+            style={{ ...style, ...additionalStyle }}
+            onClick={() => onSelect(id)}
         >
             {children}
         </div>

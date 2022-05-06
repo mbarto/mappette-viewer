@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "preact/hooks"
+import { useEffect, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { Map, MapInstance } from "../core/map"
 import { loadLocale, Locale } from "../api/locale"
@@ -16,6 +16,8 @@ type PageComponent = {
     type: string
     id: string
     box: Rectangle
+    stylable?: boolean
+    style?: object
 }
 
 type Page = {
@@ -25,6 +27,9 @@ type Page = {
 export default function ContextPrinter({ context }: ContextPrinterProps) {
     const [map, setMap] = useState<MapInstance | null>(null)
     const [selectedPage, setSelectedPage] = useState(0)
+    const [selectedComponent, setSelectedComponent] = useState<string | null>(
+        null
+    )
     const [orientation, setOrientation] = useState("portrait")
     const [sheet, setSheet] = useState("A4")
     // TODO: how to handle this?
@@ -62,6 +67,7 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                         width: "30%",
                         height: "30px",
                     },
+                    stylable: true,
                 },
             ],
         },
@@ -154,6 +160,28 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
         )
         document.head.appendChild(pageStyle)
     }, [orientation, sheet])
+
+    function applyStyleToComponent(style: object) {
+        if (selectedComponent) {
+            setPages((old) =>
+                old.map((p, idx) =>
+                    idx === selectedPage
+                        ? {
+                              ...p,
+                              components: p.components.map((c) =>
+                                  c.id === selectedComponent
+                                      ? {
+                                            ...c,
+                                            style: { ...c.style, ...style },
+                                        }
+                                      : c
+                              ),
+                          }
+                        : p
+                )
+            )
+        }
+    }
     return (
         <Locale.Provider value={locale}>
             <Map.Provider value={map}>
@@ -167,13 +195,20 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                     toggleSheet={toggleSheet}
                     selectedPage={selectedPage}
                     editingText={editingText}
+                    applyStyle={applyStyleToComponent}
                 />
                 {pages.map((page, idx) => (
                     <div
                         className={`sheet ${
                             selectedPage === idx ? "selected" : ""
                         }`}
-                        onClick={() => setSelectedPage(idx)}
+                        onClick={(e) => {
+                            if (e.target instanceof HTMLDivElement) {
+                                if (!e.target.closest(".box"))
+                                    setSelectedComponent(null)
+                            }
+                            setSelectedPage(idx)
+                        }}
                     >
                         {idx > 0 && (
                             <div
@@ -184,7 +219,14 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                             </div>
                         )}
                         {page.components.map((c) => (
-                            <Box id={`${c.id}-container`} rect={c.box}>
+                            <Box
+                                id={c.id}
+                                rect={c.box}
+                                stylable={c.stylable}
+                                boxStyle={c.style}
+                                selected={c.id === selectedComponent}
+                                onSelect={setSelectedComponent}
+                            >
                                 {renderComponent(c)}
                             </Box>
                         ))}
