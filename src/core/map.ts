@@ -50,6 +50,7 @@ export type MapInstance = {
     setLayerVisibility: (id: string, visibility: boolean) => void
     getLayerVisibility: (id: string) => boolean
     setLayerOpacity: (id: string, opacity: number) => void
+    getLayerOpacity: (id: string) => number
     setBackground: (id: string) => void
     addListener: (
         event: MapEventType,

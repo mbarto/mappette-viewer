@@ -95,7 +95,9 @@ export default function TableOfContents({ context }: TableOfContentsProps) {
                                             <div>
                                                 <input
                                                     type="checkbox"
-                                                    checked={l.visibility}
+                                                    checked={map?.getLayerVisibility(
+                                                        l.id
+                                                    )}
                                                     onChange={(evt) =>
                                                         setVisibility(
                                                             l.id,
@@ -113,7 +115,11 @@ export default function TableOfContents({ context }: TableOfContentsProps) {
                                                 type="range"
                                                 min="0"
                                                 max="100"
-                                                value={(l.opacity ?? 1) * 100}
+                                                value={
+                                                    (map?.getLayerOpacity(
+                                                        l.id
+                                                    ) ?? 1) * 100
+                                                }
                                                 onChange={(evt) =>
                                                     setOpacity(
                                                         l.id,

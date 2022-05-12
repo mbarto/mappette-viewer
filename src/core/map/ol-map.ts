@@ -131,6 +131,8 @@ const OLMapProvider: MapProvider = {
             setLayerOpacity: (id: string, opacity: number) => {
                 getLayer(map, id)?.setOpacity(opacity)
             },
+            getLayerOpacity: (id: string) =>
+                getLayer(map, id)?.getOpacity() ?? 1,
             setBackground: (id: string) => {
                 map.getLayers().forEach((l) => {
                     if (l.get("mapstore_id") === id) {
