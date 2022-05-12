@@ -1,5 +1,5 @@
 import { createContext } from "preact"
-import { useContext } from "preact/hooks"
+import { useContext, useEffect, useState } from "preact/hooks"
 
 const baseUrl =
     "https://dev-mapstore.geosolutionsgroup.com/mapstore/translations"
@@ -15,8 +15,25 @@ export type Locale = {
     messages: LocaleMessages
 }
 
-export function useLocale() {
-    return navigator.language
+export function useLocale(userLocale?: string) {
+    return (
+        userLocale ||
+        new URL(window.location.href).searchParams.get("locale") ||
+        navigator.language
+    )
+}
+
+export function useLocalizedMessages(userLocale?: string) {
+    const locale = useLocale(userLocale)
+    const [messages, setMessages] = useState<Locale | null>(null)
+    const [error, setError] = useState<string | null>(null)
+    useEffect(() => {
+        loadLocale(locale)
+            .then(setMessages)
+            .catch((e) => setError(e.message ?? "Unknown error"))
+    }, [])
+
+    return { locale, messages, error }
 }
 
 export function loadLocale(

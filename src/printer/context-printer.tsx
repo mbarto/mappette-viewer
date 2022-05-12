@@ -1,7 +1,6 @@
 import { useEffect, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { Map, MapInstance } from "../core/map"
-import { loadLocale, Locale } from "../api/locale"
 import MapViewer from "../plugins/map"
 import "./printer.css"
 import Box, { Rectangle } from "./box"
@@ -72,13 +71,6 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
             ],
         },
     ])
-    const [locale, setLocale] = useState<Locale | undefined>()
-    useEffect(() => {
-        if (context.windowTitle) {
-            document.title = context.windowTitle
-        }
-        loadLocale().then(setLocale)
-    }, [context])
     function addPage() {
         setPages((old) => [
             ...old,
@@ -183,56 +175,54 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
         }
     }
     return (
-        <Locale.Provider value={locale}>
-            <Map.Provider value={map}>
-                <Toolbar
-                    addPage={addPage}
-                    removePage={removeSelectedPage}
-                    addComponent={addComponent}
-                    orientation={orientation}
-                    sheet={sheet}
-                    toggleOrientation={toggleOrientation}
-                    toggleSheet={toggleSheet}
-                    selectedPage={selectedPage}
-                    editingText={editingText}
-                    applyStyle={applyStyleToComponent}
-                />
-                {pages.map((page, idx) => (
-                    <div
-                        className={`sheet ${
-                            selectedPage === idx ? "selected" : ""
-                        }`}
-                        onClick={(e) => {
-                            if (e.target instanceof HTMLDivElement) {
-                                if (!e.target.closest(".box"))
-                                    setSelectedComponent(null)
-                            }
-                            setSelectedPage(idx)
-                        }}
-                    >
-                        {idx > 0 && (
-                            <div
-                                className="remove"
-                                onClick={() => removePage(page)}
-                            >
-                                X
-                            </div>
-                        )}
-                        {page.components.map((c) => (
-                            <Box
-                                id={c.id}
-                                rect={c.box}
-                                stylable={c.stylable}
-                                boxStyle={c.style}
-                                selected={c.id === selectedComponent}
-                                onSelect={setSelectedComponent}
-                            >
-                                {renderComponent(c)}
-                            </Box>
-                        ))}
-                    </div>
-                ))}
-            </Map.Provider>
-        </Locale.Provider>
+        <Map.Provider value={map}>
+            <Toolbar
+                addPage={addPage}
+                removePage={removeSelectedPage}
+                addComponent={addComponent}
+                orientation={orientation}
+                sheet={sheet}
+                toggleOrientation={toggleOrientation}
+                toggleSheet={toggleSheet}
+                selectedPage={selectedPage}
+                editingText={editingText}
+                applyStyle={applyStyleToComponent}
+            />
+            {pages.map((page, idx) => (
+                <div
+                    className={`sheet ${
+                        selectedPage === idx ? "selected" : ""
+                    }`}
+                    onClick={(e) => {
+                        if (e.target instanceof HTMLDivElement) {
+                            if (!e.target.closest(".box"))
+                                setSelectedComponent(null)
+                        }
+                        setSelectedPage(idx)
+                    }}
+                >
+                    {idx > 0 && (
+                        <div
+                            className="remove"
+                            onClick={() => removePage(page)}
+                        >
+                            X
+                        </div>
+                    )}
+                    {page.components.map((c) => (
+                        <Box
+                            id={c.id}
+                            rect={c.box}
+                            stylable={c.stylable}
+                            boxStyle={c.style}
+                            selected={c.id === selectedComponent}
+                            onSelect={setSelectedComponent}
+                        >
+                            {renderComponent(c)}
+                        </Box>
+                    ))}
+                </div>
+            ))}
+        </Map.Provider>
     )
 }

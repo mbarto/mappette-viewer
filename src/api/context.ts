@@ -131,6 +131,6 @@ export function useContext() {
         loadContext(contextName, local)
             .then(setContext)
             .catch((e) => setError(e?.message || "Unknown error"))
-    })
+    }, [])
     return { context, error, mode }
 }
