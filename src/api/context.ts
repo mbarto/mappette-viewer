@@ -1,3 +1,5 @@
+import { useEffect, useState } from "preact/hooks"
+
 const baseUrl =
     "https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore"
 const contextEndpoint = "misc/category/name/CONTEXT/resource/name"
@@ -115,4 +117,20 @@ export function loadContext(
         .then((resource: MapStoreResource) => {
             return JSON.parse(resource.Resource.data.data) as Context
         })
+}
+
+export function useContext() {
+    const url = new URL(window.location.href)
+    const contextName = url.searchParams.get("context") ?? "config.json"
+    const local = contextName === "config.json"
+    const mode = url.searchParams.get("mode") ?? "2d"
+
+    const [context, setContext] = useState<Context | null>(null)
+    const [error, setError] = useState(null)
+    useEffect(() => {
+        loadContext(contextName, local)
+            .then(setContext)
+            .catch((e) => setError(e?.message || "Unknown error"))
+    })
+    return { context, error, mode }
 }
