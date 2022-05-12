@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "preact/hooks"
+import { useEffect, useRef } from "preact/hooks"
 import { ComponentChildren } from "preact"
 import "./box/box.css"
+
+export type CSSProperties = string | { [key: string]: string | number }
 
 export type Rectangle = {
     top: string
@@ -14,7 +16,7 @@ type BoxProps = {
     selected: boolean
     rect: Rectangle
     stylable?: boolean
-    boxStyle?: object
+    boxStyle?: CSSProperties
     onResize?: () => void
     onSelect: (id: string) => void
     children: ComponentChildren
@@ -111,7 +113,7 @@ function Box({
             id={`${id}-container`}
             className={`resizable draggable box ${selected ? "selected" : ""}`}
             ref={box}
-            style={{ ...style, ...additionalStyle }}
+            style={{ ...style, ...(additionalStyle as object) }}
             onClick={() => onSelect(id)}
         >
             {children}

@@ -1,3 +1,4 @@
+import { CSSProperties } from "./box"
 import "./toolbar/toolbar.css"
 
 type ToolbarProps = {
@@ -6,11 +7,10 @@ type ToolbarProps = {
     addComponent: (type: string) => void
     toggleOrientation: () => void
     toggleSheet: () => void
-    applyStyle: (style: object) => void
+    applyStyle: (style: CSSProperties) => void
     selectedPage: number
     orientation: string
     sheet: string
-    editingText: boolean
 }
 
 export default function Toolbar({
@@ -22,7 +22,6 @@ export default function Toolbar({
     selectedPage = 0,
     sheet = "A4",
     orientation = "portrait",
-    editingText = false,
     applyStyle = () => {},
 }: ToolbarProps) {
     const formatBlock = (format?: string) => () => {
@@ -70,41 +69,29 @@ export default function Toolbar({
                 {sheet}
             </button>
             <hr />
-            <button disabled={!editingText} onClick={formatBlock("h1")}>
-                H1
-            </button>
-            <button disabled={!editingText} onClick={formatBlock("h2")}>
-                H2
-            </button>
-            <button
-                disabled={!editingText}
-                onClick={formatBlock("div")}
-                title="Remove titles"
-            >
+            <button onClick={formatBlock("h1")}>H1</button>
+            <button onClick={formatBlock("h2")}>H2</button>
+            <button onClick={formatBlock("div")} title="Remove titles">
                 N
             </button>
             <hr />
             <button
-                disabled={!editingText}
                 onClick={align("left")}
                 title="Justify left"
                 className="icon-align-left"
             ></button>
             <button
-                disabled={!editingText}
                 onClick={align("center")}
                 title="Center"
                 className="icon-align-center"
             ></button>
             <button
-                disabled={!editingText}
                 onClick={align("right")}
                 title="Justify right"
                 className="icon-align-right"
             ></button>
             <hr />
             <button
-                disabled={!editingText}
                 onClick={textStyle("bold")}
                 title="Apply bold"
                 style={{
@@ -114,7 +101,6 @@ export default function Toolbar({
                 B
             </button>
             <button
-                disabled={!editingText}
                 onClick={textStyle("italic")}
                 title="Apply italic"
                 style={{
@@ -123,11 +109,7 @@ export default function Toolbar({
             >
                 I
             </button>
-            <button
-                disabled={!editingText}
-                onClick={textStyle("none")}
-                title="Remove text style"
-            >
+            <button onClick={textStyle("none")} title="Remove text style">
                 N
             </button>
             <hr />
