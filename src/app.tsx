@@ -4,19 +4,22 @@ import ContextViewer from "./viewer/context-viewer"
 
 export function App() {
     const url = new URL(window.location.href)
-    const contextName = url.searchParams.get("context")
+    const contextName = url.searchParams.get("context") ?? "config.json"
+    const local = contextName === "config.json"
     const mode = url.searchParams.get("mode") ?? "2d"
     const [context, setContext] = useState<Context | null>(null)
     const [error, setError] = useState(null)
     useEffect(() => {
         if (contextName) {
-            loadContext(contextName).then(setContext).catch(setError)
+            loadContext(contextName, local)
+                .then(setContext)
+                .catch((e) => setError(e?.message || "Unknown error"))
         }
     }, [contextName])
     return contextName ? (
         <>
             {error ? (
-                <div className="error">{JSON.stringify(error)}</div>
+                <div className="error">{error}</div>
             ) : context ? (
                 <ContextViewer context={context} mapType={getMapType(mode)} />
             ) : (

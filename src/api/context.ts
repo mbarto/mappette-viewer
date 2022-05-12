@@ -94,13 +94,24 @@ export type Context = {
     userPlugins: MapStorePluginDef[]
 }
 
-export function loadContext(contextName: string): Promise<Context> {
-    return fetch(`${baseUrl}/${contextEndpoint}/${contextName}`, {
+export function loadContext(
+    contextName: string,
+    local: boolean
+): Promise<Context> {
+    const url = local
+        ? contextName
+        : `${baseUrl}/${contextEndpoint}/${contextName}`
+    return fetch(url, {
         headers: {
             Accept: "application/json",
         },
     })
-        .then((resp) => resp.json())
+        .then((resp) => {
+            if (resp.ok) return resp.json()
+            return resp.text().then((t) => {
+                throw new Error(`Error loading ${contextName}: ${t}`)
+            })
+        })
         .then((resource: MapStoreResource) => {
             return JSON.parse(resource.Resource.data.data) as Context
         })
