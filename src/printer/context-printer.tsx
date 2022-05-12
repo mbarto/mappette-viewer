@@ -1,31 +1,21 @@
-import { useEffect, useReducer, useState } from "preact/hooks"
+import { useReducer, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { Map, MapInstance } from "../core/map"
-import MapViewer from "../plugins/map"
 import "./printer.css"
-import Box, { CSSProperties, Rectangle } from "./box"
+import { CSSProperties } from "./box"
 import Toolbar from "./toolbar"
-import ScaleBox from "../plugins/scalebox"
+import PrintedPage, {
+    Orientation,
+    Sheet,
+    usePage,
+    Page,
+    PageComponent,
+} from "./page"
 
 type ContextPrinterProps = {
     context: Context
 }
 
-type PageComponent = {
-    type: string
-    id: string
-    box: Rectangle
-    stylable?: boolean
-    style?: CSSProperties
-}
-
-type Page = {
-    id: number
-    components: PageComponent[]
-}
-
-type Orientation = "portrait" | "landscape"
-type Sheet = "A4" | "A3"
 type PrinterState = {
     selectedPage: number
     selectedComponent: string | null
@@ -81,10 +71,6 @@ type PrinterAction =
           type: "removeSelectedPage"
       }
     | {
-          type: "removePage"
-          page: Page
-      }
-    | {
           type: "addComponent"
           component: PageComponent
       }
@@ -119,11 +105,6 @@ function reducer(state: PrinterState, action: PrinterAction): PrinterState {
                 ...state,
                 pages: state.pages.filter((_, i) => i !== state.selectedPage),
             }
-        case "removePage":
-            return {
-                ...state,
-                pages: state.pages.filter((p) => p.id !== action.page.id),
-            }
         case "addComponent":
             return {
                 ...state,
@@ -140,7 +121,7 @@ function reducer(state: PrinterState, action: PrinterAction): PrinterState {
             return {
                 ...state,
                 orientation:
-                    state.orientation === "portrait" ? "portrait" : "landscape",
+                    state.orientation === "portrait" ? "landscape" : "portrait",
             }
         case "toggleSheet":
             return {
@@ -189,16 +170,11 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
         pages: [initialPage],
     })
     const { selectedPage, selectedComponent, pages, orientation, sheet } = state
+    usePage(orientation, sheet)
 
     function addPage() {
         dispatch({
             type: "addPage",
-        })
-    }
-    function removePage(page: Page) {
-        dispatch({
-            type: "removePage",
-            page,
         })
     }
     function removeSelectedPage() {
@@ -251,45 +227,6 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
         })
     }
 
-    function renderComponent(component: PageComponent) {
-        const pluginsProps = {
-            setMap,
-            context,
-            mapType: "ol",
-            plugins: [],
-            allPlugins: [],
-            cfg: {},
-        }
-        if (component.type === "map") return <MapViewer {...pluginsProps} />
-        if (component.type === "text")
-            return <div contentEditable>{context.windowTitle || "Title"}</div>
-        if (component.type === "scale") return <ScaleBox {...pluginsProps} />
-        return null
-    }
-
-    useEffect(() => {
-        document.body.classList.remove("portrait")
-        document.body.classList.remove("landscape")
-        document.body.classList.add(orientation)
-
-        document.body.classList.remove("A4")
-        document.body.classList.remove("A3")
-        document.body.classList.add(sheet)
-
-        const style = document.getElementById("page-style")
-        if (style) document.head.removeChild(style)
-
-        const pageStyle = document.createElement("style")
-        pageStyle.id = "page-style"
-        pageStyle.setAttribute("type", "text/css")
-        pageStyle.appendChild(
-            document.createTextNode(
-                `@page {margin: 0; size: ${sheet} ${orientation}}`
-            )
-        )
-        document.head.appendChild(pageStyle)
-    }, [orientation, sheet])
-
     function applyStyleToComponent(style: CSSProperties) {
         if (selectedComponent) {
             dispatch({
@@ -312,39 +249,15 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                 applyStyle={applyStyleToComponent}
             />
             {pages.map((page, idx) => (
-                <div
-                    style={{}}
-                    className={`sheet ${
-                        selectedPage === idx ? "selected" : ""
-                    }`}
-                    onClick={(e) => {
-                        if (e.target instanceof HTMLDivElement) {
-                            if (!e.target.closest(".box")) selectComponent(null)
-                        }
-                        selectPage(idx)
-                    }}
-                >
-                    {idx > 0 && (
-                        <div
-                            className="remove"
-                            onClick={() => removePage(page)}
-                        >
-                            X
-                        </div>
-                    )}
-                    {page.components.map((c) => (
-                        <Box
-                            id={c.id}
-                            rect={c.box}
-                            stylable={c.stylable}
-                            boxStyle={c.style}
-                            selected={c.id === selectedComponent}
-                            onSelect={selectComponent}
-                        >
-                            {renderComponent(c)}
-                        </Box>
-                    ))}
-                </div>
+                <PrintedPage
+                    context={context}
+                    isSelected={idx === selectedPage}
+                    onSelectComponent={selectComponent}
+                    onSelectPage={() => selectPage(idx)}
+                    page={page}
+                    selectedComponent={selectedComponent}
+                    setMap={setMap}
+                />
             ))}
         </Map.Provider>
     )
