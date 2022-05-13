@@ -1,0 +1,43 @@
+.thumbnails {
+    position: fixed;
+    left: 240mm;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    margin-top: 5mm;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.thumbnails-page {
+    background: white;
+    box-shadow: 0 0.5mm 2mm rgb(0 0 0 / 30%);
+    border-radius: 10px;
+    width: 50px;
+    margin-bottom: 10px;
+    height: 60px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.selected {
+        box-shadow: 1mm 1mm 1mm rgba(255, 0, 128, 0.3);
+    }
+}
+
+.A4.landscape .thumbnails,
+.A3.portrait .thumbnails {
+    left: 330mm;
+}
+
+.A3.landscape .thumbnails {
+    right: 30px;
+    left: inherit !important;
+}
+
+@media print {
+    .thumbnails {
+        display: none;
+    }
+}

@@ -1,8 +1,8 @@
-import { useReducer, useState } from "preact/hooks"
+import { useEffect, useReducer, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { Map, MapInstance } from "../core/map"
 import "./printer.css"
-import { CSSProperties } from "./box"
+import { CSSProperties, Rectangle } from "./box"
 import Toolbar from "./toolbar"
 import PrintedPage, {
     Orientation,
@@ -11,6 +11,7 @@ import PrintedPage, {
     Page,
     PageComponent,
 } from "./page"
+import Thumbnails from "./thumbnails"
 
 type ContextPrinterProps = {
     context: Context
@@ -31,7 +32,7 @@ const initialPage: Page = {
     components: [
         {
             type: "text",
-            id: "title",
+            id: "title-0",
             box: {
                 top: "5%",
                 left: "5%",
@@ -41,7 +42,7 @@ const initialPage: Page = {
         },
         {
             type: "map",
-            id: "map",
+            id: "map-0",
             box: {
                 top: "100px",
                 left: "5%",
@@ -51,7 +52,7 @@ const initialPage: Page = {
         },
         {
             type: "scale",
-            id: "scale",
+            id: "scale-0",
             box: {
                 top: "90%",
                 left: "5%",
@@ -73,6 +74,9 @@ type PrinterAction =
     | {
           type: "addComponent"
           component: PageComponent
+      }
+    | {
+          type: "removeSelectedComponent"
       }
     | {
           type: "toggleOrientation"
@@ -104,6 +108,16 @@ function reducer(state: PrinterState, action: PrinterAction): PrinterState {
             return {
                 ...state,
                 pages: state.pages.filter((_, i) => i !== state.selectedPage),
+            }
+        case "removeSelectedComponent":
+            return {
+                ...state,
+                pages: state.pages.map((p) => ({
+                    ...p,
+                    components: p.components.filter(
+                        (c) => c.id !== state.selectedComponent
+                    ),
+                })),
             }
         case "addComponent":
             return {
@@ -160,6 +174,40 @@ function reducer(state: PrinterState, action: PrinterAction): PrinterState {
     }
 }
 
+function getPageDimensions(pageNumber: number) {
+    const page = document
+        .getElementsByClassName("sheet")
+        .item(pageNumber) as HTMLDivElement
+    if (page) {
+        return {
+            page,
+            rect: page.getBoundingClientRect(),
+            width: page.offsetWidth,
+            height: page.offsetHeight,
+        }
+    }
+    return null
+}
+
+function isInVieweport(rect: DOMRect, width: number, height: number): boolean {
+    return (
+        rect.top >= -height &&
+        rect.left >= -width &&
+        rect.right <=
+            (window.innerWidth || document.documentElement.clientWidth) +
+                width &&
+        rect.bottom <=
+            (window.innerHeight || document.documentElement.clientHeight) +
+                height
+    )
+}
+
+function scrollToPage(page: HTMLDivElement) {
+    page.scrollIntoView()
+}
+
+let componentId = 1
+
 export default function ContextPrinter({ context }: ContextPrinterProps) {
     const [map, setMap] = useState<MapInstance | null>(null)
     const [state, dispatch] = useReducer<PrinterState, PrinterAction>(reducer, {
@@ -171,6 +219,14 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
     })
     const { selectedPage, selectedComponent, pages, orientation, sheet } = state
     usePage(orientation, sheet)
+    useEffect(() => {
+        const dimensions = getPageDimensions(selectedPage)
+        if (
+            dimensions &&
+            !isInVieweport(dimensions.rect, dimensions.width, dimensions.height)
+        )
+            scrollToPage(dimensions.page)
+    }, [selectedPage])
 
     function addPage() {
         dispatch({
@@ -184,9 +240,16 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
             })
         }
     }
+    function removeSelectedComponent() {
+        if (selectedComponent) {
+            dispatch({
+                type: "removeSelectedComponent",
+            })
+        }
+    }
     function addComponent(type: string) {
         const newComponent: PageComponent = {
-            id: type,
+            id: `${type}-${componentId++}`,
             type,
             box: {
                 left: "0",
@@ -235,18 +298,23 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
             })
         }
     }
+    function print() {
+        window.print()
+    }
     return (
         <Map.Provider value={map}>
             <Toolbar
                 addPage={addPage}
                 removePage={removeSelectedPage}
                 addComponent={addComponent}
+                removeComponent={removeSelectedComponent}
                 orientation={orientation}
                 sheet={sheet}
                 toggleOrientation={toggleOrientation}
                 toggleSheet={toggleSheet}
                 selectedPage={selectedPage}
                 applyStyle={applyStyleToComponent}
+                print={print}
             />
             {pages.map((page, idx) => (
                 <PrintedPage
@@ -259,6 +327,11 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                     setMap={setMap}
                 />
             ))}
+            <Thumbnails
+                pages={pages}
+                selectedPage={selectedPage}
+                onSelect={selectPage}
+            />
         </Map.Provider>
     )
 }

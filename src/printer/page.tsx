@@ -1,5 +1,4 @@
-import { StateUpdater, useEffect } from "preact/hooks"
-import { PluginProps } from "../core/plugins"
+import { useEffect } from "preact/hooks"
 import Box, { CSSProperties, Rectangle } from "./box"
 import MapViewer from "../plugins/map"
 import ScaleBox from "../plugins/scalebox"
@@ -45,6 +44,7 @@ export type PageComponent = {
     box: Rectangle
     stylable?: boolean
     style?: CSSProperties
+    dragButton?: number
 }
 
 type PageProps = {
@@ -95,6 +95,7 @@ export default function PrintedPage({
         >
             {page.components.map((c) => (
                 <Box
+                    key={c.id}
                     id={c.id}
                     rect={c.box}
                     stylable={c.stylable}

@@ -58,13 +58,21 @@
     content: "\ede1";
 }
 
+.icon-print:before {
+    content: "\efc6";
+}
+
+.icon-remove:before {
+    content: "\ec7e";
+}
+
 .A4.landscape .toolbar,
 .A3.portrait .toolbar {
     left: 310mm;
 }
 
 .A3.landscape .toolbar {
-    right: 10px;
+    right: 50px;
     left: inherit !important;
 }
 

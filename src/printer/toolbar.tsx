@@ -5,8 +5,10 @@ type ToolbarProps = {
     addPage: () => void
     removePage: () => void
     addComponent: (type: string) => void
+    removeComponent: () => void
     toggleOrientation: () => void
     toggleSheet: () => void
+    print: () => void
     applyStyle: (style: CSSProperties) => void
     selectedPage: number
     orientation: string
@@ -17,12 +19,14 @@ export default function Toolbar({
     addPage,
     removePage,
     addComponent,
+    removeComponent,
     toggleOrientation,
     toggleSheet,
     selectedPage = 0,
     sheet = "A4",
     orientation = "portrait",
     applyStyle = () => {},
+    print,
 }: ToolbarProps) {
     const formatBlock = (format?: string) => () => {
         document.execCommand("formatBlock", false, format)
@@ -47,6 +51,10 @@ export default function Toolbar({
         }
     return (
         <div className="toolbar">
+            <button onClick={print} title="Print" className="icon-print">
+                <span></span>
+            </button>
+            <hr />
             <button onClick={addPage} title="Add a page" className="icon-page">
                 <span>+</span>
             </button>
@@ -113,6 +121,11 @@ export default function Toolbar({
                 N
             </button>
             <hr />
+            <button
+                onClick={removeComponent}
+                title="Remove selected component"
+                className="icon-remove"
+            ></button>
             <button
                 onClick={() => addComponent("text")}
                 title="Add a text box to the page"
