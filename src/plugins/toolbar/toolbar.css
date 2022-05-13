@@ -52,3 +52,7 @@
 .glyphicon-map-marker:before {
     content: "\f1c3";
 }
+
+.glyphicon-print:before {
+    content: "\f1fb";
+}
