@@ -50,6 +50,8 @@ const initialPage: Page = {
                 width: "90%",
                 height: "50%",
             },
+            lockable: true,
+            locked: true,
         },
         {
             type: "scale",

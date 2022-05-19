@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "preact/hooks"
-import { ComponentChildren } from "preact"
+import { useEffect, useRef, useState } from "preact/hooks"
+import { cloneElement, ComponentChildren, toChildArray, VNode } from "preact"
 import "./box/box.css"
+import { clone } from "cesium"
 
 export type CSSProperties = string | { [key: string]: string | number }
 
@@ -17,6 +18,8 @@ type BoxProps = {
     rect: Rectangle
     stylable?: boolean
     boxStyle?: CSSProperties
+    lockable?: boolean
+    initiallyLocked?: boolean
     onResize?: () => void
     onSelect: (id: string) => void
     children: ComponentChildren
@@ -40,11 +43,19 @@ function Box({
     children,
     rect,
     stylable = false,
+    lockable = false,
+    initiallyLocked = false,
     boxStyle = {},
     selected = false,
 }: BoxProps) {
     const box = useRef<HTMLDivElement | null>(null)
     const dragState = useRef<DragState>({})
+    const [locked, setLocked] = useState(initiallyLocked)
+
+    function toggleLock() {
+        setLocked((actual) => !actual)
+    }
+
     useEffect(() => {
         if (box.current && onResize) {
             const observer = new ResizeObserver(onResize)
@@ -108,6 +119,9 @@ function Box({
         ...rect,
     }
     const additionalStyle = stylable ? boxStyle : {}
+    const innerComponents = toChildArray(children).map((e) =>
+        cloneElement(e as VNode, { locked })
+    )
     return (
         <div
             id={`${id}-container`}
@@ -116,7 +130,13 @@ function Box({
             style={{ ...style, ...(additionalStyle as object) }}
             onClick={() => onSelect(id)}
         >
-            {children}
+            {lockable ? (
+                <div
+                    className={`lock ${locked ? "locked" : "unlocked"}`}
+                    onClick={toggleLock}
+                ></div>
+            ) : null}
+            {innerComponents}
         </div>
     )
 }

@@ -4,6 +4,7 @@ import { PluginsContainerProps } from "../viewer/plugins-container"
 
 export type PluginProps = PluginsContainerProps & {
     cfg: unknown
+    locked?: boolean
 }
 
 export type PluginImpl = (props: PluginProps) => JSX.Element | null

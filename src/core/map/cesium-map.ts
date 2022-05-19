@@ -234,6 +234,7 @@ const CesiumMapProvider: MapProvider = {
             },
             getProjection: () => "EPSG:4326",
             resize: () => {},
+            setLocked: () => {},
         }
     },
 }

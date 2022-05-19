@@ -1,5 +1,5 @@
-import { MapEvent, MapEventType, MapInstance, MapProvider } from "../map"
-import { getProjectionScale, reproject } from "../projection"
+import { MapEvent, MapEventType, MapProvider } from "../map"
+import { reproject } from "../projection"
 import OLMap from "ol/Map"
 import View from "ol/View"
 import { createLayers } from "./ol/layers"
@@ -97,7 +97,7 @@ function getLayer(map: OLMap, id: string): BaseLayer | null {
 }
 
 const OLMapProvider: MapProvider = {
-    create: (id, mapConfig) => {
+    create: (id, mapConfig, locked) => {
         const projection = mapConfig.projection ?? "EPSG:3857"
         const center = reproject(mapConfig.center, projection)
         const map = new OLMap({
@@ -114,6 +114,13 @@ const OLMapProvider: MapProvider = {
                 mapConfig.sources
             ),
         })
+        const defaultInteractions = map
+            .getInteractions()
+            .getArray()
+            .map((i) => i)
+        if (locked) {
+            map.getInteractions().clear()
+        }
         return {
             map,
             setZoom: (zoom) => map.getView().setZoom(zoom),
@@ -165,6 +172,10 @@ const OLMapProvider: MapProvider = {
             },
             getProjection: () => projection,
             resize: () => map.updateSize(),
+            setLocked: (locked: boolean) => {
+                if (locked) map.getInteractions().clear()
+                else defaultInteractions.forEach((i) => map.addInteraction(i))
+            },
         }
     },
 }

@@ -13,6 +13,22 @@
     &.selected {
         border-color: orange;
     }
+    & .lock {
+        position: absolute;
+        cursor: pointer;
+        font-family: "icofont";
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        z-index: 1;
+        &:before {
+            content: "\f01b";
+        }
+        &.locked:before {
+            content: "\ef7a";
+        }
+    }
 }
 
 .no-select {

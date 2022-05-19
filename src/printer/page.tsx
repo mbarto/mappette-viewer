@@ -52,6 +52,8 @@ export type PageComponent = {
     stylable?: boolean
     style?: CSSProperties
     dragButton?: number
+    lockable?: boolean
+    locked?: boolean
 }
 
 type PageProps = {
@@ -109,6 +111,8 @@ export default function PrintedPage({
                     boxStyle={c.style}
                     selected={c.id === selectedComponent}
                     onSelect={onSelectComponent}
+                    lockable={c.lockable}
+                    initiallyLocked={c.locked}
                 >
                     {renderComponent(c)}
                 </Box>

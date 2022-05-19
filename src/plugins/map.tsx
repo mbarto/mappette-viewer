@@ -10,7 +10,13 @@ type MapPluginProps = PluginProps & {
     }
 }
 
-export default function Map({ cfg, context, mapType, setMap }: MapPluginProps) {
+export default function Map({
+    cfg,
+    context,
+    mapType,
+    setMap,
+    locked = false,
+}: MapPluginProps) {
     const { id = "map" } = cfg
     const map = useMap()
     const container = useRef<HTMLDivElement | null>(null)
@@ -25,8 +31,13 @@ export default function Map({ cfg, context, mapType, setMap }: MapPluginProps) {
     useEffect(() => {
         loadProvider(mapType).then((provider) => {
             const mapConfig = context.mapConfig.map
-            setMap(provider.create(id, mapConfig))
+            setMap(provider.create(id, mapConfig, locked))
         })
     }, [context])
+    useEffect(() => {
+        if (map) {
+            map.setLocked(locked)
+        }
+    }, [locked, map])
     return <div id={id} className="mapstore-map" ref={container}></div>
 }
