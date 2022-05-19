@@ -93,6 +93,9 @@ body.A5.landscape .sheet {
     }
     .box {
         border: none !important;
+        & .lock {
+            display: none;
+        }
     }
 }
 
