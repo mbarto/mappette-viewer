@@ -23,6 +23,7 @@ type PrinterState = {
     orientation: Orientation
     sheet: Sheet
     pages: Page[]
+    zoom: number
 }
 
 let currentId = 1
@@ -96,6 +97,15 @@ type PrinterAction =
           type: "applyStyle"
           style: CSSProperties
       }
+    | {
+          type: "zoomIn"
+      }
+    | {
+          type: "zoomOut"
+      }
+
+export const MAX_ZOOM = 1
+export const MIN_ZOOM = 0.125
 
 function reducer(state: PrinterState, action: PrinterAction): PrinterState {
     switch (action.type) {
@@ -171,6 +181,18 @@ function reducer(state: PrinterState, action: PrinterAction): PrinterState {
                         : p
                 ),
             }
+        case "zoomIn": {
+            return {
+                ...state,
+                zoom: state.zoom === MAX_ZOOM ? state.zoom : state.zoom * 2,
+            }
+        }
+        case "zoomOut": {
+            return {
+                ...state,
+                zoom: state.zoom === MIN_ZOOM ? state.zoom : state.zoom / 2,
+            }
+        }
     }
 }
 
@@ -189,7 +211,7 @@ function getPageDimensions(pageNumber: number) {
     return null
 }
 
-function isInVieweport(rect: DOMRect, width: number, height: number): boolean {
+function isInViewport(rect: DOMRect, width: number, height: number): boolean {
     return (
         rect.top >= -height &&
         rect.left >= -width &&
@@ -216,14 +238,16 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
         orientation: "portrait",
         sheet: "A4",
         pages: [initialPage],
+        zoom: 1,
     })
-    const { selectedPage, selectedComponent, pages, orientation, sheet } = state
-    usePage(orientation, sheet)
+    const { selectedPage, selectedComponent, pages, orientation, sheet, zoom } =
+        state
+    usePage(orientation, sheet, zoom)
     useEffect(() => {
         const dimensions = getPageDimensions(selectedPage)
         if (
             dimensions &&
-            !isInVieweport(dimensions.rect, dimensions.width, dimensions.height)
+            !isInViewport(dimensions.rect, dimensions.width, dimensions.height)
         )
             scrollToPage(dimensions.page)
     }, [selectedPage])
@@ -301,6 +325,16 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
     function print() {
         window.print()
     }
+    function zoomIn() {
+        dispatch({
+            type: "zoomIn",
+        })
+    }
+    function zoomOut() {
+        dispatch({
+            type: "zoomOut",
+        })
+    }
     return (
         <Map.Provider value={map}>
             <Toolbar
@@ -310,11 +344,14 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                 removeComponent={removeSelectedComponent}
                 orientation={orientation}
                 sheet={sheet}
+                zoom={zoom}
                 toggleOrientation={toggleOrientation}
                 toggleSheet={toggleSheet}
                 selectedPage={selectedPage}
                 applyStyle={applyStyleToComponent}
                 print={print}
+                zoomIn={zoomIn}
+                zoomOut={zoomOut}
             />
             {pages.map((page, idx) => (
                 <PrintedPage

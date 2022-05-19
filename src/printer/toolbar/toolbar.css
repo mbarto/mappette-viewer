@@ -66,6 +66,10 @@
     content: "\ec7e";
 }
 
+.icon-zoom:before {
+    content: "\ed12";
+}
+
 .A4.landscape .toolbar,
 .A3.portrait .toolbar {
     left: 310mm;

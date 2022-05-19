@@ -1,4 +1,5 @@
 import { CSSProperties } from "./box"
+import { MAX_ZOOM, MIN_ZOOM } from "./context-printer"
 import "./toolbar/toolbar.css"
 
 type ToolbarProps = {
@@ -9,10 +10,13 @@ type ToolbarProps = {
     toggleOrientation: () => void
     toggleSheet: () => void
     print: () => void
+    zoomIn: () => void
+    zoomOut: () => void
     applyStyle: (style: CSSProperties) => void
     selectedPage: number
     orientation: string
     sheet: string
+    zoom: number
 }
 
 export default function Toolbar({
@@ -25,8 +29,11 @@ export default function Toolbar({
     selectedPage = 0,
     sheet = "A4",
     orientation = "portrait",
+    zoom = 1,
     applyStyle = () => {},
     print,
+    zoomIn,
+    zoomOut,
 }: ToolbarProps) {
     const formatBlock = (format?: string) => () => {
         document.execCommand("formatBlock", false, format)
@@ -53,6 +60,22 @@ export default function Toolbar({
         <div className="toolbar">
             <button onClick={print} title="Print" className="icon-print">
                 <span></span>
+            </button>
+            <button
+                onClick={zoomIn}
+                disabled={zoom === MAX_ZOOM}
+                title="Zoom In"
+                className="icon-zoom"
+            >
+                <span>+</span>
+            </button>
+            <button
+                onClick={zoomOut}
+                disabled={zoom === MIN_ZOOM}
+                title="Zoom Out"
+                className="icon-zoom"
+            >
+                <span>-</span>
             </button>
             <hr />
             <button onClick={addPage} title="Add a page" className="icon-page">

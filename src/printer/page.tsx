@@ -8,7 +8,18 @@ import { MapInstance } from "../core/map"
 export type Orientation = "portrait" | "landscape"
 export type Sheet = "A4" | "A3"
 
-export function usePage(orientation: Orientation, sheet: Sheet) {
+function createOrReplaceStyle(id: string, content: string) {
+    const style = document.getElementById(id)
+    if (style) document.head.removeChild(style)
+
+    const newStyle = document.createElement("style")
+    newStyle.id = id
+    newStyle.setAttribute("type", "text/css")
+    newStyle.appendChild(document.createTextNode(content))
+    document.head.appendChild(newStyle)
+}
+
+export function usePage(orientation: Orientation, sheet: Sheet, zoom: number) {
     useEffect(() => {
         document.body.classList.remove("portrait")
         document.body.classList.remove("landscape")
@@ -18,19 +29,15 @@ export function usePage(orientation: Orientation, sheet: Sheet) {
         document.body.classList.remove("A3")
         document.body.classList.add(sheet)
 
-        const style = document.getElementById("page-style")
-        if (style) document.head.removeChild(style)
-
-        const pageStyle = document.createElement("style")
-        pageStyle.id = "page-style"
-        pageStyle.setAttribute("type", "text/css")
-        pageStyle.appendChild(
-            document.createTextNode(
-                `@page {margin: 0; size: ${sheet} ${orientation}}`
-            )
+        createOrReplaceStyle(
+            "page-style",
+            `@page {margin: 0; size: ${sheet} ${orientation}}`
         )
-        document.head.appendChild(pageStyle)
-    }, [orientation, sheet])
+        createOrReplaceStyle(
+            "zoom-style",
+            `@media screen { .sheet { zoom: ${zoom}}}`
+        )
+    }, [orientation, sheet, zoom])
 }
 
 export type Page = {
