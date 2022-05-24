@@ -1,8 +1,7 @@
 import { createContext } from "preact"
 import { useContext, useEffect, useState } from "preact/hooks"
 
-const baseUrl =
-    "https://dev-mapstore.geosolutionsgroup.com/mapstore/translations"
+const baseUrl = `${import.meta.env.VITE_BACKEND}/translations`
 
 export type LocaleMessages = {
     [key: string]: string | LocaleMessages

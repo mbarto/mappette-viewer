@@ -1,7 +1,6 @@
 import { useEffect, useState } from "preact/hooks"
 
-const baseUrl =
-    "https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore"
+const baseUrl = `${import.meta.env.VITE_BACKEND}/rest/geostore`
 const contextEndpoint = "misc/category/name/CONTEXT/resource/name"
 
 export type Category = {
