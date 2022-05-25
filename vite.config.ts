@@ -11,6 +11,7 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, "index.html"),
                 print: resolve(__dirname, "print.html"),
+                story: resolve(__dirname, "story.html"),
             },
         },
     },
