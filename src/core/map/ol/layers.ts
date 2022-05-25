@@ -25,8 +25,8 @@ export function createLayers(
     return layers.reduce((acc: Layer[], layer) => {
         const olLayer = createLayer(layer, projection, sources)
         if (olLayer) {
-            olLayer.set("mapstore_id", layer.id)
-            olLayer.set("mapstore_group_id", layer.group)
+            olLayer.set("map_id", layer.id)
+            olLayer.set("map_group_id", layer.group)
             return [...acc, olLayer]
         }
         return acc

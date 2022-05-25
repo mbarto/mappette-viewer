@@ -155,7 +155,7 @@ const CesiumMapProvider: MapProvider = {
         const center = reproject(mapConfig.center, "EPSG:4326")
         const map = new CesiumWidget(id, {
             creditContainer:
-                document.querySelector(".mapstore-attribution") ?? undefined,
+                document.querySelector(".mappette-attribution") ?? undefined,
         })
         map.scene.globe.baseColor = Color.WHITE
         map.imageryLayers.removeAll()
@@ -212,9 +212,7 @@ const CesiumMapProvider: MapProvider = {
                 findLayer(map, id).and((l) => (l.show = true))
                 findLayers(
                     map,
-                    (l) =>
-                        l.mapstoreGroupId === "background" &&
-                        l.mapstoreId !== id
+                    (l) => l.mapGroupId === "background" && l.mapId !== id
                 ).and((layers) => layers.forEach((l) => (l.show = false)))
             },
             addListener: (event, listener) => {
@@ -244,7 +242,7 @@ function findLayer(map: CesiumWidget, id: string) {
     for (let i = 0; i < map.imageryLayers.length; i++) {
         const candidate = map.imageryLayers.get(i)
         const provider = candidate.imageryProvider as ImageryProviderWithId
-        if (provider?.mapstoreId === id) {
+        if (provider?.mapId === id) {
             layer = candidate
         }
     }

@@ -6,7 +6,7 @@ type ToolbarPluginProps = PluginProps
 
 export default function Toolbar(props: ToolbarPluginProps) {
     return (
-        <div className="mapstore-toolbar">
+        <div className="mappette-toolbar">
             <PluginsContainer {...props} />
         </div>
     )

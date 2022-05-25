@@ -89,7 +89,7 @@ function addListener(listener: OLMapListener) {
 function getLayer(map: OLMap, id: string): BaseLayer | null {
     let result = null
     map.getLayers().forEach((l) => {
-        if (l.get("mapstore_id") === id) {
+        if (l.get("map_id") === id) {
             result = l
         }
     })
@@ -142,9 +142,9 @@ const OLMapProvider: MapProvider = {
                 getLayer(map, id)?.getOpacity() ?? 1,
             setBackground: (id: string) => {
                 map.getLayers().forEach((l) => {
-                    if (l.get("mapstore_id") === id) {
+                    if (l.get("map_id") === id) {
                         l.setVisible(true)
-                    } else if (l.get("mapstore_group_id") === "background") {
+                    } else if (l.get("map_group_id") === "background") {
                         l.setVisible(false)
                     }
                 })

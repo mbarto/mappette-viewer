@@ -29,5 +29,5 @@ export default function ScaleBox({}: ScaleBoxPluginProps) {
             })
         }
     }, [map])
-    return <div className="mapstore-scalebox">1:{format(scale)}</div>
+    return <div className="mappette-scalebox">1:{format(scale)}</div>
 }

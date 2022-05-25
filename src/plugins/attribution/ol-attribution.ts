@@ -5,7 +5,7 @@ const OLAttributionProvider: AttributionProvider = {
     create: function (map) {
         const control = new Attribution({
             target: document.querySelector(
-                ".mapstore-attribution"
+                ".mappette-attribution"
             ) as HTMLElement,
         })
         map.addControl(control)

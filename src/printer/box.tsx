@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks"
 import { cloneElement, ComponentChildren, toChildArray, VNode } from "preact"
 import "./box/box.css"
-import { clone } from "cesium"
 
 export type CSSProperties = string | { [key: string]: string | number }
 

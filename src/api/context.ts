@@ -16,7 +16,7 @@ export type Attribute = {
     }
 }
 
-export type MapStoreResource = {
+export type MappetteResource = {
     Resource: {
         id: number
         name: string
@@ -77,22 +77,22 @@ export type MapConfig = {
     }
 }
 
-export type MapStorePlugin = {
+export type MappettePlugin = {
     name: string
     cfg?: unknown
     override?: unknown
 }
 
-export type MapStorePluginDef = string | MapStorePlugin
+export type MappettePluginDef = string | MappettePlugin
 
 export type Context = {
     windowTitle?: string
     mapConfig: MapConfig
     customVariablesEnabled: boolean
     plugins: {
-        [key: string]: MapStorePluginDef[]
+        [key: string]: MappettePluginDef[]
     }
-    userPlugins: MapStorePluginDef[]
+    userPlugins: MappettePluginDef[]
 }
 
 export function loadContext(
@@ -113,7 +113,7 @@ export function loadContext(
                 throw new Error(`Error loading ${contextName}: ${t}`)
             })
         })
-        .then((resource: MapStoreResource) => {
+        .then((resource: MappetteResource) => {
             return JSON.parse(resource.Resource.data.data) as Context
         })
 }

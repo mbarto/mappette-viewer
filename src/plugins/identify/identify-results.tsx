@@ -41,7 +41,7 @@ export default function IdentifyResults({
     onClose,
 }: IdentifyResultsProps) {
     return createPortal(
-        <div className="mapstore-identify-results">
+        <div className="mappette-identify-results">
             <div className="header">
                 <span onClick={onClose}>X</span>
                 <h1>Objects on point</h1>

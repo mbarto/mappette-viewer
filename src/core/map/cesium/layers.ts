@@ -2,8 +2,8 @@ import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
 import { MapLayer, MapSources } from "../../../api/context"
 
 export type ImageryProviderWithId = ImageryProvider & {
-    mapstoreId: string
-    mapstoreGroupId: string
+    mapId: string
+    mapGroupId: string
 }
 
 const layerTypes: {
@@ -36,8 +36,8 @@ export function createLayer(
     const impl = layerTypes[layer.type]
     if (impl) {
         const provider = impl.create(layer, sources) as ImageryProviderWithId
-        provider.mapstoreId = layer.id
-        provider.mapstoreGroupId = layer.group ?? "Default"
+        provider.mapId = layer.id
+        provider.mapGroupId = layer.group ?? "Default"
         return provider
     }
     console.error(`Layer type ${layer.type} not implemented`)

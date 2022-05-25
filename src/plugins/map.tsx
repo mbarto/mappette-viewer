@@ -39,5 +39,5 @@ export default function Map({
             map.setLocked(locked)
         }
     }, [locked, map])
-    return <div id={id} className="mapstore-map" ref={container}></div>
+    return <div id={id} className="mappette-map" ref={container}></div>
 }

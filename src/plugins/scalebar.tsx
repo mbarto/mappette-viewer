@@ -37,7 +37,7 @@ export default function Scalebar({ mapType }: ScalebarPluginProps) {
             if (scalebar.current && map) scalebar.current.remove()
         }
     }, [map, provider])
-    return <div className="mapstore-scalebar"></div>
+    return <div className="mappette-scalebar"></div>
 }
 
 export const container = "mapfooter"

@@ -52,7 +52,7 @@ export default function MousePosition({ context }: MousePositionPluginProps) {
         }
     }, [active, map])
     return (
-        <div className="mapstore-mouse-position">
+        <div className="mappette-mouse-position">
             {active && point ? (
                 <div className="coordinates">
                     <label>{label}</label>

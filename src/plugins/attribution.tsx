@@ -36,7 +36,7 @@ export default function Attribution({ mapType }: AttributionPluginProps) {
             if (attribution.current && map) attribution.current.remove()
         }
     }, [map, provider])
-    return <div className="mapstore-attribution"></div>
+    return <div className="mappette-attribution"></div>
 }
 
 export const container = "mapfooter"

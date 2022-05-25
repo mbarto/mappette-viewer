@@ -1,4 +1,4 @@
-.mapstore-background-selector {
+.mappette-background-selector {
     position: absolute;
     bottom: calc(var(--main-area-bottom) + 10px);
     left: calc(var(--main-area-left) + 10px);

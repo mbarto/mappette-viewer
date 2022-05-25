@@ -1,4 +1,4 @@
-.mapstore-toolbar {
+.mappette-toolbar {
     position: absolute;
     bottom: calc(var(--main-area-bottom) + 10px);
     right: 10px;
@@ -30,7 +30,7 @@
     font-weight: 400;
     line-height: 1;
     position: relative;
-    font-family: mapstore2;
+    font-family: icons;
 }
 
 .glyphicon-plus:before {

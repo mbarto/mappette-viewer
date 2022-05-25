@@ -91,7 +91,7 @@ export default function BackgroundSelector({
     const tooltip = useMessage("backgroundSwitcher.tooltip")
     const main = temporary ?? current
     return (
-        <div className="mapstore-background-selector">
+        <div className="mappette-background-selector">
             <div className="backgrounds-container">
                 <BackgroundPreview
                     className={`background-preview current ${

@@ -1,5 +1,5 @@
 import { JSX } from "preact"
-import { MapStorePlugin, MapStorePluginDef } from "../api/context"
+import { MappettePlugin, MappettePluginDef } from "../api/context"
 import { PluginsContainerProps } from "../viewer/plugins-container"
 
 export type PluginProps = PluginsContainerProps & {
@@ -17,9 +17,9 @@ export type Plugin = {
 }
 
 function addDependencies(
-    plugins: MapStorePlugin[],
-    plugin: MapStorePlugin
-): MapStorePlugin[] {
+    plugins: MappettePlugin[],
+    plugin: MappettePlugin
+): MappettePlugin[] {
     if (plugin.name.toLowerCase() === "map") {
         return [
             ...plugins,
@@ -31,7 +31,7 @@ function addDependencies(
     return [...plugins, plugin]
 }
 
-export function getPlugins(plugins: MapStorePluginDef[]): Promise<Plugin[]> {
+export function getPlugins(plugins: MappettePluginDef[]): Promise<Plugin[]> {
     return Promise.all(
         plugins
             .map(normalizePlugin)
@@ -68,7 +68,7 @@ export function getPluginsFor(
     return []
 }
 
-function normalizePlugin(plugin: MapStorePluginDef): MapStorePlugin {
+function normalizePlugin(plugin: MappettePluginDef): MappettePlugin {
     if (typeof plugin === "string") {
         return { name: plugin }
     }

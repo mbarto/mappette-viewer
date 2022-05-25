@@ -55,7 +55,7 @@ export default function TableOfContents({ context }: TableOfContentsProps) {
                 tooltip="layers"
                 onClick={toggle}
             />
-            <div className={`mapstore-table-of-contents ${status}`}>
+            <div className={`mappette-table-of-contents ${status}`}>
                 <div className="toc-header">
                     <span
                         className="toc-close glyphicon glyphicon-1-close"

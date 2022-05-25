@@ -22,7 +22,7 @@ body {
 }
 
 @font-face {
-    font-family: mapstore2;
+    font-family: icons;
     font-style: normal;
     font-weight: 400;
     src: url("icons.woff") format("woff");

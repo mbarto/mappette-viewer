@@ -1,1 +1,1 @@
-# mapstore-context-viewer
+# mappette-viewer
