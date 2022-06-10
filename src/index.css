@@ -36,6 +36,4 @@ body {
     --left-panel-open: 0;
     --footer-height: 30px;
     --footer-present: 0;
-    --main-area-left: calc(var(--left-panel-open) * var(--left-panel-width));
-    --main-area-bottom: calc(var(--footer-present) * var(--footer-height));
 }

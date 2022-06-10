@@ -14,3 +14,7 @@
         flex-grow: 0;
     }
 }
+
+body:has(.mappette-map-footer) {
+    --footer-present: 1;
+}

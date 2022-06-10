@@ -44,9 +44,7 @@ export default function TableOfContents({ context }: TableOfContentsProps) {
             [id]: !groupStatus[id],
         })
     }
-    useLayout("left-panel-open", () => (status === "open" ? "1" : "0"), [
-        status,
-    ])
+    useLayout("left-panel-open", () => (status === "open" ? 1 : 0), [status])
     return (
         <>
             <ToolbarButton

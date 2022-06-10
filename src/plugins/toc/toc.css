@@ -17,6 +17,10 @@
     }
 }
 
+body:has(.mappette-table-of-contents.open) {
+    --left-panel-open: 1;
+}
+
 @keyframes slidein {
     from {
         left: calc(var(--left-panel-width) * -1);
