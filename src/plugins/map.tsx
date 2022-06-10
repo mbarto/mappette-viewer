@@ -10,13 +10,7 @@ type MapPluginProps = PluginProps & {
     }
 }
 
-export default function Map({
-    cfg,
-    context,
-    mapType,
-    setMap,
-    locked = false,
-}: MapPluginProps) {
+export default function Map({ cfg, context, mapType, setMap }: MapPluginProps) {
     const { id = "map" } = cfg
     const map = useMap()
     const container = useRef<HTMLDivElement | null>(null)
@@ -31,13 +25,8 @@ export default function Map({
     useEffect(() => {
         loadProvider(mapType).then((provider) => {
             const mapConfig = context.mapConfig.map
-            setMap(provider.create(id, mapConfig, locked))
+            setMap(provider.create(id, mapConfig))
         })
     }, [context])
-    useEffect(() => {
-        if (map) {
-            map.setLocked(locked)
-        }
-    }, [locked, map])
     return <div id={id} className="mappette-map" ref={container}></div>
 }

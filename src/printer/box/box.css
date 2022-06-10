@@ -29,6 +29,9 @@
             content: "\ef7a";
         }
     }
+    &.locked .box-content {
+        pointer-events: none;
+    }
 }
 
 .no-select {

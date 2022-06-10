@@ -19,7 +19,6 @@ type BoxProps = {
     boxStyle?: CSSProperties
     lockable?: boolean
     initiallyLocked?: boolean
-    onResize?: () => void
     onSelect: (id: string) => void
     children: ComponentChildren
 }
@@ -37,7 +36,6 @@ type DragState = {
 
 function Box({
     id,
-    onResize,
     onSelect,
     children,
     rect,
@@ -54,14 +52,6 @@ function Box({
     function toggleLock() {
         setLocked((actual) => !actual)
     }
-
-    useEffect(() => {
-        if (box.current && onResize) {
-            const observer = new ResizeObserver(onResize)
-            observer.observe(box.current)
-            return () => observer.disconnect()
-        }
-    }, [box.current])
 
     function onMouseDown(e: MouseEvent) {
         if (e.button === 2) {
@@ -124,7 +114,9 @@ function Box({
     return (
         <div
             id={`${id}-container`}
-            className={`resizable draggable box ${selected ? "selected" : ""}`}
+            className={`resizable draggable box ${selected ? "selected" : ""} ${
+                locked ? "locked" : ""
+            }`}
             ref={box}
             style={{ ...style, ...(additionalStyle as object) }}
             onClick={() => onSelect(id)}
@@ -135,7 +127,7 @@ function Box({
                     onClick={toggleLock}
                 ></div>
             ) : null}
-            {innerComponents}
+            <div className="box-content">{innerComponents}</div>
         </div>
     )
 }

@@ -97,7 +97,7 @@ function getLayer(map: OLMap, id: string): BaseLayer | null {
 }
 
 const OLMapProvider: MapProvider = {
-    create: (id, mapConfig, locked) => {
+    create: (id, mapConfig) => {
         const projection = mapConfig.projection ?? "EPSG:3857"
         const center = reproject(mapConfig.center, projection)
         const map = new OLMap({
@@ -118,9 +118,7 @@ const OLMapProvider: MapProvider = {
             .getInteractions()
             .getArray()
             .map((i) => i)
-        if (locked) {
-            map.getInteractions().clear()
-        }
+
         return {
             map,
             setZoom: (zoom) => map.getView().setZoom(zoom),
@@ -172,10 +170,6 @@ const OLMapProvider: MapProvider = {
             },
             getProjection: () => projection,
             resize: () => map.updateSize(),
-            setLocked: (locked: boolean) => {
-                if (locked) map.getInteractions().clear()
-                else defaultInteractions.forEach((i) => map.addInteraction(i))
-            },
         }
     },
 }

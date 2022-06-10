@@ -4,11 +4,7 @@ import { MapConfig } from "../api/context"
 import { Point } from "./projection"
 
 export type MapProvider = {
-    create: (
-        id: string,
-        mapConfig: MapConfig["map"],
-        locked: boolean
-    ) => MapInstance
+    create: (id: string, mapConfig: MapConfig["map"]) => MapInstance
 }
 
 export type MapEventType = "mousemove" | "click" | "zoom"
@@ -63,7 +59,6 @@ export type MapInstance = {
     removeListener: (listener: MapListener) => void
     getProjection: () => string
     resize: () => void
-    setLocked: (locked: boolean) => void
 }
 
 export const Map = createContext<MapInstance | null>(null)
