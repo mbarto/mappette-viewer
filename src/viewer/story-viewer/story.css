@@ -1,3 +1,7 @@
+body {
+    margin: 0;
+}
+
 .page-geostory {
     display: flex;
     flex-direction: column;
@@ -5,4 +9,36 @@
     height: 100%;
     overflow: hidden;
     position: absolute;
+}
+
+.content-text {
+    padding: 64px 0;
+    padding-left: 45px;
+    padding-right: 45px;
+    & h1 {
+        font-size: 33.6px;
+    }
+    & h6 {
+        font-size: 12.75px;
+    }
+}
+
+.content-text.large {
+    width: 85%;
+}
+
+.content-text-container {
+    padding: 16px;
+    min-height: 40px;
+}
+
+.section-background {
+    height: 0;
+    overflow-y: visible;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    & img {
+        object-fit: cover;
+    }
 }

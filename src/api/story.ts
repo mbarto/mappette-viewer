@@ -1,10 +1,9 @@
 import { useEffect, useState } from "preact/hooks"
 import { MapConfig } from "./context"
+import { CSSProperties, StoryThemes } from "./theme"
 
 const baseUrl = `${import.meta.env.VITE_BACKEND}/rest/geostore`
 const storyEndpoint = "data"
-
-export type CSSProperties = string | { [key: string]: string | number }
 
 export type BaseStoryResource = {
     id: string
@@ -54,12 +53,32 @@ export type TitleStorySection = BaseStorySection & {
 
 export type StorySection = TitleStorySection
 
+export type CustomContentTheme = {
+    value: "custom"
+    custom: CSSProperties
+}
+
+export type ContentTheme = CustomContentTheme
+
 export type BaseStoryContent = {
     id: string
+    size?: "small" | "medium" | "large"
+    theme?: ContentTheme
+}
+
+export type ContentBackground = {
+    fit: "cover"
+    size: "full"
+    align: "center"
+    theme: "bright"
+    resourceId: string
+    type: "image"
 }
 
 export type TextStoryContent = BaseStoryContent & {
     type: "text"
+    html?: string
+    background?: ContentBackground
 }
 
 export type StoryContent = TextStoryContent
@@ -76,9 +95,7 @@ export type Story = {
         isNavbarEnabled: boolean
         isTitleEnabled: boolean
         theme?: {
-            general?: CSSProperties
-            link?: CSSProperties
-            overlay?: CSSProperties
+            [key in StoryThemes]: CSSProperties
         }
         checked: string[]
     }
@@ -119,6 +136,12 @@ export function useStory() {
 
 export type SectionComponentProps = {
     section: StorySection
+    resources: StoryResource[]
+}
+
+export type ContentComponentProps = {
+    content: StoryContent
+    resources: StoryResource[]
 }
 
 export type SectionComponent = (
@@ -127,6 +150,14 @@ export type SectionComponent = (
 
 type SectionTypes = {
     [key: string]: SectionComponent
+}
+
+export type ContentComponent = (
+    props: ContentComponentProps
+) => JSX.Element | null
+
+type ContentTypes = {
+    [key: string]: ContentComponent
 }
 
 export function useSectionType(type: string) {
@@ -142,6 +173,25 @@ export function useSectionType(type: string) {
                 })
                 .catch(() => {
                     console.error(`section type ${type} not implemented`)
+                })
+        }
+    }, [type])
+    return components[type]
+}
+
+export function useContentType(type: string) {
+    const [components, setComponents] = useState<ContentTypes>({})
+    useEffect(() => {
+        if (!components[type]) {
+            import(`../story-content/${type.toLowerCase()}.tsx`)
+                .then((impl) => {
+                    setComponents((old) => ({
+                        ...old,
+                        [type]: impl.default,
+                    }))
+                })
+                .catch(() => {
+                    console.error(`component type ${type} not implemented`)
                 })
         }
     }, [type])
