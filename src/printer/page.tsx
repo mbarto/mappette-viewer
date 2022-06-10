@@ -64,6 +64,7 @@ type PageProps = {
     selectedComponent: string | null
     context: Context
     setMap: (map: MapInstance) => void
+    zoom: number
 }
 
 export default function PrintedPage({
@@ -74,6 +75,7 @@ export default function PrintedPage({
     onSelectPage,
     context,
     setMap,
+    zoom,
 }: PageProps) {
     function renderComponent(component: PageComponent) {
         const pluginsProps = {
@@ -113,6 +115,7 @@ export default function PrintedPage({
                     onSelect={onSelectComponent}
                     lockable={c.lockable}
                     initiallyLocked={c.locked}
+                    zoom={zoom}
                 >
                     {renderComponent(c)}
                 </Box>

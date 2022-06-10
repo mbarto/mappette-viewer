@@ -21,6 +21,7 @@ type BoxProps = {
     initiallyLocked?: boolean
     onSelect: (id: string) => void
     children: ComponentChildren
+    zoom: number
 }
 
 type DragState = {
@@ -44,9 +45,11 @@ function Box({
     initiallyLocked = false,
     boxStyle = {},
     selected = false,
+    zoom,
 }: BoxProps) {
     const box = useRef<HTMLDivElement | null>(null)
     const dragState = useRef<DragState>({})
+    const dragListener = useRef<(e: MouseEvent) => void | undefined>()
     const [locked, setLocked] = useState(initiallyLocked)
 
     function toggleLock() {
@@ -75,8 +78,8 @@ function Box({
         const state = dragState.current
         if (state.fromPoint && state.startingPoint) {
             const offset = {
-                x: e.clientX - state.startingPoint.x,
-                y: e.clientY - state.startingPoint.y,
+                x: (e.clientX - state.startingPoint.x) / zoom,
+                y: (e.clientY - state.startingPoint.y) / zoom,
             }
             const newPoint = {
                 x: state.fromPoint.x + offset.x,
@@ -98,12 +101,19 @@ function Box({
 
     useEffect(() => {
         if (box.current) {
+            if (dragListener.current) {
+                box.current.removeEventListener(
+                    "mousedown",
+                    dragListener.current
+                )
+            }
             box.current.addEventListener("mousedown", onMouseDown)
             box.current.addEventListener("contextmenu", (e) =>
                 e.preventDefault()
             )
+            dragListener.current = onMouseDown
         }
-    }, [box.current])
+    }, [box.current, zoom])
     const style = {
         ...rect,
     }

@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { Map, MapInstance } from "../core/map"
 import "./printer.css"
-import { CSSProperties, Rectangle } from "./box"
+import { CSSProperties } from "./box"
 import Toolbar from "./toolbar"
 import PrintedPage, {
     Orientation,
@@ -364,6 +364,7 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                     page={page}
                     selectedComponent={selectedComponent}
                     setMap={setMap}
+                    zoom={zoom}
                 />
             ))}
             <Thumbnails
