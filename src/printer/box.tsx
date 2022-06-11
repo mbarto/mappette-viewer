@@ -35,6 +35,13 @@ type DragState = {
     }
 }
 
+export function mergeStyle(style1: CSSProperties, style2: CSSProperties) {
+    if (typeof style1 !== "string" && typeof style2 !== "string") {
+        return { ...style1, ...style2 }
+    }
+    throw new Error("Merge not supported on string expressed styles")
+}
+
 function Box({
     id,
     onSelect,

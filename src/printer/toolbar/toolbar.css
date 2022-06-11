@@ -14,7 +14,7 @@
     background: white;
     box-shadow: 0 0.5mm 2mm rgb(0 0 0 / 30%);
     margin: 5mm;
-    padding: 5px;
+    padding: 0.2vh 5px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -22,17 +22,19 @@
     & button {
         border: none;
         box-shadow: 0 0.5mm 2mm rgb(0 0 0 / 60%);
-        margin-top: 10px;
-        padding: 5px;
+        margin-top: 1.5vh;
+        padding: 0.2vh 5px;
         border-radius: 10px;
         width: 30px;
-        height: 30px;
+        height: 2.8vh;
+        max-height: 30px;
         background-color: #ccc;
         cursor: pointer;
         font-family: icofont;
     }
     & hr {
         width: 100%;
+        margin: 1.5vh 0 0 0;
     }
 }
 
@@ -78,6 +80,7 @@
 .A3.landscape .toolbar {
     right: 50px;
     left: inherit !important;
+    z-index: 1;
 }
 
 @media print {

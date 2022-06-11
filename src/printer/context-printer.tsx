@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from "preact/hooks"
 import type { Context } from "../api/context"
 import { Map, MapInstance } from "../core/map"
 import "./printer.css"
-import { CSSProperties } from "./box"
+import { CSSProperties, mergeStyle } from "./box"
 import Toolbar from "./toolbar"
 import PrintedPage, {
     Orientation,
@@ -40,6 +40,7 @@ const initialPage: Page = {
                 width: "90%",
                 height: "20px",
             },
+            stylable: true,
         },
         {
             type: "map",
@@ -175,7 +176,10 @@ function reducer(state: PrinterState, action: PrinterAction): PrinterState {
                                   c.id === state.selectedComponent
                                       ? {
                                             ...c,
-                                            style: action.style,
+                                            style: mergeStyle(
+                                                c.style ?? {},
+                                                action.style
+                                            ),
                                         }
                                       : c
                               ),

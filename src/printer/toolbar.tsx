@@ -36,13 +36,23 @@ export default function Toolbar({
     zoomOut,
 }: ToolbarProps) {
     const formatBlock = (format?: string) => () => {
-        document.execCommand("formatBlock", false, format)
+        if (format === "h1") {
+            applyStyle({
+                fontSize: "3rem",
+            })
+        } else if (format === "h2") {
+            applyStyle({
+                fontSize: "2rem",
+            })
+        } else
+            applyStyle({
+                fontSize: "1rem",
+            })
     }
 
     const align =
         (position: string = "left") =>
         () => {
-            document.execCommand("justify" + position, false)
             applyStyle({
                 textAlign: position,
             })
@@ -51,10 +61,13 @@ export default function Toolbar({
     const textStyle =
         (style: string = "none") =>
         () => {
-            applyStyle({
-                fontWeight: style === "bold" ? "bold" : "",
-                fontStyle: style === "italic" ? "italic" : "",
-            })
+            if (style === "bold") applyStyle({ fontWeight: "bold" })
+            else if (style === "italic") applyStyle({ fontStyle: "italic" })
+            else
+                applyStyle({
+                    fontWeight: "",
+                    fontStyle: "",
+                })
         }
     return (
         <div className="toolbar">
