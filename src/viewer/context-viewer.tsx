@@ -3,6 +3,7 @@ import type { Context } from "../api/context"
 import { getPlugins, Plugin } from "../core/plugins"
 import { Map, MapInstance } from "../core/map"
 import PluginsContainer from "./plugins-container"
+import "./context-viewer/context-viewer.css"
 
 type ContextViewerProps = {
     context: Context

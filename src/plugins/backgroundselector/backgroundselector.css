@@ -1,18 +1,18 @@
 .mappette-background-selector {
     position: absolute;
-    bottom: calc(var(--footer-present) * var(--footer-height) + 10px);
-    left: calc(var(--left-panel-open) * var(--left-panel-width) + 10px);
+    bottom: calc(var(--footer-present) * var(--footer-height) + 0.8em);
+    left: calc(var(--left-panel-open) * var(--left-panel-width) + 0.8em);
     z-index: 1000;
 }
 
 .background-preview {
-    width: 78px;
-    height: 78px;
+    width: 5vw;
+    aspect-ratio: 1;
     background-color: white;
-    padding: 3px;
     position: relative;
-    margin-right: 3px;
+    margin-right: 0.3vw;
     box-shadow: 0 14px 28px rgb(0 0 0 / 25%), 0 10px 10px rgb(0 0 0 / 22%);
+    display: flex;
 }
 
 .background-preview.selected {
@@ -20,40 +20,34 @@
 }
 
 .background-preview.open {
-    width: 104px;
-    height: 104px;
+    width: 7vw;
+    aspect-ratio: 1;
 }
 
 .background-preview img {
-    width: 72px;
-    height: 72px;
-    position: absolute;
-    top: 3px;
-    left: 3px;
+    width: 90%;
+    aspect-ratio: 1;
+    position: relative;
+    margin: auto;
 }
 
 .background-preview label {
     background-color: rgba(255, 255, 255, 70%);
-    width: 104px;
-    height: 50px;
+    width: 100%;
+    height: 3em;
     text-align: center;
-    padding-top: 5px;
+    padding-top: 0.5em;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1;
     display: none;
-    font-size: 12px;
+    font-size: 0.7rem;
     font-weight: bold;
 }
 
 .background-preview.open label {
     display: block;
-}
-
-.background-preview.open img {
-    width: 98px;
-    height: 98px;
 }
 
 .background-preview:hover {
@@ -66,12 +60,20 @@
     align-items: flex-end;
 }
 
-@media (max-width: 600px) {
+@media (max-aspect-ratio: 1/1) {
     .backgrounds-container {
         flex-direction: column-reverse;
     }
 
     .background-preview {
-        margin-top: 3px;
+        height: 8vh;
+        width: inherit !important;
+        margin-top: 0.3vw;
+    }
+
+    .background-preview.open {
+        height: 10vh;
+        width: inherit !important;
+        aspect-ratio: 1;
     }
 }

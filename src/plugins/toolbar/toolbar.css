@@ -1,7 +1,7 @@
 .mappette-toolbar {
     position: absolute;
-    bottom: calc(var(--footer-present) * var(--footer-height) + 10px);
-    right: 10px;
+    bottom: calc(var(--footer-present) * var(--footer-height) + 0.8em);
+    right: 0.8em;
     z-index: 1000;
     box-shadow: -1px 1px 5px 1px #5e5e5e;
 }
@@ -10,10 +10,10 @@
     background-color: var(--main-color);
     border-style: solid;
     border-color: var(--main-color-darker);
-    border-width: 1px;
+    border-width: 0.1em;
     color: white;
-    width: 52px;
-    height: 52px;
+    width: 4em;
+    aspect-ratio: 1;
     position: relative;
     display: block;
     cursor: pointer;
@@ -24,11 +24,10 @@
 }
 
 .glyphicon {
-    font-size: 26px;
+    font-size: 2rem;
     margin: auto;
     font-style: normal;
     font-weight: 400;
-    line-height: 1;
     position: relative;
     font-family: icons;
 }

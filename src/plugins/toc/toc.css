@@ -50,7 +50,7 @@ body:has(.mappette-table-of-contents.open) {
 }
 
 .glyphicon-1-map {
-    font-size: 20px !important;
+    font-size: 1.3rem !important;
     &:before {
         content: "\f115";
     }
@@ -58,7 +58,7 @@ body:has(.mappette-table-of-contents.open) {
 
 .glyphicon-folder-open,
 .glyphicon-folder-close {
-    font-size: 18px !important;
+    font-size: 1rem !important;
     float: right;
     cursor: pointer;
 }
@@ -77,7 +77,7 @@ body:has(.mappette-table-of-contents.open) {
 }
 
 .toc-header {
-    padding: 8px;
+    padding: 0.5em;
 }
 
 .toc-icon {
@@ -86,22 +86,22 @@ body:has(.mappette-table-of-contents.open) {
 }
 
 .toc-title {
-    margin-top: 20px;
+    margin-top: 0.8em;
     text-align: center;
 }
 
 .toc-group-header {
-    margin-bottom: 10px;
+    margin-bottom: 0.6em;
 }
 .toc-layers-container {
-    margin-top: 20px;
+    margin-top: 1em;
 }
 
 .toc-layer {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
     box-shadow: rgba(0, 0, 0, 0.06) 0px 3px 6px 0px,
         rgba(0, 0, 0, 0.12) 0px 4px 8px 0px,
         rgba(0, 0, 0, 0.06) 2px -2px 6px 0px;
@@ -111,12 +111,12 @@ body:has(.mappette-table-of-contents.open) {
 .toc-group {
     border-bottom: solid 1px #aaa;
     border-top: solid 1px #aaa;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-left: 8px;
-    padding-right: 8px;
+    padding-bottom: 0.7em;
+    padding-top: 0.7em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 .toc-group-title {
-    padding-bottom: 10px;
+    padding-bottom: 0.7em;
 }

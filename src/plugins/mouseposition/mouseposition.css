@@ -1,41 +1,42 @@
 .mappette-mouse-position {
-    height: 30px;
+    height: 1.8rem;
     order: 3;
     display: flex;
     & button {
-        width: 25px;
-        height: 25px;
+        width: 1.7rem;
+        margin-right: 0.2em;
+        margin-top: 0.1em;
+        margin-left: 0.2em;
+        aspect-ratio: 1;
         background-color: var(--main-color);
         color: white;
         display: block;
         cursor: pointer;
         border: none;
-        margin-top: 2px;
-        margin-left: 2px;
         &.active {
             background-color: var(--selected-color);
         }
     }
     & span.glyphicon {
-        font-size: 12px;
+        font-size: 0.7rem;
         font-weight: 400;
         &:before {
             content: "\f1c9";
         }
     }
     & .coordinates {
-        width: 305px;
-        height: 30px;
+        width: 20rem;
+        height: 1.5rem;
     }
     & label {
-        font-size: 14px;
-        padding: 8px;
-        line-height: 28px;
+        font-size: 1rem;
+        padding: 0.3em;
+        line-height: 1.8rem;
     }
     & .mouseposition-value {
-        font-size: 13px;
+        font-size: 0.9rem;
         background-color: #e6e6e6;
-        padding: 4px;
+        padding: 0.1em;
         box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
     }
 }

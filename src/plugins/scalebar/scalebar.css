@@ -2,7 +2,7 @@
     order: 2;
     & .ol-scale-line {
         background-color: #fff;
-        top: 5px;
+        top: 0.5em;
         right: 0;
         left: initial;
         position: relative;

@@ -1,44 +1,48 @@
 .mappette-identify-results {
+    --identify-width: 60vh;
+    --identify-height: 70vh;
+    --identify-header-height: 2.4rem;
     position: absolute;
-    top: calc((100% - 500px) / 2);
-    width: 500px;
-    height: 500px;
-    left: calc((100% - 500px) / 2);
+    left: calc((100% - var(--identify-width)) / 2);
+    top: calc((100% - var(--identify-height)) / 2);
+    width: var(--identify-width);
+    height: var(--identify-height);
+
     background-color: white;
     & .header {
         display: flex;
         item-align: start;
-        padding: 10px;
+        padding: 0.6em;
         background-color: var(--main-color);
         color: white;
-        height: 40px;
+        height: var(--identify-header-height);
         & span {
             display: inline-block;
             cursor: pointer;
         }
         & h1 {
-            font-size: 15px;
+            font-size: 1rem;
             margin: 0;
-            margin-left: 20px;
+            margin-left: 1.2em;
         }
     }
     & .body {
-        padding: 10px;
+        padding: 0.8em;
         overflow: auto;
         position: absolute;
-        top: 40px;
-        height: calc(100% - 50px);
+        top: var(--identify-header-height);
+        height: calc(100% - var(--identify-header-height));
         width: 100%;
 
         & h1 {
-            font-size: 18px;
-            margin-top: 5px;
-            margin-bottom: 5px;
+            font-size: 1.5rem;
+            margin-top: 0.1em;
+            margin-bottom: 0.3em;
         }
 
         & > div {
-            padding-left: 20px;
-            padding-top: 5px;
+            padding-left: 1.5em;
+            padding-top: 0.5em;
             border-top: solid 1px #444;
         }
     }

@@ -7,7 +7,7 @@
 }
 
 .ol-attribution.ol-uncollapsible {
-    font-size: 11px;
+    font-size: 1rem;
     height: var(--footer-height);
     left: 0;
     max-height: 2.6em;
@@ -15,4 +15,7 @@
     position: absolute;
     text-align: left;
     width: 50%;
+    & ul {
+        font-size: 0.8rem;
+    }
 }
