@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "preact/hooks"
-import { useMap } from "../core/map"
-import { PluginProps } from "../core/plugins"
-import { getProjectionScale } from "../core/projection"
+import { useMap } from "../../core/map"
+import { getProjectionScale } from "../../core/projection"
 
-type ScaleBoxPluginProps = PluginProps
+type ScaleBoxPluginProps = {}
 
 function format(scale: number): string {
     return scale.toFixed(0)

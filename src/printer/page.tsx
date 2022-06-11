@@ -1,7 +1,7 @@
 import { useEffect } from "preact/hooks"
 import Box, { CSSProperties, Rectangle } from "./box"
 import MapViewer from "../core/map/map"
-import ScaleBox from "../plugins/scalebox"
+import ScaleBox from "./widgets/scalebox"
 import { Context } from "../api/context"
 import { MapInstance } from "../core/map"
 
@@ -78,14 +78,6 @@ export default function PrintedPage({
     zoom,
 }: PageProps) {
     function renderComponent(component: PageComponent) {
-        const pluginsProps = {
-            setMap,
-            context,
-            mapType: "ol",
-            plugins: [],
-            allPlugins: [],
-            cfg: {},
-        }
         if (component.type === "map")
             return (
                 <MapViewer
@@ -100,7 +92,7 @@ export default function PrintedPage({
             )
         if (component.type === "text")
             return <div contentEditable>{context.windowTitle || "Title"}</div>
-        if (component.type === "scale") return <ScaleBox {...pluginsProps} />
+        if (component.type === "scale") return <ScaleBox />
         return null
     }
 
