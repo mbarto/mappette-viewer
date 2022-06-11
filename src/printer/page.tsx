@@ -1,6 +1,6 @@
 import { useEffect } from "preact/hooks"
 import Box, { CSSProperties, Rectangle } from "./box"
-import MapViewer from "../plugins/map"
+import MapViewer from "../core/map/map"
 import ScaleBox from "../plugins/scalebox"
 import { Context } from "../api/context"
 import { MapInstance } from "../core/map"
@@ -86,7 +86,18 @@ export default function PrintedPage({
             allPlugins: [],
             cfg: {},
         }
-        if (component.type === "map") return <MapViewer {...pluginsProps} />
+        if (component.type === "map")
+            return (
+                <MapViewer
+                    cfg={{
+                        id: "map",
+                        className: "printer-map",
+                    }}
+                    mapType="ol"
+                    setMap={setMap}
+                    mapConfig={context.mapConfig}
+                />
+            )
         if (component.type === "text")
             return <div contentEditable>{context.windowTitle || "Title"}</div>
         if (component.type === "scale") return <ScaleBox {...pluginsProps} />

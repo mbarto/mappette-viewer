@@ -99,6 +99,14 @@ body.A5.landscape .sheet {
     }
 }
 
+.printer-map {
+    right: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+}
+
 :root {
     --footer-height: 30px;
     --footer-present: 0;
