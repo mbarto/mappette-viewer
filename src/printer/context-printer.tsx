@@ -10,6 +10,9 @@ import PrintedPage, {
     usePage,
     Page,
     PageComponent,
+    OptionalPageComponentProperties,
+    defaultComponentProperties,
+    ComponentTypes,
 } from "./page"
 import Thumbnails from "./thumbnails"
 
@@ -277,7 +280,7 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
             })
         }
     }
-    function addComponent(type: string) {
+    function addComponent(type: ComponentTypes) {
         const newComponent: PageComponent = {
             id: `${type}-${componentId++}`,
             type,
@@ -287,6 +290,7 @@ export default function ContextPrinter({ context }: ContextPrinterProps) {
                 width: "100%",
                 height: "20px",
             },
+            ...(defaultComponentProperties[type] ?? {}),
         }
         dispatch({
             type: "addComponent",

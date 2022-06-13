@@ -45,15 +45,33 @@ export type Page = {
     components: PageComponent[]
 }
 
-export type PageComponent = {
-    type: string
-    id: string
-    box: Rectangle
+export type OptionalPageComponentProperties = {
     stylable?: boolean
     style?: CSSProperties
-    dragButton?: number
     lockable?: boolean
     locked?: boolean
+}
+
+export type ComponentTypes = "map" | "text" | "scale"
+
+export type PageComponent = {
+    type: ComponentTypes
+    id: string
+    box: Rectangle
+} & OptionalPageComponentProperties
+
+type DefaultProperties = {
+    [key in ComponentTypes]: OptionalPageComponentProperties
+}
+
+export const defaultComponentProperties: DefaultProperties = {
+    text: {
+        stylable: true,
+    },
+    map: {},
+    scale: {
+        stylable: true,
+    },
 }
 
 type PageProps = {

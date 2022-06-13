@@ -1,11 +1,12 @@
 import { CSSProperties } from "./box"
 import { MAX_ZOOM, MIN_ZOOM } from "./context-printer"
+import { ComponentTypes } from "./page"
 import "./toolbar/toolbar.css"
 
 type ToolbarProps = {
     addPage: () => void
     removePage: () => void
-    addComponent: (type: string) => void
+    addComponent: (type: ComponentTypes) => void
     removeComponent: () => void
     toggleOrientation: () => void
     toggleSheet: () => void
