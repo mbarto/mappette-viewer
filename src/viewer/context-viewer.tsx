@@ -1,6 +1,6 @@
 import { useEffect, useState } from "preact/hooks"
 import type { Context } from "../api/context"
-import { getPlugins, Plugin } from "../core/plugins"
+import { addPlugins, getPlugins, Plugin } from "../core/plugins"
 import { Map, MapInstance } from "../core/map"
 import PluginsContainer from "./plugins-container"
 import "./context-viewer/context-viewer.css"
@@ -23,7 +23,9 @@ export default function ContextViewer({
         if (context.windowTitle) {
             document.title = context.windowTitle
         }
-        getPlugins(context.plugins[env]).then(setContextPlugins)
+        addPlugins(context.plugins[env], (plugin: Plugin) => {
+            setContextPlugins((plugins) => [...plugins, plugin])
+        })
     }, [context])
     return (
         <div id="viewer">

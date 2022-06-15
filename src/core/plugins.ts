@@ -30,6 +30,29 @@ function addDependencies(
     return [...plugins, plugin]
 }
 
+export function addPlugins(
+    plugins: MappettePluginDef[],
+    addPlugin: (plugin: Plugin) => void
+) {
+    plugins
+        .map(normalizePlugin)
+        .reduce(addDependencies, [])
+        .forEach((pluginDef) => {
+            import(`../plugins/${pluginDef.name.toLowerCase()}.tsx`)
+                .then((impl) =>
+                    addPlugin({
+                        name: pluginDef.name.toLowerCase(),
+                        plugin: impl.default as PluginImpl,
+                        cfg: pluginDef.cfg,
+                        container: impl.container,
+                    })
+                )
+                .catch(() => {
+                    console.error(`plugin ${pluginDef.name} not implemented`)
+                })
+        })
+}
+
 export function getPlugins(plugins: MappettePluginDef[]): Promise<Plugin[]> {
     return Promise.all(
         plugins

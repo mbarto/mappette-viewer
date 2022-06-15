@@ -1,5 +1,5 @@
 import { MapEvent, MapEventType, MapProvider } from "../map"
-import { getProjectionScale, reproject } from "../projection"
+import { reproject } from "../projection"
 
 import "./cesium/layers/all"
 
