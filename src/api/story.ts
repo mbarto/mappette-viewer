@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks"
-import { MapConfig } from "./context-types"
+import { MapConfig } from "./context/context-types"
 import { CSSProperties, StoryThemes } from "./theme"
 
 const baseUrl = `${import.meta.env.VITE_BACKEND}/rest/geostore`

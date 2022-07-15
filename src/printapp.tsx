@@ -1,4 +1,4 @@
-import { useContext } from "./api/context"
+import { useContext } from "./api/context/context"
 import { Locale, useLocalizedMessages } from "./api/locale"
 import ContextPrinter from "./printer/context-printer"
 

@@ -1,8 +1,15 @@
 import { useEffect, useState } from "preact/hooks"
-import { Context, MappetteResource } from "./context-types"
+import {
+    Attribute,
+    Context,
+    MappettePlugin,
+    MappettePluginDef,
+    MappetteResource,
+} from "./context-types"
 import { Validator as resourceValidator } from "./resource.validator"
 import { Validator as contextValidator } from "./context.validator"
 import { ValidationError } from "./validator"
+import { DomainContext, MappetteDomainResource } from "./context-domain-types"
 
 const baseUrl = `${import.meta.env.VITE_BACKEND}/rest/geostore`
 const contextEndpoint = "misc/category/name/CONTEXT/resource/name"
@@ -16,10 +23,50 @@ function buildError(prefix: string, errors?: ValidationError[]): string {
     return prefix
 }
 
+function buildAttributes(
+    attributes: MappetteResource["Resource"]["Attributes"]
+): Attribute[] {
+    if (attributes === "") return []
+    if (attributes instanceof Array) return attributes
+    return [attributes]
+}
+
+function buildResource(resource: MappetteResource): MappetteDomainResource {
+    const innerResource = resource.Resource
+    return {
+        id: innerResource.id,
+        name: innerResource.name.toString(),
+        description: innerResource.description,
+        category: innerResource.category,
+        creation: innerResource.creation,
+        lastUpdate: innerResource.lastUpdate,
+        metadata: innerResource.metadata,
+        data: innerResource.data.data,
+        attributes: buildAttributes(innerResource.Attributes),
+    }
+}
+
+function buildPlugin(plugin: MappettePluginDef): MappettePlugin {
+    if (typeof plugin === "string") {
+        return {
+            name: plugin,
+        }
+    }
+    return plugin
+}
+
+function buildContext(context: Context): DomainContext {
+    return {
+        mapConfig: context.mapConfig,
+        windowTitle: context.windowTitle,
+        plugins: context.plugins["desktop"].map(buildPlugin),
+    }
+}
+
 export function loadContext(
     contextName: string,
     local: boolean
-): Promise<Context> {
+): Promise<DomainContext> {
     const url = local
         ? contextName
         : `${baseUrl}/${contextEndpoint}/${contextName}`
@@ -36,8 +83,10 @@ export function loadContext(
         })
         .then((resource: MappetteResource) => {
             if (resourceValidator(resource)) {
-                const context = JSON.parse(resource.Resource.data.data)
-                if (contextValidator(context)) return context as Context
+                const domainResource = buildResource(resource)
+                const context = JSON.parse(domainResource.data)
+                if (contextValidator(context))
+                    return buildContext(context as Context)
                 throw new Error(
                     buildError(
                         "Error parsing Context: ",
@@ -57,7 +106,7 @@ export function useContext() {
     const local = contextName === "config.json"
     const mode = url.searchParams.get("mode") ?? "2d"
 
-    const [context, setContext] = useState<Context | null>(null)
+    const [context, setContext] = useState<DomainContext | null>(null)
     const [error, setError] = useState(null)
     useEffect(() => {
         loadContext(contextName, local)

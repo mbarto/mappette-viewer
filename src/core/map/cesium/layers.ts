@@ -1,5 +1,5 @@
 import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
-import { MapLayer, MapSources } from "../../../api/context-types"
+import { MapLayer, MapSources } from "../../../api/context/context-types"
 
 export type ImageryProviderWithId = ImageryProvider & {
     mapId: string

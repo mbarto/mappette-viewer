@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks"
-import { MapLayer } from "../api/context-types"
+import { MapLayer } from "../api/context/context-types"
 import { useMessage } from "../api/locale"
 import { useMap } from "../core/map"
 import { PluginProps } from "../core/plugins"

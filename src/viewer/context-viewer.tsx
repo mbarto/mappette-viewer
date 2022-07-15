@@ -1,20 +1,18 @@
 import { useEffect, useState } from "preact/hooks"
-import { Context } from "../api/context-types"
-import { addPlugins, getPlugins, Plugin } from "../core/plugins"
+import { addPlugins, Plugin } from "../core/plugins"
 import { Map, MapInstance } from "../core/map"
 import PluginsContainer from "./plugins-container"
 import "./context-viewer/context-viewer.css"
+import { DomainContext } from "../api/context/context-domain-types"
 
 type ContextViewerProps = {
-    context: Context
+    context: DomainContext
     mapType?: string
-    env?: string
 }
 
 export default function ContextViewer({
     context,
     mapType = "ol",
-    env = "desktop",
 }: ContextViewerProps) {
     const [map, setMap] = useState<MapInstance | null>(null)
 
@@ -23,7 +21,7 @@ export default function ContextViewer({
         if (context.windowTitle) {
             document.title = context.windowTitle
         }
-        addPlugins(context.plugins[env], (plugin: Plugin) => {
+        addPlugins(context.plugins, (plugin: Plugin) => {
             setContextPlugins((plugins) => [...plugins, plugin])
         })
     }, [context])

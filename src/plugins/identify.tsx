@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks"
-import { MapLayer } from "../api/context-types"
+import { MapLayer } from "../api/context/context-types"
 import { MapInstance, OnClickEvent, useMap } from "../core/map"
 import { PluginProps } from "../core/plugins"
 import ToolbarButton from "./toolbar/toolbar-button"

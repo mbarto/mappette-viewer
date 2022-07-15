@@ -1,5 +1,5 @@
 import { JSX } from "preact"
-import { MappettePlugin, MappettePluginDef } from "../api/context-types"
+import { MappettePlugin, MappettePluginDef } from "../api/context/context-types"
 import { PluginsContainerProps } from "../viewer/plugins-container"
 
 export type PluginProps = PluginsContainerProps & {

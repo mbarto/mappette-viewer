@@ -1,9 +1,9 @@
-import { Context } from "../api/context-types"
+import { DomainContext } from "../api/context/context-domain-types"
 import { MapInstance } from "../core/map"
 import { getPluginsFor, Plugin } from "../core/plugins"
 
 export type PluginsContainerProps = {
-    context: Context
+    context: DomainContext
     plugins: Plugin[]
     allPlugins: Plugin[]
     mapType: string

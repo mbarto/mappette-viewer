@@ -3,9 +3,10 @@ import { PluginProps } from "../core/plugins"
 import ToolbarButton from "./toolbar/toolbar-button"
 import "./toc/toc.css"
 import { useMap } from "../core/map"
-import { Context, MapLayer, MapLayerGroup } from "../api/context-types"
+import { MapLayer, MapLayerGroup } from "../api/context/context-types"
 import { useLocale } from "../api/locale"
 import { useLayout } from "../core/css"
+import { DomainContext } from "../api/context/context-domain-types"
 
 type TableOfContentsProps = PluginProps
 
@@ -150,7 +151,7 @@ function getTitle(layer: MapLayer, locale: string): string {
     return layer.name
 }
 
-function getGroups(context: Context): Group[] {
+function getGroups(context: DomainContext): Group[] {
     return context.mapConfig.map.groups.map((group) => ({
         ...group,
         layers: getLayers(context.mapConfig.map.layers, group.id),

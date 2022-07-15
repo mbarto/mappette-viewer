@@ -1,6 +1,6 @@
 import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
 import OpenStreetMapImageryProvider from "cesium/Source/Scene/OpenStreetMapImageryProvider"
-import { MapLayer } from "../../../../api/context-types"
+import { MapLayer } from "../../../../api/context/context-types"
 import { addLayerType } from "../layers"
 
 export type OSMLayer = MapLayer & {

@@ -27,7 +27,7 @@ function writeOutputFiles(outputFile, code) {
             outputFile + ".d.ts",
             `import { ValidatorFunction } from "./validator"
 
-            export const Validator: ValidatorFunction`
+export const Validator: ValidatorFunction`
         ),
     ])
 }

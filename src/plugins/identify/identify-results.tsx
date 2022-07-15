@@ -1,4 +1,4 @@
-import { MapLayer } from "../../api/context-types"
+import { MapLayer } from "../../api/context/context-types"
 import { createPortal } from "preact/compat"
 
 export type FeatureCollection = {

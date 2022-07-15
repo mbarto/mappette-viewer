@@ -1,6 +1,6 @@
 import { createContext } from "preact"
 import { useContext } from "preact/hooks"
-import { MapConfig } from "../api/context-types"
+import { MapConfig } from "../api/context/context-types"
 import { Point } from "./projection"
 
 export type MapProvider = {

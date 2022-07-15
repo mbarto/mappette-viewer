@@ -1,4 +1,4 @@
-import { MapLayer } from "../../../api/context-types"
+import { MapLayer } from "../../../api/context/context-types"
 import { MapInstance, OnClickEvent } from "../../map"
 import { Point } from "../../projection"
 import { WMSLayer } from "./types"

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "preact/hooks"
-import { MapConfig } from "../../api/context-types"
+import { MapConfig } from "../../api/context/context-types"
 import { loadProvider, MapInstance, useMap } from "../map"
 
 type MapProps = {

@@ -2,8 +2,8 @@ import { useEffect } from "preact/hooks"
 import Box, { CSSProperties, Rectangle } from "./box"
 import MapViewer from "../core/map/map"
 import ScaleBox from "./widgets/scalebox"
-import { Context } from "../api/context-types"
 import { MapInstance } from "../core/map"
+import { DomainContext } from "../api/context/context-domain-types"
 
 export type Orientation = "portrait" | "landscape"
 export type Sheet = "A4" | "A3"
@@ -80,7 +80,7 @@ type PageProps = {
     onSelectPage: () => void
     page: Page
     selectedComponent: string | null
-    context: Context
+    context: DomainContext
     setMap: (map: MapInstance) => void
     zoom: number
 }

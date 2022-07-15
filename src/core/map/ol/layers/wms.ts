@@ -3,7 +3,7 @@ import Layer from "ol/layer/Layer"
 import TileLayer from "ol/layer/Tile"
 import ImageWMS from "ol/source/ImageWMS"
 import TileWMS from "ol/source/TileWMS"
-import { MapLayer } from "../../../../api/context-types"
+import { MapLayer } from "../../../../api/context/context-types"
 import { WMSLayer } from "../../../layers/wms/types"
 import { addLayerType } from "../layers"
 

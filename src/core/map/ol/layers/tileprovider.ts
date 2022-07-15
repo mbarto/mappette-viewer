@@ -1,6 +1,6 @@
 import Layer from "ol/layer/Layer"
 import TileLayer from "ol/layer/Tile"
-import { MapLayer } from "../../../../api/context-types"
+import { MapLayer } from "../../../../api/context/context-types"
 import { addLayerType } from "../layers"
 import XYZ from "ol/source/XYZ"
 import {

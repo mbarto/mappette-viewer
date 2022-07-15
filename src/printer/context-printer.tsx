@@ -1,5 +1,4 @@
 import { useEffect, useReducer, useState } from "preact/hooks"
-import { Context } from "../api/context-types"
 import { Map, MapInstance } from "../core/map"
 import "./printer.css"
 import { CSSProperties, mergeStyle } from "./box"
@@ -10,14 +9,14 @@ import PrintedPage, {
     usePage,
     Page,
     PageComponent,
-    OptionalPageComponentProperties,
     defaultComponentProperties,
     ComponentTypes,
 } from "./page"
 import Thumbnails from "./thumbnails"
+import { DomainContext } from "../api/context/context-domain-types"
 
 type ContextPrinterProps = {
-    context: Context
+    context: DomainContext
 }
 
 type PrinterState = {
