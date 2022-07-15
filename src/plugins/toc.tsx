@@ -3,7 +3,7 @@ import { PluginProps } from "../core/plugins"
 import ToolbarButton from "./toolbar/toolbar-button"
 import "./toc/toc.css"
 import { useMap } from "../core/map"
-import { Context, MapLayer, MapLayerGroup } from "../api/context"
+import { Context, MapLayer, MapLayerGroup } from "../api/context-types"
 import { useLocale } from "../api/locale"
 import { useLayout } from "../core/css"
 

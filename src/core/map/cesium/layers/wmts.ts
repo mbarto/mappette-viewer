@@ -1,4 +1,4 @@
-import { MapLayer, MapSources } from "../../../../api/context"
+import { MapLayer, MapSources } from "../../../../api/context-types"
 import { addLayerType } from "../layers"
 import { matchesProjection } from "../../../projection"
 import ImageryProvider from "cesium/Source/Scene/ImageryProvider"

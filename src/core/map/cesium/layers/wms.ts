@@ -2,7 +2,7 @@ import Resource from "cesium/Source/Core/Resource"
 import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
 import SingleTileImageryProvider from "cesium/Source/Scene/SingleTileImageryProvider"
 import WebMapServiceImageryProvider from "cesium/Source/Scene/WebMapServiceImageryProvider"
-import { MapLayer } from "../../../../api/context"
+import { MapLayer } from "../../../../api/context-types"
 import { WMSLayer } from "../../../layers/wms/types"
 import { addLayerType } from "../layers"
 

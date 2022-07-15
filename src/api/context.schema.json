@@ -1,0 +1,180 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "customVariablesEnabled": {
+            "type": "boolean"
+        },
+        "mapConfig": {
+            "properties": {
+                "map": {
+                    "properties": {
+                        "center": {
+                            "properties": {
+                                "crs": {
+                                    "type": "string"
+                                },
+                                "x": {
+                                    "type": "number"
+                                },
+                                "y": {
+                                    "type": "number"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "groups": {
+                            "items": {
+                                "properties": {
+                                    "expanded": {
+                                        "type": "boolean"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "layers": {
+                            "items": {
+                                "properties": {
+                                    "group": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "opacity": {
+                                        "type": "number"
+                                    },
+                                    "source": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "anyOf": [
+                                            {
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                },
+                                                "type": "object"
+                                            },
+                                            {
+                                                "type": "string"
+                                            }
+                                        ]
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "visibility": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "mapOptions": {
+                            "additionalProperties": {
+                                "type": [
+                                    "string",
+                                    "number"
+                                ]
+                            },
+                            "type": "object"
+                        },
+                        "maxExtent": {
+                            "items": [
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "number"
+                                },
+                                {
+                                    "type": "number"
+                                }
+                            ],
+                            "maxItems": 4,
+                            "minItems": 4,
+                            "type": "array"
+                        },
+                        "projection": {
+                            "type": "string"
+                        },
+                        "sources": {
+                            "additionalProperties": {},
+                            "type": "object"
+                        },
+                        "zoom": {
+                            "type": "number"
+                        }
+                    },
+                    "type": "object"
+                },
+                "version": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "plugins": {
+            "additionalProperties": {
+                "items": {
+                    "anyOf": [
+                        {
+                            "properties": {
+                                "cfg": {},
+                                "name": {
+                                    "type": "string"
+                                },
+                                "override": {}
+                            },
+                            "type": "object"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "type": "array"
+            },
+            "type": "object"
+        },
+        "userPlugins": {
+            "items": {
+                "anyOf": [
+                    {
+                        "properties": {
+                            "cfg": {},
+                            "name": {
+                                "type": "string"
+                            },
+                            "override": {}
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "type": "string"
+                    }
+                ]
+            },
+            "type": "array"
+        },
+        "windowTitle": {
+            "type": "string"
+        }
+    },
+    "type": "object"
+}
+

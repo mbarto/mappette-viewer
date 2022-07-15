@@ -1,4 +1,4 @@
-import { Context } from "../api/context"
+import { Context } from "../api/context-types"
 import { MapInstance } from "../core/map"
 import { getPluginsFor, Plugin } from "../core/plugins"
 

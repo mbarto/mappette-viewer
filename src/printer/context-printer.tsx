@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "preact/hooks"
-import type { Context } from "../api/context"
+import { Context } from "../api/context-types"
 import { Map, MapInstance } from "../core/map"
 import "./printer.css"
 import { CSSProperties, mergeStyle } from "./box"

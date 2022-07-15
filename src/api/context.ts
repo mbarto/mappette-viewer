@@ -1,98 +1,19 @@
 import { useEffect, useState } from "preact/hooks"
+import { Context, MappetteResource } from "./context-types"
+import { Validator as resourceValidator } from "./resource.validator"
+import { Validator as contextValidator } from "./context.validator"
+import { ValidationError } from "./validator"
 
 const baseUrl = `${import.meta.env.VITE_BACKEND}/rest/geostore`
 const contextEndpoint = "misc/category/name/CONTEXT/resource/name"
 
-export type Category = {
-    id: number
-    name: string
-}
-
-export type Attribute = {
-    attribute: {
-        name: string
-        value: string | number
-        "@type": string
-    }
-}
-
-export type MappetteResource = {
-    Resource: {
-        id: number
-        name: string
-        category: Category
-        description?: string
-        creation: string
-        lastUpdate?: string
-        metadata?: string
-        data: {
-            data: string
-        }
-        Attributes: "" | Attribute | Attribute[]
-    }
-}
-
-export type MapLayerGroup = {
-    id: string
-    title: string
-    expanded: boolean
-}
-
-export type MapLayer = {
-    id: string
-    name: string
-    title?:
-        | {
-              [key: string]: string
-          }
-        | string
-    type: string
-    source?: string
-    group?: string
-    visibility: boolean
-    opacity?: number
-}
-
-export type MapSources = {
-    [key: string]: unknown
-}
-
-export type MapConfig = {
-    version: number
-    map: {
-        center: {
-            x: number
-            y: number
-            crs: string
-        }
-        zoom: number
-        maxExtent?: [minX: number, minY: number, maxX: number, maxY: number]
-        projection?: string
-        mapOptions: {
-            [key: string]: string | number
-        }
-        layers: MapLayer[]
-        groups: MapLayerGroup[]
-        sources: MapSources | undefined
-    }
-}
-
-export type MappettePlugin = {
-    name: string
-    cfg?: unknown
-    override?: unknown
-}
-
-export type MappettePluginDef = string | MappettePlugin
-
-export type Context = {
-    windowTitle?: string
-    mapConfig: MapConfig
-    customVariablesEnabled: boolean
-    plugins: {
-        [key: string]: MappettePluginDef[]
-    }
-    userPlugins: MappettePluginDef[]
+function buildError(prefix: string, errors?: ValidationError[]): string {
+    if (errors)
+        return (
+            prefix +
+            errors.map((e) => `${e.instancePath}: ${e.message}`).join("\n")
+        )
+    return prefix
 }
 
 export function loadContext(
@@ -114,7 +35,19 @@ export function loadContext(
             })
         })
         .then((resource: MappetteResource) => {
-            return JSON.parse(resource.Resource.data.data) as Context
+            if (resourceValidator(resource)) {
+                const context = JSON.parse(resource.Resource.data.data)
+                if (contextValidator(context)) return context as Context
+                throw new Error(
+                    buildError(
+                        "Error parsing Context: ",
+                        contextValidator.errors
+                    )
+                )
+            }
+            throw new Error(
+                buildError("Error parsing Resource: ", resourceValidator.errors)
+            )
         })
 }
 

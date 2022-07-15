@@ -1,7 +1,7 @@
 import Credit from "cesium/Source/Core/Credit"
 import ImageryProvider from "cesium/Source/Scene/ImageryProvider"
 import UrlTemplateImageryProvider from "cesium/Source/Scene/UrlTemplateImageryProvider"
-import { MapLayer } from "../../../../api/context"
+import { MapLayer } from "../../../../api/context-types"
 import {
     Config,
     getConfig,

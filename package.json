@@ -6,7 +6,12 @@
         "dev": "vite",
         "build": "tsc && vite build",
         "preview": "vite preview",
-        "postinstall": "cd node_modules/cesium; npe --delete exports"
+        "postinstall": "cd node_modules/cesium; npe --delete exports",
+        "schema-resource": "typescript-json-schema src/api/context-types.ts MappetteResource --module esnext -o src/api/resource.schema.json",
+        "schema-context": "typescript-json-schema src/api/context-types.ts Context --module esnext -o src/api/context.schema.json",
+        "schemas": "npm run schema-resource && npm run schema-context && npm run resource-validator && npm run context-validator",
+        "resource-validator": "node ./create-validator.mjs resource ./src/api/resource.schema.json ./src/api/resource.validator",
+        "context-validator": "node ./create-validator.mjs context ./src/api/context.schema.json ./src/api/context.validator"
     },
     "dependencies": {
         "cesium": "^1.91.0",
@@ -17,11 +22,14 @@
     "devDependencies": {
         "@preact/preset-vite": "^2.1.5",
         "@types/proj4": "^2.5.2",
+        "ajv": "8.11.0",
+        "node-fetch": "^3.2.8",
         "npe": "^1.2.0",
         "postcss-nesting": "^10.1.3",
         "prettier": "^2.5.1",
         "rollup-plugin-copy": "^3.4.0",
         "typescript": "^4.6.4",
+        "typescript-json-schema": "^0.54.0",
         "vite": "^2.8.0"
     }
 }

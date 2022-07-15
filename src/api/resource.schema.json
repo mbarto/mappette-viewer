@@ -1,0 +1,109 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "Resource": {
+            "properties": {
+                "Attributes": {
+                    "anyOf": [
+                        {
+                            "properties": {
+                                "attribute": {
+                                    "properties": {
+                                        "@type": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "value": {
+                                            "type": [
+                                                "string",
+                                                "number"
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        {
+                            "items": {
+                                "properties": {
+                                    "attribute": {
+                                        "properties": {
+                                            "@type": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "type": [
+                                                    "string",
+                                                    "number"
+                                                ]
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "enum": [
+                                ""
+                            ],
+                            "type": "string"
+                        }
+                    ]
+                },
+                "category": {
+                    "properties": {
+                        "id": {
+                            "type": "number"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "creation": {
+                    "type": "string"
+                },
+                "data": {
+                    "properties": {
+                        "data": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "number"
+                },
+                "lastUpdate": {
+                    "type": "string"
+                },
+                "metadata": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": [
+                        "string",
+                        "number"
+                    ]
+                }
+            },
+            "type": "object"
+        }
+    },
+    "type": "object"
+}
+

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "preact/hooks"
-import type { Context } from "../api/context"
+import { Context } from "../api/context-types"
 import { addPlugins, getPlugins, Plugin } from "../core/plugins"
 import { Map, MapInstance } from "../core/map"
 import PluginsContainer from "./plugins-container"

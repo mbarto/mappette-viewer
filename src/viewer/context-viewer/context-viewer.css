@@ -28,6 +28,32 @@ body {
     src: url("icons.woff") format("woff");
 }
 
+.toolbar-button {
+    background-color: var(--main-color);
+    border-style: solid;
+    border-color: var(--main-color-darker);
+    border-width: 0.1em;
+    color: white;
+    width: 4em;
+    aspect-ratio: 1;
+    position: relative;
+    display: block;
+    cursor: pointer;
+}
+
+.toolbar-button.selected {
+    background-color: var(--selected-color);
+}
+
+.glyphicon {
+    font-size: 2rem;
+    margin: auto;
+    font-style: normal;
+    font-weight: 400;
+    position: relative;
+    font-family: icons;
+}
+
 :root {
     --main-color: rgb(7, 138, 163);
     --selected-color: #2a602a;

@@ -2,7 +2,7 @@ import { useEffect } from "preact/hooks"
 import Box, { CSSProperties, Rectangle } from "./box"
 import MapViewer from "../core/map/map"
 import ScaleBox from "./widgets/scalebox"
-import { Context } from "../api/context"
+import { Context } from "../api/context-types"
 import { MapInstance } from "../core/map"
 
 export type Orientation = "portrait" | "landscape"

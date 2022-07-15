@@ -1,4 +1,4 @@
-import { MapLayer } from "../../../api/context"
+import { MapLayer } from "../../../api/context-types"
 
 export type WMSLayer = MapLayer & {
     type: "wms"
