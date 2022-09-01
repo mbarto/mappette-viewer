@@ -10,8 +10,8 @@
         "schema-resource": "typescript-json-schema src/api/context/context-types.ts MappetteResource --module esnext -o src/api/context/resource.schema.json",
         "schema-context": "typescript-json-schema src/api/context/context-types.ts Context --module esnext -o src/api/context/context.schema.json",
         "schemas": "npm run schema-resource && npm run schema-context && npm run resource-validator && npm run context-validator",
-        "resource-validator": "node ./create-validator.mjs resource ./src/api/context/resource.schema.json ./src/api/context/resource.validator",
-        "context-validator": "node ./create-validator.mjs context ./src/api/context/context.schema.json ./src/api/context/context.validator"
+        "resource-validator": "node ./create-validator.mjs resource ./src/api/context/resource.schema.json ./src/api/context/resource.validator MappetteResource",
+        "context-validator": "node ./create-validator.mjs context ./src/api/context/context.schema.json ./src/api/context/context.validator Context"
     },
     "dependencies": {
         "cesium": "^1.91.0",

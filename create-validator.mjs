@@ -20,25 +20,26 @@ function withId(json, id) {
     }
 }
 
-function writeOutputFiles(outputFile, code) {
+function writeOutputFiles(outputFile, code, type) {
     return Promise.all([
         writeFile(outputFile + ".js", code),
         writeFile(
             outputFile + ".d.ts",
             `import { ValidatorFunction } from "./validator"
-
-export const Validator: ValidatorFunction`
+import { ${type} } from "./context-types"
+export const Validator: ValidatorFunction<${type}>`
         ),
     ])
 }
 
-if (process.argv.length >= 5) {
+if (process.argv.length >= 6) {
     const id = process.argv[2]
     const inputFile = process.argv[3]
     const outputFile = process.argv[4]
+    const type = process.argv[5]
     readFile(inputFile)
         .then((txt) => compileSchema(withId(JSON.parse(txt), id)))
-        .then((code) => writeOutputFiles(outputFile, code))
+        .then((code) => writeOutputFiles(outputFile, code, type))
         .then(() => console.log("Validator created successfully!"))
         .catch((e) => console.error(e))
 } else {

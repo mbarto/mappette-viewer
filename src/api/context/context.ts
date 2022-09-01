@@ -81,12 +81,11 @@ export function loadContext(
                 throw new Error(`Error loading ${contextName}: ${t}`)
             })
         })
-        .then((resource: MappetteResource) => {
+        .then((resource: unknown) => {
             if (resourceValidator(resource)) {
                 const domainResource = buildResource(resource)
-                const context = JSON.parse(domainResource.data)
-                if (contextValidator(context))
-                    return buildContext(context as Context)
+                const context = JSON.parse(domainResource.data) as unknown
+                if (contextValidator(context)) return buildContext(context)
                 throw new Error(
                     buildError(
                         "Error parsing Context: ",

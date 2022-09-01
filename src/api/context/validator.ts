@@ -12,7 +12,7 @@ export type ValidationError = {
     schemaPath: string
 }
 
-export type ValidatorFunction = {
-    (data: unknown, options?: ValidatorOptions): Boolean
+export type ValidatorFunction<T> = {
+    (data: unknown, options?: ValidatorOptions): data is T
     errors?: ValidationError[]
 }

@@ -1,3 +1,3 @@
 import { ValidatorFunction } from "./validator"
-
-export const Validator: ValidatorFunction
+import { Context } from "./context-types"
+export const Validator: ValidatorFunction<Context>
